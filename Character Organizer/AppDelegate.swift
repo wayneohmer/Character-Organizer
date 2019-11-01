@@ -15,6 +15,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        Character.shared.name = "Boris"
+        Character.shared.race = "elf"
+        Character.shared.level = "2"
+        Character.shared.currentHP = "10"
+        Character.shared.str = "12"
+        Character.shared.dex = "15"
+        Character.shared.con = "17"
+        Character.shared.int = "9"
+        Character.shared.wis = "13"
+        Character.shared.cha = "20"
+
         return true
     }
 

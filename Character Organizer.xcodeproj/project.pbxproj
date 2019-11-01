@@ -14,6 +14,7 @@
 		2B6890A6236B812C00EC8948 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B6890A5236B812C00EC8948 /* Preview Assets.xcassets */; };
 		2B6890A9236B812C00EC8948 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B6890A7236B812C00EC8948 /* LaunchScreen.storyboard */; };
 		2B6890B4236B812D00EC8948 /* Character_OrganizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890B3236B812D00EC8948 /* Character_OrganizerTests.swift */; };
+		2B6890BF236B84B300EC8948 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890BE236B84B300EC8948 /* Character.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		2B6890AF236B812D00EC8948 /* Character OrganizerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Character OrganizerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B6890B3236B812D00EC8948 /* Character_OrganizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character_OrganizerTests.swift; sourceTree = "<group>"; };
 		2B6890B5236B812D00EC8948 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B6890BE236B84B300EC8948 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				2B6890A7236B812C00EC8948 /* LaunchScreen.storyboard */,
 				2B6890AA236B812C00EC8948 /* Info.plist */,
 				2B6890A4236B812C00EC8948 /* Preview Content */,
+				2B6890BE236B84B300EC8948 /* Character.swift */,
 			);
 			path = "Character Organizer";
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				2B68909D236B812700EC8948 /* AppDelegate.swift in Sources */,
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ContentView.swift in Sources */,
+				2B6890BF236B84B300EC8948 /* Character.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
