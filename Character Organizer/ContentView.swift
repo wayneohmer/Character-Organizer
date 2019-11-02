@@ -9,150 +9,217 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selection = 0
-    @State private var character = Character.shared
+    @State var selection = 0
+//    @EnvironmentObject var character:Character
+    @State var character = Character.shared
+    @State var model = Character.shared.model
+    @State var str = Character.shared.str
     var lightGray = Color(.lightGray)
-    
-    var demographics: some View {
-        HStack {
-            Text("Name:").fontWeight(.bold)
-            TextField("name", text: self.$character.name).offset(y:2)
-                .offset(x: 3)
-                .border(Color.black, width: 1)
-            Text("Race:").fontWeight(.bold)
-            TextField("race", text: self.$character.race).offset(y:2)
-                .offset(x: 3)
-                .border(Color.black, width: 1)
-            Text("Level:").fontWeight(.bold)
-            TextField("name", text: self.$character.level).multilineTextAlignment(.center)
-                .frame(maxWidth: 55)
-                .offset(y: 2)
-                .border(Color.black, width: 1)
+    var background = Color(red: 0.15, green: 0.15, blue: 0.15)
+
+    var hitPoints: some View {
+        VStack(spacing: 3){
+            Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+            TextField("0", text: self.$character.currentHP)
+                .font(Font.system(size: 45, weight: .bold, design: .default))
+                .frame(maxWidth: 100, minHeight: 80)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .multilineTextAlignment(.center)
+                .background(Color.white)
         }.padding(8)
     }
     
-    var hitPoints: some View {
+    var demographics: some View {
+        return HStack {
+            Text("Race:").foregroundColor(Color.white)
+            Text(character.race).fontWeight(.bold).foregroundColor(Color.white)
+            Text("Alignment:").foregroundColor(Color.white)
+            Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
+            Text("Speed:").foregroundColor(Color.white)
+            Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
+            Text("Level:").foregroundColor(Color.white)
+            Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
+           
+            Spacer()
+        }.padding(8)
+    }
+    
+    var armorClass: some View {
         VStack(spacing: 3){
-            Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100)
-            TextField("0", text: self.$character.currentHP)
-                .font(Font.system(size: 45, weight: .bold, design: .default))
-                .frame(minHeight: 80)
-                .border(Color.black, width: 2)
-                .frame(maxWidth: 100)
-                .multilineTextAlignment(.center)
-            self.attributes
+            Text("AC").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+            Text(character.armorClass)
+                .padding(8)
+                .font(Font.system(size: 25, weight: .bold, design: .default))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .background(Color.white)
+        }
+    }
+    
+    var initiative: some View {
+        VStack(spacing: 3){
+            Text("Init").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+            Text(character.armorClass)
+                .padding(8)
+                .font(Font.system(size: 25, weight: .bold, design: .default))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .background(Color.white)
         }
     }
     
     var attributes: some View {
-        
-        VStack(spacing:3 ){
-            
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("STR:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                    .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                    .cornerRadius(5)
-                TextField("str", text: self.$character.str).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("DEX:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                TextField("dex", text: self.$character.dex).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("CON:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                TextField("con", text: self.$character.con).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("INT:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                TextField("int", text: self.$character.int).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("WIS:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                TextField("wis", text: self.$character.wis).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-            HStack {
-                Button(action: { self.attributeTouched() }) {
-                    Text("CHA:").fontWeight(.bold).padding(3).frame(width: 60)
-                }.foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                TextField("cha", text: self.$character.cha).multilineTextAlignment(.center)
-                    .frame(maxWidth: 55.0)
-                    .offset(y: 2)
-                    .border(Color.black, width: 1)
-            }.padding(3)
-        }
+        VStack(spacing:8) {
+            VStack  {
+                self.attrButton(name: "STR", action: { self.attributeTouched() })
+                self.attrText(character.str)
+                self.attrModifier(character.strMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+
+            VStack  {
+                self.attrButton(name: "DEX", action: { self.attributeTouched() })
+                self.attrText(character.dex)
+                self.attrModifier(character.dexMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+
+            VStack  {
+                self.attrButton(name: "CON", action: { self.attributeTouched() })
+                self.attrText(character.con)
+                self.attrModifier(character.conMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+
+            VStack  {
+                self.attrButton(name: "INT", action: { self.attributeTouched() })
+                self.attrText(character.int)
+                self.attrModifier(character.intMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+
+            VStack  {
+                self.attrButton(name: "WIS", action: { self.attributeTouched() })
+                self.attrText(character.wis)
+                self.attrModifier(character.wisMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+
+            VStack  {
+                self.attrButton(name: "CHA", action: { self.attributeTouched() })
+                self.attrText(character.cha)
+                self.attrModifier(character.chaMod)
+            }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+            .background(Color.white)
+        }.padding(8)
+
     }
     
     var body: some View {
-            TabView(selection: self.$selection){
-                VStack {
-                    self.demographics
-                    HStack {
-                        self.hitPoints
-                        Spacer()
+        TabView(selection: self.$selection){
+            
+            VStack {
+                Text(character.name)
+                    .font(Font.system(size: 20, weight: .bold, design: .default))
+                    .foregroundColor(Color.white)
+                    .padding(8)
+                HStack {
+                    VStack {
+                        HStack {
+                            hitPoints
+                            VStack {
+                                demographics
+                                HStack {
+                                    HStack {
+                                        armorClass
+                                    }.frame(width:60)
+                                    VStack {
+                                        Text("")
+                                            .foregroundColor(Color.white)
+                                            .font(Font.system(size: 18, weight: .bold, design: .default))
+                                        
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }.frame(height:70)
+                            }
+                        }
+                        HStack {
+                            VStack(spacing:5) {
+                                Button(action: {}){
+                                    Text("Conditions").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                                }
+                                .frame(width:100, height:40)
+                                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                                Button(action: {}){
+                                    Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                                }
+                                .frame(width:100, height:40)
+                                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                                self.attributes
+                            }
+                            Spacer()
+                        }
                     }
-                    Spacer()
                 }
-                    
+                Spacer()
+            }
+            .tabItem {
+                VStack {
+                    Text("First")
+                }
+            }.background(background)
+            .tag(0)
+
+            Text("Second View")
+                .font(.title)
                 .tabItem {
                     VStack {
-                        Image("first")
-                        Text("First")
+                        Text("Second")
                     }
-                }
-                .tag(0)
-                
-                
-                Text("Second View")
-                    .font(.title)
-                    .tabItem {
-                        VStack {
-                            Image("second")
-                            Text("Second")
-                        }
-                }
-                .tag(1)
             }
+            .tag(1)
         }
+        
+    }
     
     func attributeTouched() {
         print("touched")
     }
-        
+    
+    func attrButton(name:String, action: @escaping () -> Void ) -> some View {
+        return Button(action: action) {
+            Text("\(name)").fontWeight(.bold).padding(3).frame(alignment: .center)
+        }
+        .frame(maxWidth: 70, maxHeight: 35)
+        .foregroundColor(Color.white)
+        .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
+        .cornerRadius(5)
+    }
+    
+    func attrText(_ text:String) -> some View {
+        Text(text).multilineTextAlignment(.center)
+        .font(Font.system(size: 25, weight: .bold, design: .default))
+        .frame(maxWidth: 70)
+    }
+    
+    func attrModifier(_ text:String) -> some View {
+        return Text(text)
+            .frame(maxWidth: 55, alignment: .center)
+    
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

@@ -16,11 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        Character.shared.name = "Boris"
-        Character.shared.race = "elf"
+        Character.shared.name = "Boris Cunt Fucker"
+        Character.shared.race = "Disco Fag Elf"
+        Character.shared.alignment = "Lawful Shithead"
         Character.shared.level = "2"
-        Character.shared.currentHP = "10"
-        Character.shared.str = "12"
+        Character.shared.armorClass = "10"
+        Character.shared.speed = "10"
+        Character.shared.currentHP = "35"
+        Character.shared.str = "16"
         Character.shared.dex = "15"
         Character.shared.con = "17"
         Character.shared.int = "9"
