@@ -15,9 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        Character.shared.name = "Boris Cunt Fucker"
-        Character.shared.race = "Disco Fag Elf"
+        UITableView.appearance().tableFooterView = UIView()
+        UITableView.appearance().separatorStyle = .none
+        UITableView.appearance().backgroundColor = .black
+        UITableViewCell.appearance().backgroundColor = .black
+
+        Character.shared.name = "Boris"
+        Character.shared.race = "Disco Elf"
         Character.shared.alignment = "Lawful Shithead"
         Character.shared.level = "2"
         Character.shared.armorClass = "10"
@@ -29,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.int = "9"
         Character.shared.wis = "13"
         Character.shared.cha = "20"
+        Character.shared.model.actions = [Action(name: "Action1", desc: "Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description "),Action(name: "Action2", desc: "Action 2 description"),Action(name: "Action3", desc: "Action 3 description")]
 
         return true
     }

@@ -123,6 +123,8 @@ class Character: ObservableObject {
         }
     }
     
+    var actions:[Action] { return model.actions }
+    
     var strMod:String { return "\(Int((model.str - 10)/2))"}
     var dexMod:String { return "\(Int((model.dex - 10)/2))"}
     var conMod:String { return "\(Int((model.con - 10)/2))"}
@@ -147,4 +149,11 @@ struct CharacterModel: Codable {
     var con = Int(1)
     var cha = Int(1)
 
+    var actions = [Action]()
+}
+
+struct Action: Codable, Identifiable {
+    var id = UUID()
+    var name = ""
+    var desc = ""
 }

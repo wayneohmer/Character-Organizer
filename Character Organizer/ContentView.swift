@@ -26,33 +26,43 @@ struct ContentView: View {
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
                 .multilineTextAlignment(.center)
                 .background(Color.white)
+                .foregroundColor(Color.black)
         }.padding(8)
     }
     
     var demographics: some View {
-        return HStack {
-            Text("Race:").foregroundColor(Color.white)
-            Text(character.race).fontWeight(.bold).foregroundColor(Color.white)
-            Text("Alignment:").foregroundColor(Color.white)
-            Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
-            Text("Speed:").foregroundColor(Color.white)
-            Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
-            Text("Level:").foregroundColor(Color.white)
-            Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
-           
-            Spacer()
-        }.padding(8)
+        return
+            VStack {
+                Text(character.name)
+                    .font(Font.system(size: 20, weight: .bold, design: .default))
+                    .foregroundColor(Color.white)
+                    .padding(8)
+                HStack {
+                    Text("Race:").foregroundColor(Color.white)
+                    Text(character.race).fontWeight(.bold).foregroundColor(Color.white)
+                    Text("Alignment:").foregroundColor(Color.white)
+                    Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
+                    Text("Speed:").foregroundColor(Color.white)
+                    Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
+                    Text("Level:").foregroundColor(Color.white)
+                    Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
+                    
+                    Spacer()
+                }.padding(8)
+        }
     }
     
     var armorClass: some View {
         VStack(spacing: 3){
-            Text("AC").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+            Text("AC").fontWeight(.bold).frame(width: 110).foregroundColor(Color.white)
             Text(character.armorClass)
                 .padding(8)
-                .font(Font.system(size: 25, weight: .bold, design: .default))
+                .font(Font.system(size: 35, weight: .bold, design: .default))
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
                 .background(Color.white)
-        }
+                .foregroundColor(Color.black)
+            Spacer()
+        }.padding(5)
     }
     
     var initiative: some View {
@@ -129,20 +139,24 @@ struct ContentView: View {
         TabView(selection: self.$selection){
             
             VStack {
-                Text(character.name)
-                    .font(Font.system(size: 20, weight: .bold, design: .default))
-                    .foregroundColor(Color.white)
-                    .padding(8)
+                
+                
                 HStack {
                     VStack {
-                        HStack {
-                            hitPoints
-                            VStack {
+                            HStack{
+                                Image("Wayne").resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 90, height:90)
+                                    .padding(3)
                                 demographics
+
+                            }
+                            VStack {
                                 HStack {
+                                    hitPoints
                                     HStack {
                                         armorClass
-                                    }.frame(width:60)
+                                    }.frame(width:60, height:110)
                                     VStack {
                                         Text("")
                                             .foregroundColor(Color.white)
@@ -151,24 +165,27 @@ struct ContentView: View {
                                         Spacer()
                                     }
                                     Spacer()
-                                }.frame(height:70)
+                                }.frame(height:110)
                             }
-                        }
                         HStack {
                             VStack(spacing:5) {
                                 Button(action: {}){
                                     Text("Conditions").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
                                 }
-                                .frame(width:100, height:40)
+                                .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
                                 Button(action: {}){
                                     Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
                                 }
-                                .frame(width:100, height:40)
+                                .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
                                 self.attributes
+                            }
+                            
+                            List(character.actions) { action in
+                                return ActionRow(action:action)
                             }
                             Spacer()
                         }
@@ -211,15 +228,35 @@ struct ContentView: View {
     
     func attrText(_ text:String) -> some View {
         Text(text).multilineTextAlignment(.center)
-        .font(Font.system(size: 25, weight: .bold, design: .default))
-        .frame(maxWidth: 70)
+            .font(Font.system(size: 25, weight: .bold, design: .default))
+            .frame(width: 70)
+            .foregroundColor(Color.black)
     }
     
     func attrModifier(_ text:String) -> some View {
         return Text(text)
-            .frame(maxWidth: 55, alignment: .center)
-    
+            .frame(width: 55, alignment: .center)
+            .foregroundColor(Color.black)
     }
+}
+
+struct ActionRow: View {
+    var action:Action
+    
+    var body: some View {
+        return HStack {
+            Spacer()
+            VStack {
+                Text(self.action.name)
+                    .foregroundColor(Color.white)
+                    .font(Font.system(size: 25, weight: .bold, design: .default)).padding(4)
+                Text(self.action.desc).foregroundColor(Color.white).offset(y:-6)
+                }
+            .background(Color.black)
+            Spacer()
+        }.overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
