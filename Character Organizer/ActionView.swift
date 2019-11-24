@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ActionView.swift
 //  Character Organizer
 //
 //  Created by Wayne Ohmer on 10/31/19.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ActionView: View {
     @State var selection = 0
 //    @EnvironmentObject var character:Character
     @State var character = Character.shared
@@ -259,8 +259,8 @@ struct ActionRow: View {
     
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct ActionView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ActionView()
     }
 }
