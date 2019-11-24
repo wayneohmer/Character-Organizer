@@ -14,6 +14,9 @@ struct ActionView: View {
     @State var character = Character.shared
     @State var model = Character.shared.model
     @State var str = Character.shared.str
+    @State var showingInitiative = false
+
+
     var lightGray = Color(.lightGray)
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
@@ -139,9 +142,7 @@ struct ActionView: View {
         TabView(selection: self.$selection){
             
             VStack {
-                
-                
-                HStack {
+                 HStack {
                     VStack {
                             HStack{
                                 Image("Wayne").resizable()
@@ -175,12 +176,15 @@ struct ActionView: View {
                                 .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
-                                Button(action: {}){
+                                
+                                Button(action: { self.showingInitiative = true }){
                                     Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-                                }
+                                }.popover(isPresented: self.$showingInitiative, arrowEdge: .leading, content:  {
+                                    DiceView()                                })
                                 .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
+                                
                                 self.attributes
                             }
                             
