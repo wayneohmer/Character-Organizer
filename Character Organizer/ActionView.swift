@@ -14,8 +14,9 @@ struct ActionView: View {
     @State var character = Character.shared
     @State var model = Character.shared.model
     @State var str = Character.shared.str
-    @State var showingInitiative = false
-
+    @State var showingDice = false
+    
+    var diceDetails = DiceDetails()
 
     var lightGray = Color(.lightGray)
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
@@ -68,21 +69,10 @@ struct ActionView: View {
         }.padding(5)
     }
     
-    var initiative: some View {
-        VStack(spacing: 3){
-            Text("Init").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
-            Text(character.armorClass)
-                .padding(8)
-                .font(Font.system(size: 25, weight: .bold, design: .default))
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-                .background(Color.white)
-        }
-    }
-    
     var attributes: some View {
         VStack(spacing:8) {
             VStack  {
-                self.attrButton(name: "STR", action: { self.attributeTouched() })
+                self.attrButton(name: "STR", action: { self.attributeTouched(title:"Strength", mod: Int(self.character.strMod) ?? 0) })
                 self.attrText(character.str)
                 self.attrModifier(character.strMod)
             }
@@ -91,7 +81,7 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "DEX", action: { self.attributeTouched() })
+                self.attrButton(name: "DEX", action: { self.attributeTouched(title:"Dexterity", mod: Int(self.character.dexMod) ?? 0) })
                 self.attrText(character.dex)
                 self.attrModifier(character.dexMod)
             }
@@ -100,7 +90,7 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "CON", action: { self.attributeTouched() })
+                self.attrButton(name: "CON", action: { self.attributeTouched(title:"Constitution", mod: Int(self.character.conMod) ?? 0) })
                 self.attrText(character.con)
                 self.attrModifier(character.conMod)
             }
@@ -109,7 +99,7 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "INT", action: { self.attributeTouched() })
+                self.attrButton(name: "INT", action: { self.attributeTouched(title:"Intelligence", mod: Int(self.character.intMod) ?? 0) })
                 self.attrText(character.int)
                 self.attrModifier(character.intMod)
             }
@@ -118,7 +108,7 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "WIS", action: { self.attributeTouched() })
+                self.attrButton(name: "WIS", action: { self.attributeTouched(title:"Wisdom", mod: Int(self.character.wisMod) ?? 0) })
                 self.attrText(character.wis)
                 self.attrModifier(character.wisMod)
             }
@@ -127,7 +117,7 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "CHA", action: { self.attributeTouched() })
+                self.attrButton(name: "CHA", action: { self.attributeTouched(title:"Charisma", mod: Int(self.character.chaMod) ?? 0) })
                 self.attrText(character.cha)
                 self.attrModifier(character.chaMod)
             }
@@ -177,13 +167,17 @@ struct ActionView: View {
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
                                 
-                                Button(action: { self.showingInitiative = true }){
+                                Button(action: {
+                                    self.diceDetails.title = "Initiative"
+                                    self.showingDice = true
+                                    self.diceDetails.isSave = false
+                                }){
                                     Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-                                }.popover(isPresented: self.$showingInitiative, arrowEdge: .leading, content:  {
-                                    DiceView()                                })
+                                }
                                 .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
+                                
                                 
                                 self.attributes
                             }
@@ -194,9 +188,11 @@ struct ActionView: View {
                             Spacer()
                         }
                     }
-                }
+                 }.sheet(isPresented: self.$showingDice, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+
                 Spacer()
             }
+
             .tabItem {
                 VStack {
                     Text("First")
@@ -216,8 +212,11 @@ struct ActionView: View {
         
     }
     
-    func attributeTouched() {
-        print("touched")
+    func attributeTouched(title:String, mod:Int) {
+        self.showingDice = true
+        self.diceDetails.title = title
+        self.diceDetails.isSave = true
+        self.diceDetails.dice = FyreDice(with: [20:1], modifier: mod)
     }
     
     func attrButton(name:String, action: @escaping () -> Void ) -> some View {

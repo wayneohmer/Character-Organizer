@@ -7,24 +7,36 @@
 //
 
 import UIKit
+import AudioToolbox
 
-class FDFyreDice {
+class FyreDice: ObservableObject {
     
-    var dice = [Int:Int]()
-    var diceResults = [Int:Int]()
-    var modifier = 0
-    var rollValue = 0
-    var advantageDisplayString = ""
-    static var shardedHistory = [FDFyreDice]()
+    let deathSound = "DeathSound"
+    let awwwSound = "Awww"
+    let oneDieSound = "1die"
+    let threeDieSound = "3dice"
+    let tenDieSound = "10dice"
+    var soundUrls = [String: CFURL]()
     
-    var advantage = false {
+   
+    @Published var dice = [Int:Int]()
+    @Published var diceResults = [Int:Int]()
+    @Published var modifier = 0
+    @Published var rollValue = 0
+    @Published var advantageDisplayString = ""
+    
+    static var shardedHistory = [FyreDice]()
+    
+    var rollValueString:String { return "\(self.rollValue)" }
+    
+    @Published var advantage = false {
         didSet {
             if advantage {
                 self.disadvantage = false
             }
         }
     }
-    var disadvantage = false {
+    @Published var disadvantage = false {
         didSet {
             if disadvantage {
                 self.advantage = false
@@ -117,7 +129,17 @@ class FDFyreDice {
         return returnString
     }
     
-    convenience init(with fyreDice:FDFyreDice, includeResult isResultIncluded:Bool = false) {
+    init() {
+        self.makeSystemSoundUrls()
+    }
+    
+    convenience init(with die:[Int:Int], modifier:Int) {
+        self.init()
+        self.dice = die
+        self.modifier = modifier
+    }
+    
+    convenience init(with fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {
         self.init()
         self.dice = fyreDice.dice
         self.modifier = fyreDice.modifier
@@ -126,6 +148,35 @@ class FDFyreDice {
         if isResultIncluded {
             self.diceResults = fyreDice.diceResults
             self.rollValue = fyreDice.rollValue
+        }
+    }
+    
+    func replaceWith(fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {
+        self.dice = fyreDice.dice
+        self.modifier = fyreDice.modifier
+        self.advantage = fyreDice.advantage
+        self.disadvantage = fyreDice.disadvantage
+        if isResultIncluded {
+            self.diceResults = fyreDice.diceResults
+            self.rollValue = fyreDice.rollValue
+        }
+    }
+    
+    func makeSystemSoundUrls() {
+        if let soundUrl = Bundle.main.url(forResource: self.deathSound, withExtension: "aif") {
+            self.soundUrls[self.deathSound] = soundUrl as CFURL
+        }
+        if let soundUrl = Bundle.main.url(forResource: self.awwwSound, withExtension: "aif") {
+            self.soundUrls[self.awwwSound] = soundUrl as CFURL
+        }
+        if let soundUrl = Bundle.main.url(forResource: self.oneDieSound, withExtension: "aif") {
+            self.soundUrls[self.oneDieSound] = soundUrl as CFURL
+        }
+        if let soundUrl = Bundle.main.url(forResource: self.threeDieSound, withExtension: "aif") {
+            self.soundUrls[self.threeDieSound] = soundUrl as CFURL
+        }
+        if let soundUrl = Bundle.main.url(forResource: self.tenDieSound, withExtension: "aif") {
+            self.soundUrls[self.tenDieSound] = soundUrl as CFURL
         }
     }
     
@@ -175,8 +226,49 @@ class FDFyreDice {
         }
         
         self.rollValue = self.diceResults.reduce(0,{$0 + $1.value}) + self.modifier
+        
+        var soundURL: CFURL?
+        if self.rollValue == self.max {
+            soundURL = self.soundUrls[self.deathSound]
+        } else if self.rollValue == self.min {
+            soundURL = self.soundUrls[self.awwwSound]
+        } else if self.numberOfDice > 10 {
+            soundURL = self.soundUrls[self.tenDieSound]
+        } else if self.numberOfDice > 3 {
+            soundURL = self.soundUrls[self.threeDieSound]
+        } else {
+            soundURL = self.soundUrls[self.oneDieSound]
+        }
+        if let soundURL = soundURL {
+            var soundId = SystemSoundID(0)
+            AudioServicesCreateSystemSoundID(soundURL, &soundId)
+            AudioServicesPlaySystemSoundWithCompletion(soundId) {
+                AudioServicesDisposeSystemSoundID(soundId)
+            }
+        }
     }
 
 }
     
+class Oops {
+
+    enum OopsType {
+        case buttonTouch
+        case roll
+        case saveDelete
+        case save
+        case hit
+    }
+
+    var fyreDice = FyreDice()
+    var type = OopsType.buttonTouch
+    var saveIndex = Int(0)
+
+    convenience init(fyreDice: FyreDice, type: OopsType) {
+        self.init()
+        self.fyreDice = fyreDice
+        self.type = type
+    }
+
+}
 
