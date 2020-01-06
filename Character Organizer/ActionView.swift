@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ActionView: View {
     @State var selection = 0
-//    @EnvironmentObject var character:Character
     @State var character = Character.shared
     @State var model = Character.shared.model
     @State var str = Character.shared.str
@@ -43,7 +42,7 @@ struct ActionView: View {
                     .padding(8)
                 HStack {
                     Text("Race:").foregroundColor(Color.white)
-                    Text(character.race).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Alignment:").foregroundColor(Color.white)
                     Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Speed:").foregroundColor(Color.white)
@@ -195,18 +194,17 @@ struct ActionView: View {
 
             .tabItem {
                 VStack {
-                    Text("First")
+                    Text("Action")
                 }
             }.background(background)
-            .tag(0)
-
-            Text("Second View")
-                .font(.title)
+                .tag(0)
+            
+            CreateView()
                 .tabItem {
                     VStack {
-                        Text("Second")
+                        Text("Create")
                     }
-            }
+            }.background(background)
             .tag(1)
         }
         

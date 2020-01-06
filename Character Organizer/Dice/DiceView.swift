@@ -142,7 +142,7 @@ struct DiceView: View {
     
     func diceButton(name:String, width:CGFloat, action: @escaping () -> Void ) -> some View {
         return Button(action: action) {
-            Text("\(name)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .top)
+            Text("\(name)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
         }
         .foregroundColor(Color.white)
         .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))

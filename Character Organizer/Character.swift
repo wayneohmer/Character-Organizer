@@ -21,14 +21,7 @@ class Character: ObservableObject {
             return model.name
         }
     }
-    var race:String {
-        set {
-            model.race = newValue
-        }
-        get {
-            return model.race
-        }
-    }
+    var race = Race()
     var alignment:String {
            set {
                model.alignment = newValue
@@ -136,7 +129,8 @@ class Character: ObservableObject {
 
 struct CharacterModel: Codable {
     var name = ""
-    var race = ""
+    var raceModel:RaceModel?
+    var subrace:RaceModel?
     var alignment = ""
     var currentHP = 0
     var armorClass = 0
