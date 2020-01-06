@@ -116,6 +116,8 @@ class Character: ObservableObject {
         }
     }
     
+    var charcaterClass = Class.sharedClasses[0]
+    
     var actions:[Action] { return model.actions }
     
     var strMod:String { return "\(Int((model.str - 10)/2))"}
@@ -131,6 +133,7 @@ struct CharacterModel: Codable {
     var name = ""
     var raceModel:RaceModel?
     var subrace:RaceModel?
+    var characterClass:ClassModel?
     var alignment = ""
     var currentHP = 0
     var armorClass = 0

@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableViewCell.appearance().backgroundColor = .black
         RaceModel.getRaces()
         Trait.getTraits()
+        Class.getClasses()
         Character.shared.name = "Boris"
         Character.shared.race = Race.sharedRaces[0]
         Character.shared.alignment = "Lawful Shithead"

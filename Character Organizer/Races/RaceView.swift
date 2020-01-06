@@ -52,10 +52,10 @@ struct RaceView: View {
                                 DescText(text: descriptor.name, width: 370)
                             }
                         }
-                        if selectedRace.startingProficiencies != nil && (selectedRace.startingProficiencyOptions?.choose ?? 0) > 0 {
+                        if selectedRace.startingProficiencies != nil && (selectedRace.startingChooseableOption?.choose ?? 0) > 0 {
                             DescText(text: "Starting Proficiencies Options", alingment: .center)
-                            DescText(text: "Choose \(selectedRace.startingProficiencyOptions?.choose ?? 0)", alingment: .center)
-                            ForEach(selectedRace.startingProficiencyOptions?.from ?? [Descriptor](), id: \.name) { descriptor in
+                            DescText(text: "Choose \(selectedRace.startingChooseableOption?.choose ?? 0)", alingment: .center)
+                            ForEach(selectedRace.startingChooseableOption?.from ?? [Descriptor](), id: \.name) { descriptor in
                                 DescText(text: descriptor.name, width: 370)
                             }
                         }

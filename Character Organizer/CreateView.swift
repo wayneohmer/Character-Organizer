@@ -13,6 +13,8 @@ struct CreateView: View {
     @State var character = Character.shared
 
     @State var raceShowing = false
+    @State var classShowing = false
+    
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
     var body: some View {
@@ -30,10 +32,17 @@ struct CreateView: View {
                 Button(action: { self.raceShowing = true }, label: { formatedText("Race", width: 200) })
                     .sheet(isPresented: $raceShowing, content:  { RaceView() })
                 formatedText(character.race.name, width: 200, align: .leading)
+                
+                Spacer()
+            }
+            HStack {
+                Button(action: { self.classShowing = true }, label: { formatedText("Class", width: 200) })
+                    .sheet(isPresented: $classShowing, content:  { ClassView() })
+                formatedText(character.charcaterClass.name, width: 200, align: .leading)
                 Spacer()
             }
             Spacer()
-
+            
         }.background(background)
     }
 }

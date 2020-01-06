@@ -24,8 +24,8 @@ class Race: Identifiable, Equatable, Comparable, ObservableObject {
     var age:String { return model.age }
     var abilityBonuses:[Ability]? { return isSubrace ? subrace.ability_bonuses : model.ability_bonuses }
     var startingProficiencies:[Descriptor]? { return isSubrace ? subrace.starting_proficiencies : model.starting_proficiencies }
-    var startingProficiencyOptions:ProficiencyOptions? { return isSubrace ? subrace.starting_proficiency_options : model.starting_proficiency_options }
-    var languageOptions:ProficiencyOptions? { return isSubrace ? subrace.language_options : model.language_options }
+    var startingChooseableOption:ChooseableOption? { return isSubrace ? subrace.starting_proficiency_options : model.starting_proficiency_options }
+    var languageOptions:ChooseableOption? { return isSubrace ? subrace.language_options : model.language_options }
     var languages:[Descriptor]? { return isSubrace ? subrace.languages : model.languages }
     var traits:[Descriptor]? { return isSubrace ? subrace.traits : model.traits }
     var subraces:[Descriptor]?
@@ -57,9 +57,9 @@ struct RaceModel: Codable, Identifiable, Equatable {
     var age = ""
     var ability_bonuses:[Ability]?
     var starting_proficiencies:[Descriptor]?
-    var starting_proficiency_options:ProficiencyOptions?
+    var starting_proficiency_options:ChooseableOption?
     var languages:[Descriptor]?
-    var language_options:ProficiencyOptions?
+    var language_options:ChooseableOption?
     var traits:[Descriptor]?
     var subraces:[Descriptor]?
 
@@ -123,9 +123,9 @@ struct SubRace: Codable, Identifiable, Equatable {
     var name = ""
     var ability_bonuses:[Ability]?
     var starting_proficiencies:[Descriptor]?
-    var starting_proficiency_options:ProficiencyOptions?
+    var starting_proficiency_options:ChooseableOption?
     var languages:[Descriptor]?
-    var language_options:ProficiencyOptions?
+    var language_options:ChooseableOption?
     var traits:[Descriptor]?
     var race:Descriptor?
     var desc:String?
@@ -144,7 +144,7 @@ struct Ability: Codable {
     var bonus = Int(0)
 }
 
-struct ProficiencyOptions: Codable {
+struct ChooseableOption: Codable {
     var choose:Int?
     var type:String?
     var from:[Descriptor]?
@@ -154,4 +154,6 @@ struct Descriptor: Codable {
     
     var name = ""
     var url = ""
+    
+   
 }
