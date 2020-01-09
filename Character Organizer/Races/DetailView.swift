@@ -1,5 +1,5 @@
 //
-//  TraitView.swift
+//  DetailView.swift
 //  Character Organizer
 //
 //  Created by Wayne Ohmer on 1/5/20.
@@ -8,10 +8,11 @@
 
 import SwiftUI
 
-struct TraitView: View {
+
+struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    var trait:Trait
+    var detail:Viewable
     
     var body: some View {
         VStack {
@@ -24,9 +25,16 @@ struct TraitView: View {
                 }.frame(width: 100, height: 50, alignment: .center)
                 
             }
-            Text(trait.name).fontWeight(.bold).foregroundColor(Color.white).padding(5)
-            Text(trait.desc.joined(separator: "\n\n")).fontWeight(.bold).foregroundColor(Color.white).padding(5)
+            Text(detail.name).fontWeight(.bold).foregroundColor(Color.white).padding(5)
+            Text(detail.description).fontWeight(.bold).foregroundColor(Color.white).padding(5)
             Spacer()
         }.background(Color.black)
     }
 }
+
+protocol Viewable {
+    
+    var name:String { get }
+    var description:String { get }
+}
+

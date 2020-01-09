@@ -199,7 +199,7 @@ class FyreDice: ObservableObject {
         self.disadvantage = false
     }
     
-    func roll() {
+    func roll(silent: Bool = false) {
         for (die,multiplier) in dice {
             var thisResult = Int(0)
             if die == 20 && (self.advantage || self.disadvantage) {
@@ -227,23 +227,25 @@ class FyreDice: ObservableObject {
         
         self.rollValue = self.diceResults.reduce(0,{$0 + $1.value}) + self.modifier
         
-        var soundURL: CFURL?
-        if self.rollValue == self.max {
-            soundURL = self.soundUrls[self.deathSound]
-        } else if self.rollValue == self.min {
-            soundURL = self.soundUrls[self.awwwSound]
-        } else if self.numberOfDice > 10 {
-            soundURL = self.soundUrls[self.tenDieSound]
-        } else if self.numberOfDice > 3 {
-            soundURL = self.soundUrls[self.threeDieSound]
-        } else {
-            soundURL = self.soundUrls[self.oneDieSound]
-        }
-        if let soundURL = soundURL {
-            var soundId = SystemSoundID(0)
-            AudioServicesCreateSystemSoundID(soundURL, &soundId)
-            AudioServicesPlaySystemSoundWithCompletion(soundId) {
-                AudioServicesDisposeSystemSoundID(soundId)
+        if !silent {
+            var soundURL: CFURL?
+            if self.rollValue == self.max {
+                soundURL = self.soundUrls[self.deathSound]
+            } else if self.rollValue == self.min {
+                soundURL = self.soundUrls[self.awwwSound]
+            } else if self.numberOfDice > 10 {
+                soundURL = self.soundUrls[self.tenDieSound]
+            } else if self.numberOfDice > 3 {
+                soundURL = self.soundUrls[self.threeDieSound]
+            } else {
+                soundURL = self.soundUrls[self.oneDieSound]
+            }
+            if let soundURL = soundURL {
+                var soundId = SystemSoundID(0)
+                AudioServicesCreateSystemSoundID(soundURL, &soundId)
+                AudioServicesPlaySystemSoundWithCompletion(soundId) {
+                    AudioServicesDisposeSystemSoundID(soundId)
+                }
             }
         }
     }

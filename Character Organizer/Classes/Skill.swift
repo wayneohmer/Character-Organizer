@@ -1,34 +1,34 @@
 //
-//  Traits.swift
+//  Skill.swift
 //  Character Organizer
 //
-//  Created by Wayne Ohmer on 1/5/20.
+//  Created by Wayne Ohmer on 1/7/20.
 //  Copyright © 2020 Tryal by Fyre. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-struct Trait: Codable, Viewable {
+struct Skill: Codable, Viewable {
     
-    static var shared:[String:Trait] = [String:Trait]()
+    static var shared = [String:Skill]()
     
     var description:String { return desc.joined(separator: "\n\n") }
-
-    var index = ""
+    
     var name = ""
     var desc = [String]()
+    var ability_score:Descriptor?
     var url = ""
-    
-    static func getTraits(){
+
+    static func getSkills(){
         
-        let path = Bundle.main.path(forResource: "5e-SRD-Traits", ofType: "json")!
+        let path = Bundle.main.path(forResource: "5e-SRD-Skills", ofType: "json")!
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             do {
                 let decoder = JSONDecoder()
-                let allTraits = try decoder.decode([Trait].self, from: data)
-                for trait in allTraits {
-                    shared[trait.url] = trait
+                let all = try decoder.decode([Skill].self, from: data)
+                for skill in all {
+                    shared[skill.url] = skill
                 }
             } catch {
                 print(error)
@@ -37,4 +37,6 @@ struct Trait: Codable, Viewable {
             print(error)
         }
     }
+    
 }
+

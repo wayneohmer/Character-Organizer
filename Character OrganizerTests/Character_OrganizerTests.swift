@@ -20,8 +20,31 @@ class Character_OrganizerTests: XCTestCase {
     }
 
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        var fileURL: URL?
+
+        
+        if let path = Bundle.main.path(forResource: "5e-SRD-Proficiencies", ofType: "json") {
+            fileURL = URL(fileURLWithPath: path)
+        } else {
+            XCTAssert(false)
+        }
+
+        do {
+            let data = try Data(contentsOf: fileURL!, options: .mappedIfSafe)
+            do {
+                let decoder = JSONDecoder()
+                let skillarray = try decoder.decode([Proficiency].self, from: data)
+                for skill in skillarray {
+                    Proficiency.shared[skill.url] = skill
+                }
+                
+            } catch {
+                print(error)
+                XCTAssert(false, error.localizedDescription)
+            }
+        } catch {
+            XCTAssert(false, error.localizedDescription)
+        }
     }
 
     func testPerformanceExample() {

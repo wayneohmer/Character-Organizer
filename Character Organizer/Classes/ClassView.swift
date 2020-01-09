@@ -1,5 +1,5 @@
 //
-//  ClassView.swift
+//  CharacterClassView.swift
 //  Character Organizer
 //
 //  Created by Wayne Ohmer on 1/5/20.
@@ -11,8 +11,9 @@ struct ClassView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State var character = Character.shared
-    @State var selectedClass:Class = Class.sharedClasses[0]
-
+    @State var selectedClass:CharacterClass = CharacterClass.sharedClasses[0]
+    var classes = CharacterClass.sharedClasses
+    
     var body: some View {
         VStack {
             HStack {
@@ -26,8 +27,8 @@ struct ClassView: View {
             }.background(Color.black)
             HStack {
                 VStack {
-                    ForEach(Class.sharedClasses, id:\.name) { thisClass in
-                        ClassRow(thisClass: thisClass, isSelected: thisClass == self.selectedClass).onTapGesture {
+                    ForEach(CharacterClass.sharedClasses) { thisClass in
+                        ClassRow(thisClass: thisClass, isSelected: thisClass == self.selectedClass) .onTapGesture {
                             self.selectedClass = thisClass
                         }
                     }
@@ -36,17 +37,8 @@ struct ClassView: View {
                 ScrollView {
                     VStack {
                         DescText(text: "Hit Die: \(selectedClass.hitDie)")
-                        if selectedClass.proficiencyChoices != nil && (selectedClass.proficiencyChoices?.choose ?? 0) > 0 {
-                            DescText(text: "Starting Proficiencies Options", alingment: .center)
-                            DescText(text: "Choose \(selectedClass.proficiencyChoices?.choose ?? 0)", alingment: .center)
-                            ForEach(selectedClass.proficiencyChoices?.from ?? [Descriptor](), id: \.name) { descriptor in
-                                DescText(text: descriptor.name, width: 370)
-                            }
-                        }
-                        DescText(text: "Starting Proficiencies", alingment: .center)
-                        ForEach(selectedClass.proficiencies ?? [Descriptor](), id: \.name) { descriptor in
-                            DescText(text: descriptor.name, width: 370)
-                        }
+                        ProficiencyOptionsView(profObject: self.selectedClass)
+                        StartingProficiencyView(selectedClass: selectedClass)
                         DescText(text: "Saving Throws", alingment: .center)
                         ForEach(selectedClass.savingThrows ?? [Descriptor](), id: \.name) { descriptor in
                             DescText(text: descriptor.name, width: 370)
@@ -60,9 +52,59 @@ struct ClassView: View {
     }
 }
 
+struct StartingProficiencyView: View {
+    
+    @State var showProficiencyOptions = true
+    @State var selectedClass:CharacterClass
+    
+    var body: some View {
+        VStack {
+            DescText(text: "Starting Proficiencies", alingment: .center).onTapGesture {
+                self.showProficiencyOptions.toggle()
+            }
+            if self.showProficiencyOptions {
+                ForEach(selectedClass.proficiencies ?? [Descriptor](), id: \.name) { descriptor in
+                    DescText(text: descriptor.name, width: 370)
+                }
+            }
+        }
+        
+    }
+}
+
+
+struct ProficiencyOptionsView: View  {
+
+    @State var selectedSkill = Skill()
+    @State var showProficiencyOptions = true
+    @State var profShowing = false
+
+    var profObject:CharacterClass
+
+    var body: some View {
+        VStack {
+            DescText(text: "Starting Proficiencies Options", alingment: .center).onTapGesture {
+                self.showProficiencyOptions.toggle()
+            }
+            if self.showProficiencyOptions {
+                DescText(text: "Choose \(profObject.proficiencyChoices.choose ?? 0)", alingment: .center)
+                ForEach(profObject.proficiencyChoices.proficiencies, id:\.name ) { proficiency in
+                    DescText(text: proficiency.name, width: 370).onTapGesture {
+                        if let skill = proficiency.skill {
+                            self.selectedSkill = skill
+                            self.profShowing = true
+                        }
+                    }
+                }.sheet(isPresented: self.$profShowing, content:  { DetailView(detail: self.selectedSkill as Viewable ) })
+            }
+        }
+    }
+}
+
+
 struct ClassRow: View {
     
-    var thisClass:Class
+    var thisClass: CharacterClass
     var isSelected = false
     
     var body: some View {

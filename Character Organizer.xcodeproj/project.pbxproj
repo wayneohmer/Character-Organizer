@@ -11,13 +11,14 @@
 		2B068BD223C26A6E007893BC /* RaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BD123C26A6E007893BC /* RaceView.swift */; };
 		2B068BD523C26C0F007893BC /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BD423C26C0F007893BC /* Race.swift */; };
 		2B068BE023C2B495007893BC /* Traits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BDF23C2B495007893BC /* Traits.swift */; };
-		2B068BE223C2B6B2007893BC /* TraitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BE123C2B6B2007893BC /* TraitView.swift */; };
+		2B068BE223C2B6B2007893BC /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BE123C2B6B2007893BC /* DetailView.swift */; };
 		2B068BEB23C2C879007893BC /* ClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BEA23C2C879007893BC /* ClassView.swift */; };
 		2B068BEE23C2C920007893BC /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B068BED23C2C920007893BC /* Class.swift */; };
 		2B068BEF23C2CCBA007893BC /* 5e-SRD-Races.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B068BE623C2C814007893BC /* 5e-SRD-Races.json */; };
 		2B068BF023C2CCBA007893BC /* 5e-SRD-Classes.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B068BE723C2C814007893BC /* 5e-SRD-Classes.json */; };
 		2B068BF123C2CCBA007893BC /* 5e-SRD-Subraces.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B068BE823C2C814007893BC /* 5e-SRD-Subraces.json */; };
 		2B068BF223C2CCBA007893BC /* 5e-SRD-Traits.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B068BE923C2C814007893BC /* 5e-SRD-Traits.json */; };
+		2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */; };
 		2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B396238B2330000E022B /* FDFyreDice.swift */; };
 		2B25B399238B2B52000E022B /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B398238B2B52000E022B /* DiceView.swift */; };
 		2B27BF9523BFFEE0001719A0 /* 3dice.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B391238B22F8000E022B /* 3dice.aif */; };
@@ -34,6 +35,9 @@
 		2B6890B4236B812D00EC8948 /* Character_OrganizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890B3236B812D00EC8948 /* Character_OrganizerTests.swift */; };
 		2B6890BF236B84B300EC8948 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890BE236B84B300EC8948 /* Character.swift */; };
 		2BEC8E0C23C3B26C0034CE8B /* 5e-SRD-Skills.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BEC8E0B23C3B26C0034CE8B /* 5e-SRD-Skills.json */; };
+		2BF2934E23C4F84300659673 /* Skill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF2934D23C4F84300659673 /* Skill.swift */; };
+		2BF2935023C5042F00659673 /* 5e-SRD-Proficiencies.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF2934F23C5042F00659673 /* 5e-SRD-Proficiencies.json */; };
+		2BF2935223C505E000659673 /* Proficiency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF2935123C505E000659673 /* Proficiency.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,13 +55,14 @@
 		2B068BD123C26A6E007893BC /* RaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaceView.swift; sourceTree = "<group>"; };
 		2B068BD423C26C0F007893BC /* Race.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
 		2B068BDF23C2B495007893BC /* Traits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Traits.swift; sourceTree = "<group>"; };
-		2B068BE123C2B6B2007893BC /* TraitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraitView.swift; sourceTree = "<group>"; };
+		2B068BE123C2B6B2007893BC /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		2B068BE623C2C814007893BC /* 5e-SRD-Races.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "5e-SRD-Races.json"; sourceTree = "<group>"; };
 		2B068BE723C2C814007893BC /* 5e-SRD-Classes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "5e-SRD-Classes.json"; sourceTree = "<group>"; };
 		2B068BE823C2C814007893BC /* 5e-SRD-Subraces.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "5e-SRD-Subraces.json"; sourceTree = "<group>"; };
 		2B068BE923C2C814007893BC /* 5e-SRD-Traits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "5e-SRD-Traits.json"; sourceTree = "<group>"; };
 		2B068BEA23C2C879007893BC /* ClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassView.swift; sourceTree = "<group>"; };
 		2B068BED23C2C920007893BC /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
+		2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCreationView.swift; sourceTree = "<group>"; };
 		2B25B391238B22F8000E022B /* 3dice.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 3dice.aif; sourceTree = "<group>"; };
 		2B25B392238B22F8000E022B /* DeathSound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = DeathSound.aif; sourceTree = "<group>"; };
 		2B25B393238B22F8000E022B /* 10dice.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 10dice.aif; sourceTree = "<group>"; };
@@ -78,6 +83,9 @@
 		2B6890B5236B812D00EC8948 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B6890BE236B84B300EC8948 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		2BEC8E0B23C3B26C0034CE8B /* 5e-SRD-Skills.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Skills.json"; sourceTree = "<group>"; };
+		2BF2934D23C4F84300659673 /* Skill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skill.swift; sourceTree = "<group>"; };
+		2BF2934F23C5042F00659673 /* 5e-SRD-Proficiencies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Proficiencies.json"; sourceTree = "<group>"; };
+		2BF2935123C505E000659673 /* Proficiency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proficiency.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				2B068BD123C26A6E007893BC /* RaceView.swift */,
-				2B068BE123C2B6B2007893BC /* TraitView.swift */,
+				2B068BE123C2B6B2007893BC /* DetailView.swift */,
 				2B068BD423C26C0F007893BC /* Race.swift */,
 				2B068BDF23C2B495007893BC /* Traits.swift */,
 			);
@@ -126,6 +134,7 @@
 				2B068BE823C2C814007893BC /* 5e-SRD-Subraces.json */,
 				2B068BE923C2C814007893BC /* 5e-SRD-Traits.json */,
 				2BEC8E0B23C3B26C0034CE8B /* 5e-SRD-Skills.json */,
+				2BF2934F23C5042F00659673 /* 5e-SRD-Proficiencies.json */,
 			);
 			path = "Data Files";
 			sourceTree = "<group>";
@@ -135,6 +144,9 @@
 			children = (
 				2B068BEA23C2C879007893BC /* ClassView.swift */,
 				2B068BED23C2C920007893BC /* Class.swift */,
+				2BF2934D23C4F84300659673 /* Skill.swift */,
+				2BF2935123C505E000659673 /* Proficiency.swift */,
+				2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -291,6 +303,7 @@
 				2B068BF023C2CCBA007893BC /* 5e-SRD-Classes.json in Resources */,
 				2B6890A9236B812C00EC8948 /* LaunchScreen.storyboard in Resources */,
 				2B27BF9923BFFEE0001719A0 /* 1die.aif in Resources */,
+				2BF2935023C5042F00659673 /* 5e-SRD-Proficiencies.json in Resources */,
 				2B6890A6236B812C00EC8948 /* Preview Assets.xcassets in Resources */,
 				2B27BF9723BFFEE0001719A0 /* 10dice.aif in Resources */,
 				2B068BF123C2CCBA007893BC /* 5e-SRD-Subraces.json in Resources */,
@@ -322,13 +335,16 @@
 				2B25B399238B2B52000E022B /* DiceView.swift in Sources */,
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ActionView.swift in Sources */,
-				2B068BE223C2B6B2007893BC /* TraitView.swift in Sources */,
+				2B068BE223C2B6B2007893BC /* DetailView.swift in Sources */,
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
+				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
+				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
 				2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */,
 				2B6890BF236B84B300EC8948 /* Character.swift in Sources */,
 				2B068BEE23C2C920007893BC /* Class.swift in Sources */,
 				2B068BE023C2B495007893BC /* Traits.swift in Sources */,
+				2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */,
 				2B068BD223C26A6E007893BC /* RaceView.swift in Sources */,
 				2B068BEB23C2C879007893BC /* ClassView.swift in Sources */,
 			);
@@ -494,7 +510,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Character-Organizer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -514,7 +530,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Character-Organizer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

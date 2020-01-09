@@ -8,16 +8,38 @@
 
 import UIKit
 
-class Class: NSObject {
-    static var sharedClasses = [Class]()
+class CharacterClass: HasProfOptions, Identifiable, Equatable {
+   
     
+    static var sharedClasses = [CharacterClass]()
+    
+    var id:String { name }
     var model:ClassModel = ClassModel()
     var name:String { return model.name }
     var hitDie:Int { return model.hit_die }
-    var proficiencyChoices:ChooseableOption? { return model.proficiency_choices?[0] ?? ChooseableOption()  }
+    var proficiencyChoices:ProficiencyChoices { return profChoices }
     var proficiencies:[Descriptor]? { return model.proficiencies }
     var savingThrows:[Descriptor]? { return model.saving_throws }
+    
+    lazy var profChoices:ProficiencyChoices = {
+        var returnValue = ProficiencyChoices()
+        guard let choices = model.proficiency_choices?[0].from, let choose = model.proficiency_choices?[0].choose, let type = model.proficiency_choices?[0].type else {
+            return returnValue
+        }
+        returnValue.choose = choose
+        returnValue.type = type
+        for descriptor in choices {
+            if let prof = Proficiency.shared[descriptor.url] {
+                returnValue.proficiencies.append(prof)
+            }
+        }
+        return returnValue
+    }()
 
+    static func == (lhs: CharacterClass, rhs: CharacterClass) -> Bool {
+         return lhs.name == rhs.name
+    }
+       
     static func getClasses(){
         
         let path = Bundle.main.path(forResource: "5e-SRD-Classes", ofType: "json")!
@@ -27,9 +49,9 @@ class Class: NSObject {
                 let decoder = JSONDecoder()
                 let classes = try decoder.decode([ClassModel].self, from: data)
                 for model in classes {
-                    let newClass = Class()
+                    let newClass = CharacterClass()
                     newClass.model = model
-                    Class.sharedClasses.append(newClass)
+                    CharacterClass.sharedClasses.append(newClass)
                 }
             } catch {
                 print(error)
@@ -41,11 +63,20 @@ class Class: NSObject {
     
 }
 
+class ProficiencyChoices: ChooseableOption {
+    
+    var choose: Int?
+    var type: String?
+    var from:[Viewable] { return proficiencies as [Viewable] }
+    var proficiencies = [Proficiency]()
+
+}
+
 struct ClassModel: Codable {
     
     var name = ""
     var hit_die = Int(0)
-    var proficiency_choices:[ChooseableOption]?
+    var proficiency_choices:[ChooseableOptionModel]?
     var proficiencies:[Descriptor]?
     var saving_throws:[Descriptor]?
     var starting_equipment:ClassDeccripter?

@@ -12,7 +12,7 @@ struct RaceView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State var character = Character.shared
-    @State var selectedRace:Race = Race.sharedRaces[0]
+    @State var selectedRace:Race = Race.shared[0]
     
     let background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
@@ -29,7 +29,7 @@ struct RaceView: View {
             }.background(Color.black)
             HStack {
                 VStack {
-                    ForEach(Race.sharedRaces) { race in
+                    ForEach(Race.shared) { race in
                         RaceRow(race: race, isSelected: race == self.selectedRace).onTapGesture {
                             self.selectedRace = race
                         }
@@ -52,12 +52,8 @@ struct RaceView: View {
                                 DescText(text: descriptor.name, width: 370)
                             }
                         }
-                        if selectedRace.startingProficiencies != nil && (selectedRace.startingChooseableOption?.choose ?? 0) > 0 {
-                            DescText(text: "Starting Proficiencies Options", alingment: .center)
-                            DescText(text: "Choose \(selectedRace.startingChooseableOption?.choose ?? 0)", alingment: .center)
-                            ForEach(selectedRace.startingChooseableOption?.from ?? [Descriptor](), id: \.name) { descriptor in
-                                DescText(text: descriptor.name, width: 370)
-                            }
+                        if selectedRace.startingProficiencies != nil && (selectedRace.proficiencyChoices.choose ?? 0) > 0 {
+                            //ProficiencyOptionsView(selectedClass: selectedRace as HasProfOptions)
                         }
                         VStack {
                             Languages(race: selectedRace)
@@ -87,11 +83,11 @@ struct Traits: View {
             DescText(text: "Traits", alingment: .center)
             ForEach(race.traits ?? [Descriptor](), id: \.name) { descriptor in
                 DescText(text: descriptor.name, width: 370).onTapGesture {
-                    self.selectedTrait = Trait.sharedTraits[descriptor.url] ?? Trait()
+                    self.selectedTrait = Trait.shared[descriptor.url] ?? Trait()
                     self.traitShowing = true
                 }
             }
-        }.sheet(isPresented: self.$traitShowing, content:  { TraitView(trait: self.selectedTrait) })
+        }.sheet(isPresented: self.$traitShowing, content:  { DetailView(detail: self.selectedTrait as Viewable ) })
     }
     
 }

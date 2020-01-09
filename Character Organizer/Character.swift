@@ -116,16 +116,26 @@ class Character: ObservableObject {
         }
     }
     
-    var charcaterClass = Class.sharedClasses[0]
+    var charcaterClass = CharacterClass.sharedClasses[0]
     
     var actions:[Action] { return model.actions }
     
-    var strMod:String { return "\(Int((model.str - 10)/2))"}
-    var dexMod:String { return "\(Int((model.dex - 10)/2))"}
-    var conMod:String { return "\(Int((model.con - 10)/2))"}
-    var intMod:String { return "\(Int((model.int - 10)/2))"}
-    var wisMod:String { return "\(Int((model.wis - 10)/2))"}
-    var chaMod:String { return "\(Int((model.cha - 10)/2))"}
+    var strMod:String { return modString(model.str) }
+    var dexMod:String { return modString(model.dex) }
+    var conMod:String { return modString(model.con) }
+    var intMod:String { return modString(model.int) }
+    var wisMod:String { return modString(model.wis) }
+    var chaMod:String { return modString(model.cha) }
+    
+    func modString(_ attribute:Int) -> String {
+        
+        let result = Int((attribute - 10)/2)
+        if result > 0 {
+            return "+\(result)"
+        }
+        return "\(result)"
+        
+    }
 
 }
 

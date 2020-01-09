@@ -21,9 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableViewCell.appearance().backgroundColor = .black
         RaceModel.getRaces()
         Trait.getTraits()
-        Class.getClasses()
+        CharacterClass.getClasses()
+        Skill.getSkills()
+        Proficiency.getProficiencies()
         Character.shared.name = "Boris"
-        Character.shared.race = Race.sharedRaces[0]
+        Character.shared.race = Race.shared[0]
         Character.shared.alignment = "Lawful Shithead"
         Character.shared.level = "2"
         Character.shared.armorClass = "10"
@@ -33,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.dex = "15"
         Character.shared.con = "17"
         Character.shared.int = "9"
-        Character.shared.wis = "13"
+        Character.shared.wis = "7"
         Character.shared.cha = "20"
         Character.shared.model.actions = [Action(name: "Action1", desc: "Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description "),Action(name: "Action2", desc: "Action 2 description"),Action(name: "Action3", desc: "Action 3 description")]
         
