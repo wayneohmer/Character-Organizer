@@ -21,7 +21,12 @@ class Character: ObservableObject {
             return model.name
         }
     }
-    var race = Race()
+    var race:Race = Race() {
+        didSet {
+            self.speed = "\(self.race.speed)"
+            self.languages.formUnion(self.race.selectedLanguages)
+        }
+    }
     var alignment:String {
            set {
                model.alignment = newValue
@@ -136,6 +141,8 @@ class Character: ObservableObject {
         return "\(result)"
         
     }
+    
+    var languages = Set<Descriptor>()
 
 }
 

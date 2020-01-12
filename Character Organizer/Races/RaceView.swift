@@ -22,6 +22,7 @@ struct RaceView: View {
                 Spacer()
                 Button(action: {
                     Character.shared.race = self.selectedRace
+                    
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
                     Text("Save").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
@@ -53,7 +54,7 @@ struct RaceView: View {
                             }
                         }
                         if selectedRace.startingProficiencies != nil && (selectedRace.proficiencyChoices.choose ?? 0) > 0 {
-                            //ProficiencyOptionsView(selectedClass: selectedRace as HasProfOptions)
+                            //ProficiencyOptionsView(profObject: self.selectedRace as HasProfOptions)
                         }
                         VStack {
                             Languages(race: selectedRace)
@@ -95,19 +96,39 @@ struct Traits: View {
 struct Languages: View {
     
     var race:Race
+    @State var selectedLanguages = Set<Descriptor>()
+    var choose:Int { return race.languageOptions?.choose ?? 0 }
+    var chooseColor:Color { return selectedLanguages.count == choose ? .white : .red }
     
     var body: some View {
         VStack {
             DescText(text: "Languages", alingment: .center)
-            
+
             ForEach(race.languages ?? [Descriptor](), id: \.name) { descriptor in
                 DescText(text: descriptor.name, width: 370)
             }
             if race.languageOptions != nil && (race.languageOptions?.choose ?? 0) > 0 {
-                DescText(text: "Language Options", alingment: .center)
-                DescText(text: "Choose \(race.languageOptions?.choose ?? 0)", alingment: .center)
-                ForEach(race.languageOptions?.from ?? [Descriptor](), id: \.name) { descriptor in
-                    DescText(text: descriptor.name, width: 370)
+                Text("Language Options")
+                    .foregroundColor(self.chooseColor)
+                    .font(Font.system(size: 25, weight: .bold, design: .default))
+                DescText(text: "Choose \(choose)", alingment: .center)
+                ForEach(race.languageOptions?.from ?? [Descriptor]()) { descriptor in
+                    if self.selectedLanguages.contains(descriptor) {
+                        DescText(text: descriptor.name, width: 370).onTapGesture {
+                            self.selectedLanguages.remove(descriptor)
+                            self.race.selectedLanguages.remove(descriptor)
+                        }
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    } else {
+                        DescText(text: descriptor.name, width: 370).onTapGesture {
+                            if self.selectedLanguages.count == self.choose {
+                                self.selectedLanguages.removeFirst()
+                                self.race.selectedLanguages.removeFirst()
+                            }
+                            self.selectedLanguages.insert(descriptor)
+                            self.race.selectedLanguages.insert(descriptor)
+                        }
+                    }
                 }
             }
         }
@@ -132,7 +153,6 @@ struct DescText: View {
         .padding(2)
     }
 }
-
 
 struct RaceRow: View {
     

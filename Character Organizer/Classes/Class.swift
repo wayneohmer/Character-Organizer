@@ -20,6 +20,7 @@ class CharacterClass: HasProfOptions, Identifiable, Equatable {
     var proficiencyChoices:ProficiencyChoices { return profChoices }
     var proficiencies:[Descriptor]? { return model.proficiencies }
     var savingThrows:[Descriptor]? { return model.saving_throws }
+    var selectedProficiencies = Set<Proficiency>()
     
     lazy var profChoices:ProficiencyChoices = {
         var returnValue = ProficiencyChoices()

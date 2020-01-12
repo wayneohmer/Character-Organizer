@@ -29,6 +29,7 @@ class Race: Identifiable, Equatable, Comparable, ObservableObject, HasProfOption
     var languages:[Descriptor]? { return isSubrace ? subrace.languages : model.languages }
     var traits:[Descriptor]? { return isSubrace ? subrace.traits : model.traits }
     var subraces:[Descriptor]?
+    var selectedLanguages = Set<Descriptor>()
 
     lazy var profChoices:ProficiencyChoices = {
         var returnValue = ProficiencyChoices()
@@ -177,10 +178,11 @@ struct ChooseableOptionModel: Codable {
     var from:[Descriptor]?
 }
 
-struct Descriptor: Codable {
+struct Descriptor: Codable, Identifiable, Hashable {
     
+    var id:String { return name }
     var name = ""
     var url = ""
-    
-   
+    var selected:Bool? = false
+
 }

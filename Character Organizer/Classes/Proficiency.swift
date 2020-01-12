@@ -8,10 +8,11 @@
 
 import UIKit
 
-struct Proficiency: Codable, Viewable {
+struct Proficiency: Codable, Viewable, Identifiable, Hashable {
     
     static var shared = [String:Proficiency]()
-        
+    
+    var id:String { return name}
     var index = ""
     var name = ""
     var type = ""

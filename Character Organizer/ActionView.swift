@@ -12,7 +12,6 @@ struct ActionView: View {
     @State var selection = 0
     @State var character = Character.shared
     @State var model = Character.shared.model
-    @State var str = Character.shared.str
     @State var showingDice = false
     
     var diceDetails = DiceDetails()
@@ -44,11 +43,11 @@ struct ActionView: View {
                     Text("Race:").foregroundColor(Color.white)
                     Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Alignment:").foregroundColor(Color.white)
-                    Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(Character.shared.alignment).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Speed:").foregroundColor(Color.white)
-                    Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(Character.shared.speed).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Level:").foregroundColor(Color.white)
-                    Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(Character.shared.level).fontWeight(.bold).foregroundColor(Color.white)
                     
                     Spacer()
                 }.padding(8)
@@ -71,8 +70,8 @@ struct ActionView: View {
     var attributes: some View {
         VStack(spacing:8) {
             VStack  {
-                self.attrButton(name: "STR", action: { self.attributeTouched(title:"Strength", mod: Int(self.character.strMod) ?? 0) })
-                self.attrText(character.str)
+                self.attrButton(name: "STR", action: { self.attributeTouched(title:"Strength", mod: Int(Character.shared.strMod) ?? 0) })
+                self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
             }
             .padding(5)
@@ -80,45 +79,45 @@ struct ActionView: View {
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "DEX", action: { self.attributeTouched(title:"Dexterity", mod: Int(self.character.dexMod) ?? 0) })
-                self.attrText(character.dex)
-                self.attrModifier(character.dexMod)
+                self.attrButton(name: "DEX", action: { self.attributeTouched(title:"Dexterity", mod: Int(Character.shared.dexMod) ?? 0) })
+                self.attrText(Character.shared.dex)
+                self.attrModifier(Character.shared.dexMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "CON", action: { self.attributeTouched(title:"Constitution", mod: Int(self.character.conMod) ?? 0) })
-                self.attrText(character.con)
-                self.attrModifier(character.conMod)
+                self.attrButton(name: "CON", action: { self.attributeTouched(title:"Constitution", mod: Int(Character.shared.conMod) ?? 0) })
+                self.attrText(Character.shared.con)
+                self.attrModifier(Character.shared.conMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "INT", action: { self.attributeTouched(title:"Intelligence", mod: Int(self.character.intMod) ?? 0) })
-                self.attrText(character.int)
-                self.attrModifier(character.intMod)
+                self.attrButton(name: "INT", action: { self.attributeTouched(title:"Intelligence", mod: Int(Character.shared.intMod) ?? 0) })
+                self.attrText(Character.shared.int)
+                self.attrModifier(Character.shared.intMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "WIS", action: { self.attributeTouched(title:"Wisdom", mod: Int(self.character.wisMod) ?? 0) })
-                self.attrText(character.wis)
-                self.attrModifier(character.wisMod)
+                self.attrButton(name: "WIS", action: { self.attributeTouched(title:"Wisdom", mod: Int(Character.shared.wisMod) ?? 0) })
+                self.attrText(Character.shared.wis)
+                self.attrModifier(Character.shared.wisMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
 
             VStack  {
-                self.attrButton(name: "CHA", action: { self.attributeTouched(title:"Charisma", mod: Int(self.character.chaMod) ?? 0) })
-                self.attrText(character.cha)
-                self.attrModifier(character.chaMod)
+                self.attrButton(name: "CHA", action: { self.attributeTouched(title:"Charisma", mod: Int(Character.shared.chaMod) ?? 0) })
+                self.attrText(Character.shared.cha)
+                self.attrModifier(Character.shared.chaMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
@@ -190,6 +189,10 @@ struct ActionView: View {
                  }.sheet(isPresented: self.$showingDice, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
 
                 Spacer()
+            }.onAppear(){
+                //forces redraw
+                self.showingDice = true
+                self.showingDice = false
             }
 
             .tabItem {
