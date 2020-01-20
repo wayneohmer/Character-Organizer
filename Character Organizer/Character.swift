@@ -24,7 +24,10 @@ class Character: ObservableObject {
     var race:Race = Race() {
         didSet {
             self.speed = "\(self.race.speed)"
+            self.languages.removeAll()
             self.languages.formUnion(self.race.selectedLanguages)
+            self.languages.formUnion(self.race.languages ?? [Descriptor]())
+            self.proficiencies.removeAll()
         }
     }
     var alignment:String {
@@ -143,6 +146,11 @@ class Character: ObservableObject {
     }
     
     var languages = Set<Descriptor>()
+    var languageString:String {
+        let langs = languages.map({ $0.name })
+        return langs.joined(separator: ", ")
+    }
+    var proficiencies = Set<Proficiency>()
 
 }
 

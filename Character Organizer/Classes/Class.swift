@@ -18,7 +18,17 @@ class CharacterClass: HasProfOptions, Identifiable, Equatable {
     var name:String { return model.name }
     var hitDie:Int { return model.hit_die }
     var proficiencyChoices:ProficiencyChoices { return profChoices }
-    var proficiencies:[Descriptor]? { return model.proficiencies }
+    var proficiencies:[Proficiency] {
+        var returnValue = [Proficiency]()
+        
+        for descriptor in model.proficiencies ?? [Descriptor]() {
+            if let prof = Proficiency.shared[descriptor.url] {
+                returnValue.append(prof)
+            }
+        }
+        return returnValue
+    }
+        
     var savingThrows:[Descriptor]? { return model.saving_throws }
     var selectedProficiencies = Set<Proficiency>()
     

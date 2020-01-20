@@ -19,13 +19,18 @@ struct RaceView: View {
     var body: some View {
         VStack {
             HStack {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("Cancel")
+                        .font(Font.system(size: 30, weight: .bold, design: .default)).foregroundColor(Color.white).padding(5).offset(y:-2)
+                }.frame(width: 150, height: 70, alignment: .center)
                 Spacer()
                 Button(action: {
                     Character.shared.race = self.selectedRace
-                    
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
-                    Text("Save").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                    Text("Save").font(Font.system(size: 30, weight: .bold, design: .default)).foregroundColor(Color.white).padding(5).offset(y:-2)
                 }.frame(width: 100, height: 50, alignment: .center)
             }.background(Color.black)
             HStack {
@@ -39,18 +44,16 @@ struct RaceView: View {
                 }
                 ScrollView {
                     VStack {
-                        DescText(text: "Speed: \(selectedRace.speed)")
-                        DescText(text: "Size: \(selectedRace.size)")
-                        DescText(text: "\(selectedRace.sizeDescription)", fontSize: 20)
-                        DescText(text: "Ability Bonuses", alingment: .center)
+                        
+                        HeadingView(text: "Ability Bonuses")
                         ForEach(selectedRace.abilityBonuses ?? [Ability](), id: \.name) { bonus in
-                            DescText(text: "\(bonus.name): +\(bonus.bonus)", width: 370)
+                            DescText(text: "\(bonus.name): +\(bonus.bonus)", offset: CGSize(width: 15, height: 0))
                         }
                         if selectedRace.startingProficiencies?.count ?? 0 > 0 {
-                            DescText(text: "Starting Proficiencies", alingment: .center)
+                            HeadingView(text: "Starting Proficiencies")
                             
                             ForEach(selectedRace.startingProficiencies ?? [Descriptor](), id: \.name) { descriptor in
-                                DescText(text: descriptor.name, width: 370)
+                                DescText(text: descriptor.name)
                             }
                         }
                         if selectedRace.startingProficiencies != nil && (selectedRace.proficiencyChoices.choose ?? 0) > 0 {
@@ -61,7 +64,12 @@ struct RaceView: View {
                             if selectedRace.traits?.count ?? 0 > 0 {
                                 Traits(race: selectedRace)
                             }
+                            HeadingView(text: "Fluff")
+
                         }
+                        DescText(text: "Speed: \(selectedRace.speed)")
+                        DescText(text: "Size: \(selectedRace.size)")
+                        DescText(text: "\(selectedRace.sizeDescription)", fontSize: 20)
                         DescText(text: "Age: \(selectedRace.age)", fontSize: 20)
                         
                         Spacer()
@@ -81,9 +89,9 @@ struct Traits: View {
 
     var body: some View {
         VStack {
-            DescText(text: "Traits", alingment: .center)
+            HeadingView(text: "Traits")
             ForEach(race.traits ?? [Descriptor](), id: \.name) { descriptor in
-                DescText(text: descriptor.name, width: 370).onTapGesture {
+                DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
                     self.selectedTrait = Trait.shared[descriptor.url] ?? Trait()
                     self.traitShowing = true
                 }
@@ -102,25 +110,24 @@ struct Languages: View {
     
     var body: some View {
         VStack {
-            DescText(text: "Languages", alingment: .center)
+            HeadingView(text: "Languages")
 
             ForEach(race.languages ?? [Descriptor](), id: \.name) { descriptor in
-                DescText(text: descriptor.name, width: 370)
+                DescText(text: descriptor.name,offset: CGSize(width: 15, height: 0))
             }
             if race.languageOptions != nil && (race.languageOptions?.choose ?? 0) > 0 {
-                Text("Language Options")
-                    .foregroundColor(self.chooseColor)
-                    .font(Font.system(size: 25, weight: .bold, design: .default))
-                DescText(text: "Choose \(choose)", alingment: .center)
+                HeadingView(text: "Language Options")
+                DescText(text: "Choose \(choose)", alingment: .center, forgroundcolor:self.chooseColor)
+
                 ForEach(race.languageOptions?.from ?? [Descriptor]()) { descriptor in
                     if self.selectedLanguages.contains(descriptor) {
-                        DescText(text: descriptor.name, width: 370).onTapGesture {
+                        DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0) ).onTapGesture {
                             self.selectedLanguages.remove(descriptor)
                             self.race.selectedLanguages.remove(descriptor)
                         }
                         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
                     } else {
-                        DescText(text: descriptor.name, width: 370).onTapGesture {
+                        DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
                             if self.selectedLanguages.count == self.choose {
                                 self.selectedLanguages.removeFirst()
                                 self.race.selectedLanguages.removeFirst()
@@ -135,22 +142,55 @@ struct Languages: View {
     }
 }
 
+struct HeadingView: View {
+    
+    let background = Color(red: 0.25, green: 0.25, blue: 0.25)
+    
+    var text = ""
+    var imageName:String?
+    
+    var body: some View {
+        HStack {
+            Text(text).frame(alignment: .center)
+                .padding(5)
+                .foregroundColor(Color.white)
+                .font(Font.system(size: 30, weight: .bold, design: .default))
+            self.imageView()
+           
+            }.frame(width:500).background(background)
+    }
+    
+    func imageView() -> AnyView {
+        if let imageName = self.imageName {
+            return  AnyView(Image(imageName).resizable().frame(width: 40, height: 40, alignment: .center))
+        } else {
+            return AnyView(EmptyView())
+        }
+    }
+    
+}
+
+
 struct DescText: View {
     
     var text = ""
-    var width = CGFloat(400)
+
     var alingment:Alignment = .leading
+    var width = CGFloat(500)
     var fontSize = CGFloat(25)
+    var offset = CGSize(width: 0, height: 0)
+    var forgroundcolor = Color.white
     let background = Color(red: 0.15, green: 0.15, blue: 0.15)
-    
 
     var body: some View {
         Text(text).frame(width: width, alignment: alingment)
-        .padding(4)
-        .foregroundColor(Color.white)
+        .offset(offset)
+        .padding(5)
+        .foregroundColor(forgroundcolor)
         .background(background)
         .font(Font.system(size: fontSize, weight: .bold, design: .default))
         .padding(2)
+
     }
 }
 
@@ -163,19 +203,19 @@ struct RaceRow: View {
         VStack {
             if isSelected {
                 
-                Text("\(self.race.isSubrace ? "   " : "")\(self.race.name)")
+                Text(self.race.isSubrace ? "   \(self.race.name.replacingOccurrences(of: race.model.name, with: ""))" : self.race.name )
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(8)
                     .foregroundColor(Color.white)
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 4))
-                    .font(Font.system(size: 25, weight: .bold, design: .default)).padding(4)
+                    .font(Font.system(size: 20, weight: .bold, design: .default)).padding(4)
                 
             } else  {
-                Text("\(self.race.isSubrace ? "   " : "")\(self.race.name)")
+                Text(self.race.isSubrace ? "   \(self.race.name.replacingOccurrences(of: race.model.name, with: ""))" : self.race.name )
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(8)
                     .foregroundColor(Color.white)
-                    .font(Font.system(size: 25, weight: .bold, design: .default)).padding(4)
+                    .font(Font.system(size: 20, weight: .bold, design: .default)).padding(4)
                 
             }
         }

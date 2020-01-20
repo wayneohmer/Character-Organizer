@@ -22,13 +22,23 @@ struct ClassView: View {
     var body: some View {
         VStack {
             HStack {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("Cancel")
+                        .font(Font.system(size: 30, weight: .bold, design: .default)).foregroundColor(Color.white).padding(5).offset(y:-2)
+                }.frame(width: 150, height: 70, alignment: .center)
                 Spacer()
                 Button(action: {
                     Character.shared.charcaterClass = self.selectedClass
+                    Character.shared.proficiencies.formUnion(self.selectedClass.proficiencies)
+                    Character.shared.proficiencies.formUnion(self.selectedProfs )
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
-                    Text("Save").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-                }.frame(width: 100, height: 50, alignment: .center)
+                    Text("Save")
+                        .font(Font.system(size: 30, weight: .bold, design: .default)).foregroundColor(Color.white).padding(5).offset(y:-2)
+                }.frame(width: 150, height: 70, alignment: .center)
+                
             }.background(Color.black)
             HStack {
                 VStack {
@@ -45,9 +55,9 @@ struct ClassView: View {
                         DescText(text: "Hit Die: \(selectedClass.hitDie)")
                         self.proficiencyOptionsView()
                         StartingProficiencyView(selectedClass: selectedClass)
-                        DescText(text: "Saving Throws", alingment: .center)
+                        HeadingView(text: "Saving Throws")
                         ForEach(selectedClass.savingThrows ?? [Descriptor](), id: \.name) { descriptor in
-                            DescText(text: descriptor.name, width: 370)
+                            DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0))
                         }
                         
                         
@@ -66,29 +76,25 @@ struct ClassView: View {
         var imageName: String  { return showProficiencyOptions ? "arrowDown" : "arrowLeft" }
         return VStack {
                 HStack{
-                    Text("Starting Proficiencies Options")
-                            .frame(width: 360, height:50 ,alignment: .center)
-                            .foregroundColor(chooseColor)
-                            .font(Font.system(size: 25, weight: .bold, design: .default))
+                    HeadingView(text: "Starting Proficiencies Options", imageName: imageName)
 
                         .onTapGesture {
                             self.showProficiencyOptions.toggle()
                         }
-                        Image(imageName).resizable().frame(width: 40, height: 40
-                            , alignment: .center)
                     }.background(background)
                 if self.showProficiencyOptions {
-                    DescText(text: "Choose \(self.selectedClass.proficiencyChoices.choose ?? 0)", alingment: .center)
+                    DescText(text: "Choose \(self.selectedClass.proficiencyChoices.choose ?? 0)",
+                        alingment: .center, forgroundcolor: chooseColor)
                     ForEach(self.selectedClass.proficiencyChoices.proficiencies, id:\.name ) { proficiency in
                         HStack{
                             if self.selectedProfs.contains(proficiency) {
-                                DescText(text: proficiency.name, width: 370).onTapGesture {
+                                DescText(text: proficiency.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
                                     self.selectedClass.selectedProficiencies.remove(proficiency)
                                     self.selectedProfs.remove(proficiency)
                                 }
                                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
                             } else {
-                                DescText(text: proficiency.name, width: 370).onTapGesture {
+                                DescText(text: proficiency.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
                                     if self.selectedClass.selectedProficiencies.count == choose {
                                         self.selectedProfs.removeFirst()
                                         self.selectedClass.selectedProficiencies.removeFirst()
@@ -97,12 +103,12 @@ struct ClassView: View {
                                     self.selectedProfs.insert(proficiency)
                                 }
                             }
-                            Button(action: {
-                                if let skill = proficiency.skill {
-                                    self.selectedSkill = skill
-                                    self.profShowing = true
-                                }},
-                                   label: { Text("  ?  " )})
+//                            Button(action: {
+//                                if let skill = proficiency.skill {
+//                                    self.selectedSkill = skill
+//                                    self.profShowing = true
+//                                }},
+//                                   label: { DescText(text: "?", alingment: .center, width: 40 )})
                         }
                     }.sheet(isPresented: self.$profShowing, content:  { DetailView(detail: self.selectedSkill as Viewable ) })
                 }
@@ -111,7 +117,7 @@ struct ClassView: View {
 }
 
 struct StartingProficiencyView: View {
-    
+
     @State var selectedClass:CharacterClass
     @State var showProficiencyOptions = true
     var imageName: String  { return showProficiencyOptions ? "arrowDown" : "arrowLeft" }
@@ -119,91 +125,24 @@ struct StartingProficiencyView: View {
 
     var body: some View {
         VStack {
+            Text("junk")
             HStack{
-                Text("Starting Proficiencies")
-                    .frame(width: 360, height:50 ,alignment: .center)
-                    .foregroundColor(Color.white)
-                    .font(Font.system(size: 25, weight: .bold, design: .default))
+                HeadingView(text: "Starting Proficiencies", imageName: imageName)
 
-                
-                Image(imageName).resizable().frame(width: 40, height: 40
-                    , alignment: .center)
             }.background(background)
             .onTapGesture {
                 self.showProficiencyOptions.toggle()
             }
 
             if self.showProficiencyOptions {
-                ForEach(selectedClass.proficiencies ?? [Descriptor](), id: \.name) { descriptor in
-                    DescText(text: descriptor.name, width: 370)
+                ForEach(selectedClass.proficiencies, id: \.name) { descriptor in
+                    DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0))
                 }
             }
         }
-        
+
     }
 }
-
-
-//struct ProficiencyOptionsView: View  {
-//
-//    @State var selectedSkill = Skill()
-//    @State var showProficiencyOptions = true
-//
-//    @State var selectedProfs = Set<Proficiency>()
-//
-//    let background = Color(red: 0.15, green: 0.15, blue: 0.15)
-//    var choose:Int { return profObject.proficiencyChoices.choose ?? 0 }
-//    var chooseColor:Color { return selectedProfs.count == choose ? .white : .red }
-//
-//
-//    var imageName: String  { return showProficiencyOptions ? "arrowDown" : "arrowLeft" }
-//
-//    var profObject:HasProfOptions
-//
-//    var body: some View {
-//        VStack {
-//            HStack{
-//                Text("Starting Proficiencies Options")
-//                        .frame(width: 360, height:50 ,alignment: .center)
-//                        .foregroundColor(chooseColor)
-//                        .font(Font.system(size: 25, weight: .bold, design: .default))
-//
-//                    .onTapGesture {
-//                        self.showProficiencyOptions.toggle()
-//                    }
-//                    Image(imageName).resizable().frame(width: 40, height: 40
-//                        , alignment: .center)
-//                }.background(background)
-//            if self.showProficiencyOptions {
-//                DescText(text: "Choose \(profObject.proficiencyChoices.choose ?? 0)", alingment: .center)
-//                ForEach(profObject.proficiencyChoices.proficiencies, id:\.name ) { proficiency in
-//                    HStack{
-//                        if self.selectedProfs.contains(proficiency) {
-//                            DescText(text: proficiency.name, width: 370).onTapGesture {
-//                                self.selectedProfs.remove(proficiency)
-//                            }
-//                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-//                        } else {
-//                            DescText(text: proficiency.name, width: 370).onTapGesture {
-//                                if self.selectedProfs.count == self.choose {
-//                                    self.selectedProfs.removeFirst()
-//                                }
-//                                self.selectedProfs.insert(proficiency)
-//                            }
-//                        }
-//                        Button(action: {
-//                            if let skill = proficiency.skill {
-//                                self.selectedSkill = skill
-//                                self.profShowing = true
-//                            }},
-//                               label: { Text("  ?  " )})
-//                    }
-//                }.sheet(isPresented: self.$profShowing, content:  { DetailView(detail: self.selectedSkill as Viewable ) })
-//            }
-//        }
-//    }
-//}
-
 
 struct ClassRow: View {
     

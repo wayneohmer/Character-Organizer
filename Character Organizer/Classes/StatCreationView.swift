@@ -35,6 +35,14 @@ struct StatCreationView: View {
         StatDetail(label: "Charisma", value: 8, fontSize: 30, idx: 5)
     ]
     
+    var mods:[Int] { return [self.character.race.abilityBonuses?.first(where:{ $0.name == "STR" })?.bonus ?? 0 ,
+                             self.character.race.abilityBonuses?.first(where:{ $0.name == "DEX" })?.bonus ?? 0 ,
+                             self.character.race.abilityBonuses?.first(where:{ $0.name == "CON" })?.bonus ?? 0 ,
+                             self.character.race.abilityBonuses?.first(where:{ $0.name == "INT" })?.bonus ?? 0 ,
+                             self.character.race.abilityBonuses?.first(where:{ $0.name == "WIS" })?.bonus ?? 0 ,
+                             self.character.race.abilityBonuses?.first(where:{ $0.name == "CHA" })?.bonus ?? 0 ]
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -46,12 +54,12 @@ struct StatCreationView: View {
                 }.frame(width: 150, height: 70, alignment: .center)
                 Spacer()
                 Button(action: {
-                    Character.shared.str = "\(self.details[0].value)"
-                    Character.shared.dex = "\(self.details[1].value)"
-                    Character.shared.con = "\(self.details[2].value)"
-                    Character.shared.int = "\(self.details[3].value)"
-                    Character.shared.wis = "\(self.details[4].value)"
-                    Character.shared.cha = "\(self.details[5].value)"
+                    Character.shared.str = "\(self.details[0].value + self.mods[0])"
+                    Character.shared.dex = "\(self.details[1].value + self.mods[1])"
+                    Character.shared.con = "\(self.details[2].value + self.mods[2])"
+                    Character.shared.int = "\(self.details[3].value + self.mods[3])"
+                    Character.shared.wis = "\(self.details[4].value + self.mods[4])"
+                    Character.shared.cha = "\(self.details[5].value + self.mods[5])"
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
                     Text("Save")
@@ -88,7 +96,7 @@ struct StatCreationView: View {
                 HStack {
                     Text(detail.label)
                         .font(Font.system(size: detail.fontSize, weight: .bold, design: .default))
-                        .frame(width: 225, height: 30, alignment: .trailing)
+                        .frame(width: 300, height: 30, alignment: .trailing)
                         .offset(x:-10)
                     .foregroundColor(Color.white)
                     HStack {
@@ -128,7 +136,13 @@ struct StatCreationView: View {
                                 }
                             
                         )}.overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                    Text(self.character.modString(detail.value)).frame(width: 60, height: 60, alignment: .center)
+                    Text("\(detail.value + self.mods[detail.idx])").frame(width: 60, height: 60, alignment: .center)
+                        .frame(width: 60, height: 60, alignment: .center)
+                        .font(Font.system(size: 25, weight: .bold, design: .default))
+                        
+                        .foregroundColor(self.mods[detail.idx] == 0 ? Color.white : Color.yellow)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    Text(self.character.modString(detail.value + self.mods[detail.idx])).frame(width: 60, height: 60, alignment: .center)
                         .frame(width: 40, height: 30, alignment: .center)
                         .font(Font.system(size: 20, weight: .bold, design: .default))
                         

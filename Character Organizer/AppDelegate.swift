@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Skill.getSkills()
         Proficiency.getProficiencies()
         Character.shared.name = "Boris"
-        Character.shared.race = Race.shared[0]
+        Character.shared.race = Race.shared[5]
         Character.shared.alignment = "Lawful Shithead"
         Character.shared.level = "2"
         Character.shared.armorClass = "10"

@@ -26,7 +26,7 @@ class Race: Identifiable, Equatable, Comparable, ObservableObject, HasProfOption
     var startingProficiencies:[Descriptor]? { return isSubrace ? subrace.starting_proficiencies : model.starting_proficiencies }
     var proficiencyChoices:ProficiencyChoices { return profChoices }
     var languageOptions:ChooseableOptionModel? { return isSubrace ? subrace.language_options : model.language_options }
-    var languages:[Descriptor]? { return isSubrace ? subrace.languages : model.languages }
+    var languages:[Descriptor]? { return  model.languages }
     var traits:[Descriptor]? { return isSubrace ? subrace.traits : model.traits }
     var subraces:[Descriptor]?
     var selectedLanguages = Set<Descriptor>()
@@ -145,7 +145,6 @@ struct SubRace: Codable, Identifiable, Equatable {
     var ability_bonuses:[Ability]?
     var starting_proficiencies:[Descriptor]?
     var starting_proficiency_options:ChooseableOptionModel?
-    var languages:[Descriptor]?
     var language_options:ChooseableOptionModel?
     var traits:[Descriptor]?
     var race:Descriptor?

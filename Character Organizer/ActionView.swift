@@ -50,6 +50,12 @@ struct ActionView: View {
                     Text(Character.shared.level).fontWeight(.bold).foregroundColor(Color.white)
                     
                     Spacer()
+                    
+                }.padding(8)
+                HStack {
+                    Text("Languages:").foregroundColor(Color.white)
+                    Text(Character.shared.languageString).fontWeight(.bold).foregroundColor(Color.white)
+                    Spacer()
                 }.padding(8)
         }
     }
@@ -201,14 +207,20 @@ struct ActionView: View {
                 }
             }.background(background)
                 .tag(0)
-            
+            DescriptionView()
+                .tabItem {
+                    VStack {
+                        Text("Description")
+                    }
+            }.background(background)
+            .tag(1)
             CreateView()
                 .tabItem {
                     VStack {
                         Text("Create")
                     }
             }.background(background)
-            .tag(1)
+            .tag(2)
         }
         
     }
