@@ -10,14 +10,16 @@ import SwiftUI
 struct ClassView: View {
     
     @State var showProficiencyOptions = true
+    @State var showProficiencies = true
+
     @State var profShowing = false
     @State var selectedSkill = Skill()
     @State var selectedProfs = Set<Proficiency>()
 
     @Environment(\.presentationMode) var presentationMode
     @State var character = Character.shared
-    @State var selectedClass:CharacterClass = CharacterClass.sharedClasses[0]
-    var classes = CharacterClass.sharedClasses
+    @State var selectedClass:CharacterClass = CharacterClass.shared[0]
+    var classes = CharacterClass.shared
     
     var body: some View {
         VStack {
@@ -31,8 +33,6 @@ struct ClassView: View {
                 Spacer()
                 Button(action: {
                     Character.shared.charcaterClass = self.selectedClass
-                    Character.shared.proficiencies.formUnion(self.selectedClass.proficiencies)
-                    Character.shared.proficiencies.formUnion(self.selectedProfs )
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
                     Text("Save")
@@ -42,8 +42,8 @@ struct ClassView: View {
             }.background(Color.black)
             HStack {
                 VStack {
-                    ForEach(CharacterClass.sharedClasses) { thisClass in
-                        ClassRow(thisClass: thisClass, isSelected: thisClass == self.selectedClass) .onTapGesture {
+                    ForEach(CharacterClass.shared) { thisClass in
+                        ClassRow(thisClass: thisClass, isSelected: thisClass == self.selectedClass).onTapGesture {
                             self.selectedClass = thisClass
                             self.selectedProfs.removeAll()
                         }
@@ -54,7 +54,7 @@ struct ClassView: View {
                     VStack {
                         DescText(text: "Hit Die: \(selectedClass.hitDie)")
                         self.proficiencyOptionsView()
-                        StartingProficiencyView(selectedClass: selectedClass)
+                        startingProficiencyView()
                         HeadingView(text: "Saving Throws")
                         ForEach(selectedClass.savingThrows ?? [Descriptor](), id: \.name) { descriptor in
                             DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0))
@@ -65,6 +65,29 @@ struct ClassView: View {
                 }
             }.background(Color.black)
         }
+    }
+    
+    func startingProficiencyView() -> some View {
+        
+        var imageName: String  { return self.showProficiencies ? "arrowDown" : "arrowLeft" }
+        let background = Color(red: 0.15, green: 0.15, blue: 0.15)
+        
+        return VStack {
+            HStack{
+                HeadingView(text: "Starting Proficiencies", imageName: imageName)
+                
+            }.background(background)
+                .onTapGesture {
+                    self.showProficiencies.toggle()
+            }
+            
+            if self.showProficiencies {
+                ForEach(selectedClass.proficiencies, id: \.name) { descriptor in
+                    DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0))
+                }
+            }
+        }
+        
     }
     
     func proficiencyOptionsView() -> some View {
@@ -103,46 +126,16 @@ struct ClassView: View {
                                     self.selectedProfs.insert(proficiency)
                                 }
                             }
-//                            Button(action: {
-//                                if let skill = proficiency.skill {
-//                                    self.selectedSkill = skill
-//                                    self.profShowing = true
-//                                }},
-//                                   label: { DescText(text: "?", alingment: .center, width: 40 )})
                         }
                     }.sheet(isPresented: self.$profShowing, content:  { DetailView(detail: self.selectedSkill as Viewable ) })
                 }
             }
-        }
-}
-
-struct StartingProficiencyView: View {
-
-    @State var selectedClass:CharacterClass
-    @State var showProficiencyOptions = true
-    var imageName: String  { return showProficiencyOptions ? "arrowDown" : "arrowLeft" }
-    let background = Color(red: 0.15, green: 0.15, blue: 0.15)
-
-    var body: some View {
-        VStack {
-            Text("junk")
-            HStack{
-                HeadingView(text: "Starting Proficiencies", imageName: imageName)
-
-            }.background(background)
-            .onTapGesture {
-                self.showProficiencyOptions.toggle()
-            }
-
-            if self.showProficiencyOptions {
-                ForEach(selectedClass.proficiencies, id: \.name) { descriptor in
-                    DescText(text: descriptor.name, offset: CGSize(width: 15, height: 0))
-                }
-            }
-        }
-
     }
+    
+    
 }
+
+
 
 struct ClassRow: View {
     

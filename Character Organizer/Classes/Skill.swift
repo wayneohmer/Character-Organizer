@@ -8,12 +8,13 @@
 
 import UIKit
 
-struct Skill: Codable, Viewable {
+struct Skill: Codable, Viewable, Identifiable, Hashable {
     
     static var shared = [String:Skill]()
     
     var description:String { return desc.joined(separator: "\n\n") }
     
+    var id:String { return name }
     var name = ""
     var desc = [String]()
     var ability_score:Descriptor?

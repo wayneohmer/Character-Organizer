@@ -8,12 +8,13 @@
 
 import Foundation
 
-struct Trait: Codable, Viewable {
+struct Trait: Codable, Viewable, Identifiable, Hashable {
     
     static var shared:[String:Trait] = [String:Trait]()
     
     var description:String { return desc.joined(separator: "\n\n") }
 
+    var id:String { return name }
     var index = ""
     var name = ""
     var desc = [String]()

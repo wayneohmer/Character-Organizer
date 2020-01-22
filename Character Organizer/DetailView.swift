@@ -26,7 +26,10 @@ struct DetailView: View {
                 
             }
             Text(detail.name).fontWeight(.bold).foregroundColor(Color.white).padding(5)
-            Text(detail.description).fontWeight(.bold).foregroundColor(Color.white).padding(5)
+            HStack {
+                Text(detail.description).fontWeight(.bold).foregroundColor(Color.white).padding(8)
+                Spacer()
+            }
             Spacer()
         }.background(Color.black)
     }

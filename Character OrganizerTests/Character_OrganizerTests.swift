@@ -23,7 +23,7 @@ class Character_OrganizerTests: XCTestCase {
         var fileURL: URL?
 
         
-        if let path = Bundle.main.path(forResource: "5e-SRD-Proficiencies", ofType: "json") {
+        if let path = Bundle.main.path(forResource: "5e-SRD-Equipment", ofType: "json") {
             fileURL = URL(fileURLWithPath: path)
         } else {
             XCTAssert(false)
@@ -33,9 +33,9 @@ class Character_OrganizerTests: XCTestCase {
             let data = try Data(contentsOf: fileURL!, options: .mappedIfSafe)
             do {
                 let decoder = JSONDecoder()
-                let skillarray = try decoder.decode([Proficiency].self, from: data)
-                for skill in skillarray {
-                    Proficiency.shared[skill.url] = skill
+                let array = try decoder.decode([Equipment].self, from: data)
+                for item in array {
+                    Equipment.shared[item.url] = item
                 }
                 
             } catch {

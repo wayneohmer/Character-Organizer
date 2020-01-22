@@ -8,13 +8,18 @@
 
 import SwiftUI
 
+
+
 struct CreateView: View {
     
     @State var character = Character.shared
-
+    
     @State var raceShowing = false
     @State var classShowing = false
     @State var statsShowing = false
+    @State var alignment1Idx = 1
+    @State var alignment2Idx = 1
+
 
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
@@ -60,6 +65,25 @@ struct CreateView: View {
                     }
                 }
 
+                Spacer()
+            }
+            HStack {
+                formatedText("Alignment", width: 200)
+                VStack {
+                    Picker("Alignment", selection: $character.model.alingment1Idx) {
+                        ForEach(0 ..< Character.aligment1.count) { index in
+                            Text(Character.aligment1[index])
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    Picker("Alignment", selection: $character.model.alingment2Idx) {
+                        ForEach(0 ..< Character.aligment2.count) { index in
+                            Text(Character.aligment2[index])
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
                 Spacer()
             }
             Spacer()

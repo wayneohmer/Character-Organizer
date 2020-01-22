@@ -11,7 +11,7 @@ import UIKit
 class CharacterClass: HasProfOptions, Identifiable, Equatable {
    
     
-    static var sharedClasses = [CharacterClass]()
+    static var shared = [CharacterClass]()
     
     var id:String { name }
     var model:ClassModel = ClassModel()
@@ -62,7 +62,7 @@ class CharacterClass: HasProfOptions, Identifiable, Equatable {
                 for model in classes {
                     let newClass = CharacterClass()
                     newClass.model = model
-                    CharacterClass.sharedClasses.append(newClass)
+                    CharacterClass.shared.append(newClass)
                 }
             } catch {
                 print(error)

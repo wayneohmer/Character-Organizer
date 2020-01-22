@@ -9,10 +9,14 @@
 import UIKit
 
 class Character: ObservableObject {
-     
+    
     static let shared = Character()
     
+    static let aligment1 = ["Lawful","Neutral","Chaotic"]
+    static let aligment2 = ["Good","Neutral","Evil"]
+    
     @Published var model = CharacterModel()
+    
     var name:String {
         set {
             model.name = newValue
@@ -28,16 +32,36 @@ class Character: ObservableObject {
             self.languages.formUnion(self.race.selectedLanguages)
             self.languages.formUnion(self.race.languages ?? [Descriptor]())
             self.proficiencies.removeAll()
+            for descriptor in race.startingProficiencies ?? [Descriptor]() {
+                if let prof = Proficiency.shared[descriptor.url] {
+                    if let skill = prof.skill  {
+                        self.skills.insert(skill)
+                    } else {
+                        self.proficiencies.insert(prof)
+                    }
+                }
+            }
+            self.traits.removeAll()
+            for descriptor in race.traits ?? [Descriptor]() {
+                if let trait = Trait.shared[descriptor.url] {
+                    self.traits.insert(trait)
+                }
+            }
         }
     }
-    var alignment:String {
-           set {
-               model.alignment = newValue
-           }
-           get {
-               return model.alignment
-           }
-       }
+    
+    var charcaterClass = CharacterClass() {
+        didSet {
+            self.proficiencies.formUnion(self.charcaterClass.proficiencies)
+            for prof in self.charcaterClass.selectedProficiencies {
+                if let skill = prof.skill {
+                    self.skills.insert(skill)
+                } else {
+                    self.proficiencies.insert(prof)
+                }
+            }
+        }
+    }
     
     var level:String {
         set {
@@ -124,7 +148,6 @@ class Character: ObservableObject {
         }
     }
     
-    var charcaterClass = CharacterClass.sharedClasses[0]
     
     var actions:[Action] { return model.actions }
     
@@ -151,6 +174,17 @@ class Character: ObservableObject {
         return langs.joined(separator: ", ")
     }
     var proficiencies = Set<Proficiency>()
+    var skills = Set<Skill>()
+    var traits = Set<Trait>()
+    var alingment1Idx:Int { return model.alingment1Idx }
+    var alingment2Idx:Int { return model.alingment2Idx }
+    var alingment:String {
+        if self.alingment1Idx == 1, alingment2Idx == 1 {
+            return "Neutral"
+        } else {
+            return "\(Character.aligment1[alingment1Idx]) \(Character.aligment2[alingment2Idx])"
+        }
+    }
 
 }
 
@@ -170,6 +204,8 @@ struct CharacterModel: Codable {
     var wis = Int(1)
     var con = Int(1)
     var cha = Int(1)
+    var alingment1Idx:Int = 1
+    var alingment2Idx:Int = 1
 
     var actions = [Action]()
 }

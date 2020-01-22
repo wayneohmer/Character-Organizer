@@ -14,7 +14,7 @@ struct DescriptionView: View {
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
     @State var character = Character.shared
     @State var showingDice = false
-    @State var selectedProficiency = Proficiency()
+    @State var selectedDetail:Viewable = Proficiency()
     @State var detailShowing = false
     
     var body: some View {
@@ -34,7 +34,7 @@ struct DescriptionView: View {
                         Text("Class:").foregroundColor(Color.white)
                         Text(character.charcaterClass.name).fontWeight(.bold).foregroundColor(Color.white)
                         Text("Alignment:").foregroundColor(Color.white)
-                        Text(character.alignment).fontWeight(.bold).foregroundColor(Color.white)
+                        Text(character.alingment).fontWeight(.bold).foregroundColor(Color.white)
                         Spacer()
                     }.offset(CGSize(width: 8, height: 0))
                     HStack{
@@ -55,8 +55,11 @@ struct DescriptionView: View {
                 VStack {
                     Text("Proficiencies:").fontWeight(.bold).foregroundColor(Color.white)
                     ScrollView {
-                        ForEach(Array(character.proficiencies.filter({$0.skill == nil})) ) { proficiency in
-                            Text(proficiency.name).foregroundColor(Color.white).padding(3)
+                        ForEach(Array(character.proficiencies) ) { proficiency in
+                            Text(proficiency.name).foregroundColor(Color.white).padding(3).onTapGesture {
+                                    self.selectedDetail = proficiency
+                                    self.detailShowing = true
+                            }
                         }
                     }.frame(height: 150)
                         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
@@ -66,10 +69,10 @@ struct DescriptionView: View {
                 VStack {
                     Text("Skills:").fontWeight(.bold).foregroundColor(Color.white)
                     ScrollView {
-                        ForEach(Array(character.proficiencies.filter({$0.skill != nil})) ) { proficiency in
-                            Text(proficiency.name).foregroundColor(Color.white).padding(3)
+                        ForEach(Array(character.skills) ) { skill in
+                            Text(skill.name).foregroundColor(Color.white).padding(3)
                                 .onTapGesture {
-                                    self.selectedProficiency = proficiency
+                                    self.selectedDetail = skill
                                     self.detailShowing = true
                             }
                         }
@@ -78,17 +81,30 @@ struct DescriptionView: View {
                         .background(Color.black)
                     
                 }
-                .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedProficiency as Viewable ) })
+                VStack {
+                    Text("Traits:").fontWeight(.bold).foregroundColor(Color.white)
+                    ScrollView {
+                        ForEach(Array(character.traits)) { trait in
+                            Text(trait.name).foregroundColor(Color.white).padding(3)
+                                .onTapGesture {
+                                    self.selectedDetail = trait
+                                    self.detailShowing = true
+                            }
+                        }
+                    }.frame(height: 150)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                        .background(Color.black)
+                    
+                }
+                .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedDetail ) })
                 Spacer()
             }.padding(8)
             Spacer()
         }.background(background)
         .onAppear(){
             //forces redraw
-            self.character = Character()
-            self.character = Character.shared
-            self.showingDice = true
-            self.showingDice = false
+            self.detailShowing = true
+            self.detailShowing = false
         }
     }
 }

@@ -14,6 +14,12 @@ struct RaceView: View {
     @State var character = Character.shared
     @State var selectedRace:Race = Race.shared[0]
     
+    @State var showProficiencyOptions = true
+    @State var showProficiencies = true
+    @State var selectedProfs = Set<Proficiency>()
+    @State var profShowing = false
+    @State var selectedSkill = Skill()
+
     let background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
     var body: some View {
@@ -57,7 +63,8 @@ struct RaceView: View {
                             }
                         }
                         if selectedRace.startingProficiencies != nil && (selectedRace.proficiencyChoices.choose ?? 0) > 0 {
-                            //ProficiencyOptionsView(profObject: self.selectedRace as HasProfOptions)
+                            proficiencyOptionsView()
+                            
                         }
                         VStack {
                             Languages(race: selectedRace)
@@ -78,6 +85,48 @@ struct RaceView: View {
                 
             }
         }.background(Color.black)
+    }
+    
+    func proficiencyOptionsView() -> some View {
+    
+    let background = Color(red: 0.15, green: 0.15, blue: 0.15)
+    var choose:Int { return self.selectedRace.proficiencyChoices.choose ?? 0 }
+    var chooseColor:Color { return self.selectedRace.selectedProficiencies.count == choose ? .white : .red }
+
+    var imageName: String  { return showProficiencyOptions ? "arrowDown" : "arrowLeft" }
+    return VStack {
+            HStack{
+                HeadingView(text: "Starting Proficiencies Options", imageName: imageName)
+
+                    .onTapGesture {
+                        self.showProficiencyOptions.toggle()
+                    }
+                }.background(background)
+            if self.showProficiencyOptions {
+                DescText(text: "Choose \(self.selectedRace.proficiencyChoices.choose ?? 0)",
+                    alingment: .center, forgroundcolor: chooseColor)
+                ForEach(self.selectedRace.proficiencyChoices.proficiencies, id:\.name ) { proficiency in
+                    HStack{
+                        if self.selectedProfs.contains(proficiency) {
+                            DescText(text: proficiency.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
+                                self.selectedRace.selectedProficiencies.remove(proficiency)
+                                self.selectedProfs.remove(proficiency)
+                            }
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                        } else {
+                            DescText(text: proficiency.name, offset: CGSize(width: 15, height: 0)).onTapGesture {
+                                if self.selectedRace.selectedProficiencies.count == choose {
+                                    self.selectedProfs.removeFirst()
+                                    self.selectedRace.selectedProficiencies.removeFirst()
+                                }
+                                self.selectedRace.selectedProficiencies.insert(proficiency)
+                                self.selectedProfs.insert(proficiency)
+                            }
+                        }
+                    }
+                }.sheet(isPresented: self.$profShowing, content:  { DetailView(detail: self.selectedSkill as Viewable ) })
+            }
+        }
     }
 }
 

@@ -17,7 +17,18 @@ struct Proficiency: Codable, Viewable, Identifiable, Hashable {
     var name = ""
     var type = ""
     var url = ""
-    var description:String { return skill?.description ?? name }
+    var description:String {
+        
+        if let skill = skill {
+            return skill.description
+        }
+        if let category = EquipmentCatagories.shared[index] {
+            let array = category.equipment?.map { $0.name }
+            return array?.joined(separator: "\n") ?? ""
+        }
+        return name
+        
+    }
     
     var skill:Skill? {
         

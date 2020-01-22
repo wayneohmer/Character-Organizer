@@ -43,7 +43,7 @@ struct ActionView: View {
                     Text("Race:").foregroundColor(Color.white)
                     Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Alignment:").foregroundColor(Color.white)
-                    Text(Character.shared.alignment).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(Character.shared.alingment).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Speed:").foregroundColor(Color.white)
                     Text(Character.shared.speed).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Level:").foregroundColor(Color.white)
