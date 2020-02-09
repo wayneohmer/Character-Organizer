@@ -148,7 +148,6 @@ class Character: ObservableObject {
         }
     }
     
-    
     var actions:[Action] { return model.actions }
     
     var strMod:String { return modString(model.str) }
@@ -185,6 +184,9 @@ class Character: ObservableObject {
             return "\(Character.aligment1[alingment1Idx]) \(Character.aligment2[alingment2Idx])"
         }
     }
+    var equipment:[Equipment] { return model.equipment }
+    var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
+    var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
 
 }
 
@@ -208,6 +210,7 @@ struct CharacterModel: Codable {
     var alingment2Idx:Int = 1
 
     var actions = [Action]()
+    var equipment = [Equipment]()
 }
 
 struct Action: Codable, Identifiable {

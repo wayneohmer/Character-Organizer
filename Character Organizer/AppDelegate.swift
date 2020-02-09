@@ -25,9 +25,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Skill.getSkills()
         Proficiency.getProficiencies()
         Equipment.getEquipment()
+        DamageType.getDamageTypes()
+        WeaponProperties.getWeaponProperties()
         Character.shared.charcaterClass = CharacterClass.shared[0]
         Character.shared.name = "Boris"
         Character.shared.race = Race.shared[0]
+        for descriptor in Character.shared.race.startingProficiencies ?? [Descriptor]() {
+            if let prof = Proficiency.shared[descriptor.url] {
+                Character.shared.proficiencies.insert(prof)
+            }
+        }
+        Character.shared.proficiencies.formUnion(Set(Character.shared.charcaterClass.proficiencies))
+        Character.shared.skills.insert(Skill.shared["/api/skills/animal-handling"] ?? Skill())
+        Character.shared.model.equipment = [Equipment.shared["camel"] ?? Equipment(),Equipment.shared["longsword"] ?? Equipment()]
         Character.shared.level = "2"
         Character.shared.armorClass = "10"
         Character.shared.speed = "10"

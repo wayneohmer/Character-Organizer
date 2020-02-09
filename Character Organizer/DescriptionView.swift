@@ -16,7 +16,8 @@ struct DescriptionView: View {
     @State var showingDice = false
     @State var selectedDetail:Viewable = Proficiency()
     @State var detailShowing = false
-    
+    @State var equipmentShowing = false
+
     var body: some View {
         VStack {
             HStack {
@@ -52,59 +53,165 @@ struct DescriptionView: View {
                 }
             }
             HStack {
-                VStack {
-                    Text("Proficiencies:").fontWeight(.bold).foregroundColor(Color.white)
-                    ScrollView {
-                        ForEach(Array(character.proficiencies) ) { proficiency in
-                            Text(proficiency.name).foregroundColor(Color.white).padding(3).onTapGesture {
-                                    self.selectedDetail = proficiency
-                                    self.detailShowing = true
-                            }
-                        }
-                    }.frame(height: 150)
-                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                        .background(Color.black)
-                    
-                }
-                VStack {
-                    Text("Skills:").fontWeight(.bold).foregroundColor(Color.white)
-                    ScrollView {
-                        ForEach(Array(character.skills) ) { skill in
-                            Text(skill.name).foregroundColor(Color.white).padding(3)
-                                .onTapGesture {
-                                    self.selectedDetail = skill
-                                    self.detailShowing = true
-                            }
-                        }
-                    }.frame(height: 150)
-                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                        .background(Color.black)
-                    
-                }
-                VStack {
-                    Text("Traits:").fontWeight(.bold).foregroundColor(Color.white)
-                    ScrollView {
-                        ForEach(Array(character.traits)) { trait in
-                            Text(trait.name).foregroundColor(Color.white).padding(3)
-                                .onTapGesture {
-                                    self.selectedDetail = trait
-                                    self.detailShowing = true
-                            }
-                        }
-                    }.frame(height: 150)
-                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                        .background(Color.black)
-                    
-                }
+                ProficiencieView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                SkillsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                TraitsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
                 .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedDetail ) })
                 Spacer()
             }.padding(8)
+            HStack{
+                
+                EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
+                Spacer()
+                
+            }.sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
+           
             Spacer()
         }.background(background)
         .onAppear(){
             //forces redraw
             self.detailShowing = true
             self.detailShowing = false
+        }
+    }
+}
+struct EquipmentView:  View {
+    
+    @Binding var character:Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    @Binding var equipmentShowing:Bool
+    
+    var body: some View {
+        VStack {
+            HStack{
+                Text("Equipment").fontWeight(.bold).foregroundColor(Color.white)
+                Button(action:{
+                    self.equipmentShowing = true
+                }) {
+                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
+                }
+            }
+            ScrollView {
+                VStack(alignment: .leading){
+                    if character.weapons.count > 0 {
+                        Text("Weapons:").font(Font.system(size: 25, weight: .bold))
+                        ScrollView(.horizontal) {
+                            HStack{ ForEach(character.weapons) { equipment in
+                                Text(equipment.name).onTapGesture {
+                                    self.selectedDetail = equipment
+                                    self.detailShowing = true
+                                }.font(Font.system(size: 20))
+                                }
+                            }.padding(3)
+                        }
+                    }
+                    if character.armor.count > 0 {
+
+                    Text("Armor:").font(Font.system(size: 25, weight: .bold))
+                    ScrollView(.horizontal) {
+                        HStack{
+                            ForEach(character.armor) { equipment in
+                                Text(equipment.name).padding(3).onTapGesture {
+                                    self.selectedDetail = equipment
+                                    self.detailShowing = true
+                                }
+                            }
+                        }
+                    }
+                    }
+                    Text("Other Shit:").font(Font.system(size: 25, weight: .bold))
+                    ScrollView(.horizontal) {
+                        HStack{
+                            ForEach(Array(character.equipment.filter({
+                                $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
+                            })) ) { equipment in
+                                Text(equipment.name).padding(3).onTapGesture {
+                                    self.selectedDetail = equipment
+                                    self.detailShowing = true
+                                }
+                            }
+                        }
+                    }
+                }.padding(8)
+            }.frame(height: 250, alignment: .leading)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+            .background(Color.black)
+            
+            }.foregroundColor(Color.white)
+    }
+}
+
+struct ProficiencieView:  View {
+    
+    @Binding var character:Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    var body: some View {
+        
+        VStack {
+            Text("Proficiencies:").fontWeight(.bold).foregroundColor(Color.white)
+            ScrollView {
+                ForEach(Array(character.proficiencies) ) { proficiency in
+                    Text(proficiency.name).foregroundColor(Color.white).padding(3).onTapGesture {
+                        self.selectedDetail = proficiency
+                        self.detailShowing = true
+                    }
+                }
+            }.frame(height: 150)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                .background(Color.black)
+            
+        }
+    }
+}
+
+struct SkillsView:  View {
+    
+    @Binding var character:Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    var body: some View {
+        VStack {
+            Text("Skills:").fontWeight(.bold).foregroundColor(Color.white)
+            ScrollView {
+                ForEach(Array(character.skills) ) { skill in
+                    Text(skill.name).foregroundColor(Color.white).padding(3)
+                        .onTapGesture {
+                            self.selectedDetail = skill
+                            self.detailShowing = true
+                    }
+                }
+            }.frame(height: 150)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                .background(Color.black)
+        }
+    }
+}
+
+struct TraitsView:  View {
+    
+    @Binding var character:Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    var body: some View {
+        VStack {
+            Text("Traits:").fontWeight(.bold).foregroundColor(Color.white)
+            ScrollView {
+                ForEach(Array(character.traits)) { trait in
+                    Text(trait.name).foregroundColor(Color.white).padding(3)
+                        .onTapGesture {
+                            self.selectedDetail = trait
+                            self.detailShowing = true
+                    }
+                }
+            }.frame(height: 150)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                .background(Color.black)
+            
         }
     }
 }
