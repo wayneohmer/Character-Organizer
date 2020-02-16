@@ -41,6 +41,9 @@
 		2B6890B4236B812D00EC8948 /* Character_OrganizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890B3236B812D00EC8948 /* Character_OrganizerTests.swift */; };
 		2B6890BF236B84B300EC8948 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890BE236B84B300EC8948 /* Character.swift */; };
 		2BBFC05623EA41FA0019E819 /* EquipmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */; };
+		2BE92C6A23F9C04F00044E68 /* 5e-SRD-Spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */; };
+		2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6B23F9D0CE00044E68 /* Spell.swift */; };
+		2BE92C6E23F9D4CD00044E68 /* SpellPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */; };
 		2BE9EF2B23F0B01700422D0D /* 5e-SRD-Damage-Types.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BE9EF2A23F0B01700422D0D /* 5e-SRD-Damage-Types.json */; };
 		2BE9EF2D23F0B05C00422D0D /* WeaponModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE9EF2C23F0B05C00422D0D /* WeaponModels.swift */; };
 		2BE9EF2F23F0B31100422D0D /* 5e-SRD-Weapon-Properties.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BE9EF2E23F0B31100422D0D /* 5e-SRD-Weapon-Properties.json */; };
@@ -99,6 +102,9 @@
 		2B6890B5236B812D00EC8948 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B6890BE236B84B300EC8948 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentPicker.swift; sourceTree = "<group>"; };
+		2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Spells.json"; sourceTree = "<group>"; };
+		2BE92C6B23F9D0CE00044E68 /* Spell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spell.swift; sourceTree = "<group>"; };
+		2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellPicker.swift; sourceTree = "<group>"; };
 		2BE9EF2A23F0B01700422D0D /* 5e-SRD-Damage-Types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Damage-Types.json"; sourceTree = "<group>"; };
 		2BE9EF2C23F0B05C00422D0D /* WeaponModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeaponModels.swift; sourceTree = "<group>"; };
 		2BE9EF2E23F0B31100422D0D /* 5e-SRD-Weapon-Properties.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Weapon-Properties.json"; sourceTree = "<group>"; };
@@ -147,6 +153,7 @@
 		2B068BE523C2C814007893BC /* Data Files */ = {
 			isa = PBXGroup;
 			children = (
+				2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */,
 				2BE9EF2A23F0B01700422D0D /* 5e-SRD-Damage-Types.json */,
 				2B16BCEE23D8172800360928 /* 5e-SRD-StartingEquipment.json */,
 				2B16BCE823D80B0D00360928 /* 5e-SRD-Equipment.json */,
@@ -180,6 +187,7 @@
 				2B16BCE423D80A6E00360928 /* UtiliyStructs.swift */,
 				2B16BCEC23D80B4D00360928 /* Equipment.swift */,
 				2BE9EF2C23F0B05C00422D0D /* WeaponModels.swift */,
+				2BE92C6B23F9D0CE00044E68 /* Spell.swift */,
 			);
 			path = "Misc Models";
 			sourceTree = "<group>";
@@ -232,6 +240,7 @@
 				2B2CF77E23D513F500167DB3 /* DescriptionView.swift */,
 				2B068BE123C2B6B2007893BC /* DetailView.swift */,
 				2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */,
+				2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */,
 				2B16BCE723D80AC700360928 /* Creation */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -364,6 +373,7 @@
 				2B27BF9623BFFEE0001719A0 /* DeathSound.aif in Resources */,
 				2BEC8E0C23C3B26C0034CE8B /* 5e-SRD-Skills.json in Resources */,
 				2B27BF9523BFFEE0001719A0 /* 3dice.aif in Resources */,
+				2BE92C6A23F9C04F00044E68 /* 5e-SRD-Spells.json in Resources */,
 				2B068BEF23C2CCBA007893BC /* 5e-SRD-Races.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,9 +396,11 @@
 				2B25B399238B2B52000E022B /* DiceView.swift in Sources */,
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ActionView.swift in Sources */,
+				2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */,
 				2B16BCE523D80A6E00360928 /* UtiliyStructs.swift in Sources */,
 				2BE9EF2D23F0B05C00422D0D /* WeaponModels.swift in Sources */,
 				2B068BE223C2B6B2007893BC /* DetailView.swift in Sources */,
+				2BE92C6E23F9D4CD00044E68 /* SpellPicker.swift in Sources */,
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,

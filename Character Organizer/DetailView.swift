@@ -111,6 +111,56 @@ struct EquipmentDetail: View {
     }
 }
 
+struct SpellDetail: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    var spell: Spell
+    
+    @State var detailShow = false
+    @State var selectedDetail: Viewable = Equipment()
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                } ) {
+                    Text("Close").fontWeight(.bold).padding(5).offset(y:-2)
+                }.frame(width: 100, height: 50, alignment: .center)
+                
+            }
+            Text(spell.name)
+                .font(Font.system(size: 25, weight: .bold, design: .default))
+                .frame(maxWidth: .infinity, alignment: .center)
+            HStack{
+                Text("Level:")
+                Text("\(spell.level)")
+            }
+            HStack{
+                Text("Range:")
+                Text(spell.range).fontWeight(.bold)
+            }
+            HStack{
+                Text("Components:")
+                Text("\(spell.components.joined(separator: ","))").fontWeight(.bold)
+            }
+            HStack{
+                Text("Casting Time:")
+                Text(spell.casting_time).fontWeight(.bold)
+            }
+            HStack{
+                Text("School:")
+                Text("\(spell.school?.name ?? "")").fontWeight(.bold)
+            }
+            ScrollView {
+                Text(spell.description).fontWeight(.bold)
+            }
+            Spacer()
+            }.padding().background(Color.black).foregroundColor(Color.white)
+    }
+}
+
 protocol Viewable {
     
     var name:String { get }

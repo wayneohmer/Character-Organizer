@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Equipment.getEquipment()
         DamageType.getDamageTypes()
         WeaponProperties.getWeaponProperties()
+        Spell.getSpells()
         Character.shared.charcaterClass = CharacterClass.shared[0]
         Character.shared.name = "Boris"
         Character.shared.race = Race.shared[0]
