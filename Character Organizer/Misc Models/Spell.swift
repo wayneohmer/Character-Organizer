@@ -10,7 +10,8 @@ import Foundation
 
 struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
-    static var shared = Set<Spell>()
+    static var shared = [String: Spell]()
+
     
     var description:String { return desc.joined(separator: "\n\n") }
 
@@ -60,8 +61,10 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             do {
                 let decoder = JSONDecoder()
-                let all = try decoder.decode([Spell].self, from: data)
-                shared.formUnion(Set(all))
+                let array = try decoder.decode([Spell].self, from: data)
+                for item in array {
+                    Spell.shared[item.index] = item
+                }               
                 
             } catch {
                 print(error)

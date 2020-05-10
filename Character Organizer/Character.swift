@@ -185,6 +185,7 @@ class Character: ObservableObject {
         }
     }
     var equipment:[Equipment] { return model.equipment }
+    var spells:[Spell] { return model.spells }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
 
@@ -211,10 +212,5 @@ struct CharacterModel: Codable {
 
     var actions = [Action]()
     var equipment = [Equipment]()
-}
-
-struct Action: Codable, Identifiable {
-    var id = UUID()
-    var name = ""
-    var desc = ""
+    var spells = [Spell]()
 }

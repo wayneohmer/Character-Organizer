@@ -130,11 +130,10 @@ struct EquipmentPicker: View {
     }
 }
 
-//struct EquipmentPicker_Previews: PreviewProvider {
-//
-//
-//    static var previews: some View {
-//       EquipmentPicker(character: Character.shared)
-//    }
-//}
+struct EquipmentPicker_Previews: PreviewProvider {
+
+    static var previews: some View {
+       EquipmentPicker(character: .constant(Character.shared))
+    }
+}
 

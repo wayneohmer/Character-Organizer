@@ -1305,7 +1305,7 @@
 				"name": "Evocation"
 			}
 		],
-		"spellcasting": {
+		" ": {
 			"url": "/api/spellcasting/8",
 			"class": "Wizard"
 		},

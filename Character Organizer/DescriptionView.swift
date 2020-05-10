@@ -18,11 +18,12 @@ struct DescriptionView: View {
     @State var detailShowing = false
     @State var equipmentShowing = false
     @State var spellsShowing = false
+    @State var attacksShowing = false
 
     var body: some View {
-        ScrollView{
-            VStack {
-                DemographicsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+        VStack {
+            DemographicsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+            ScrollView{
                 
                 VStack {
                     
@@ -35,10 +36,12 @@ struct DescriptionView: View {
                 .padding(5)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
                 .background(Color.black)
+                AttacksView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
+                    .sheet(isPresented: self.$attacksShowing, content:  { EquipmentPicker(character: self.$character) })
                 EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
                     .sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
-                SpellsView(character: $character, spellsShowing: $spellsShowing)
-                .sheet(isPresented: self.$spellsShowing, content:  { SpellPicker() })
+                SpellsView(character: $character, selectedDetail: $selectedDetail, spellsShowing: $spellsShowing, detailShowing: $detailShowing)
+                    .sheet(isPresented: self.$spellsShowing, content:  { SpellPicker(character: self.$character) })
                 Spacer()
             }
             
@@ -96,11 +99,35 @@ struct DemographicsView:  View {
     }
 }
 
+struct AttacksView: View {
+    
+    @Binding var character:Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    @Binding var attacksShowing:Bool
+
+    
+    var body: some View {
+        HStack{
+            Text("Attacks").fontWeight(.bold).foregroundColor(Color.white)
+            Button(action:{
+                self.attacksShowing = true
+            }) {
+                Text("+").fontWeight(.bold).foregroundColor(Color.white)
+            }
+        }.padding(5)
+    }
+    
+}
+
+
 struct SpellsView:  View {
     
     @Binding var character:Character
+    @Binding var selectedDetail:Viewable
     @Binding var spellsShowing:Bool
-
+    @Binding var detailShowing:Bool
+    
     var body: some View {
         VStack {
             HStack{
@@ -111,6 +138,89 @@ struct SpellsView:  View {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
             }.padding(5)
+            if character.spells.count > 0 {
+                VStack(alignment: .leading) {
+                    HStack {
+                        if character.spells.filter({ $0.level == 0 }).count > 0 {
+                            Text("Cantrips:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 0 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 1 }).count > 0 {
+                            Text("1st:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 1 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 2 }).count > 0 {
+                            Text("2nd:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 2 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 3 }).count > 0 {
+                            Text("3rd:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 3 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 4 }).count > 0 {
+                            Text("4th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 4 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 5 }).count > 0 {
+                            Text("5th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 5 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 6 }).count > 0 {
+                            Text("6th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 6 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 7 }).count > 0 {
+                            Text("7th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 7 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 8 }).count > 0 {
+                            Text("8th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 8 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    HStack {
+                        if character.spells.filter({ $0.level == 9 }).count > 0 {
+                            Text("9th:").font(Font.system(size: 20, weight: .bold))
+                            SpellLevelView(spells: character.spells.filter({ $0.level == 9 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        }
+                    }
+                    
+                    }.padding(8)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                .background(Color.black)
+            }
+        }
+    }
+}
+
+struct SpellLevelView:  View {
+    
+    var spells:[Spell]
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack{ ForEach(spells.sorted()) { spell in
+                DetailTextView(thing: spell, selectedDetail: self.$selectedDetail, detailShowing: self.$detailShowing)
+                }
+            }
         }
     }
 }
@@ -136,50 +246,59 @@ struct EquipmentView:  View {
                 HStack {
                     if character.weapons.count > 0 {
                         Text("Weapons:").font(Font.system(size: 20, weight: .bold))
-                        ScrollView(.horizontal) {
-                            HStack{ ForEach(character.weapons) { equipment in
-                                Text(equipment.name).onTapGesture {
-                                    self.selectedDetail = equipment
-                                    self.detailShowing = true
-                                }.font(Font.system(size: 20))
-                                }
-                            }
-                        }
+                        EquipmentTypeView(equipment: character.weapons , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
                     }
                 }
                 HStack {
                     if character.armor.count > 0 {
                         Text("Armor:").font(Font.system(size: 20, weight: .bold))
-                        ScrollView(.horizontal) {
-                            HStack{
-                                ForEach(character.armor) { equipment in
-                                    Text(equipment.name).onTapGesture {
-                                        self.selectedDetail = equipment
-                                        self.detailShowing = true
-                                    }
-                                }
-                            }
-                        }
+                        EquipmentTypeView(equipment: character.armor , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
                     }
                 }
                 HStack {
                     Text("Other Shit:").font(Font.system(size: 20, weight: .bold))
-                    ScrollView(.horizontal) {
-                        HStack{
-                            ForEach(Array(character.equipment.filter({
-                                $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
-                            })) ) { equipment in
-                                Text(equipment.name).onTapGesture {
-                                    self.selectedDetail = equipment
-                                    self.detailShowing = true
-                                }
-                            }
-                        }
-                    }
+                    EquipmentTypeView(equipment: Array(character.equipment.filter({
+                        $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
+                    })) , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                    
                 }
             }.padding(8)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
                 .background(Color.black)
+        }
+    }
+}
+
+struct DetailTextView:  View {
+    
+    let thing:Viewable
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    
+    var body: some View {
+        Text(thing.name).onTapGesture {
+            self.selectedDetail = self.thing
+            self.detailShowing = true
+        }.font(Font.system(size: 18))
+            .padding(4)
+            .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+            .cornerRadius(8)
+    }
+}
+
+struct EquipmentTypeView:  View {
+    
+    var equipment:[Equipment]
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack{ ForEach(equipment.sorted()) { equipment in
+                DetailTextView(thing: equipment, selectedDetail: self.$selectedDetail, detailShowing: self.$detailShowing)
+                }
+            }
         }
     }
 }
@@ -197,10 +316,7 @@ struct ProficiencieView:  View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.proficiencies) ) { proficiency in
-                        Text(proficiency.name).onTapGesture {
-                            self.selectedDetail = proficiency
-                            self.detailShowing = true
-                        }
+                        DetailTextView(thing: proficiency, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
                     }
                 }
             }
@@ -220,11 +336,7 @@ struct SkillsView:  View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.skills) ) { skill in
-                        Text(skill.name)
-                            .onTapGesture {
-                                self.selectedDetail = skill
-                                self.detailShowing = true
-                        }
+                       DetailTextView(thing: skill, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
                     }
                 }
             }
@@ -244,11 +356,7 @@ struct TraitsView:  View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.traits) ) { trait in
-                        Text(trait.name)
-                            .onTapGesture {
-                                self.selectedDetail = trait
-                                self.detailShowing = true
-                        }
+                         DetailTextView(thing: trait, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
                     }
                 }
             }

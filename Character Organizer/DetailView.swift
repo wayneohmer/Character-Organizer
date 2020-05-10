@@ -27,6 +27,8 @@ struct DetailView: View {
             Text(detail.name).font(.title).foregroundColor(Color.white).padding(5)
             if detail is Equipment {
                 EquipmentDetail(equipment:detail as! Equipment)
+            } else if detail is Spell {
+                SpellDetail(spell: detail as! Spell)
             } else {
                 HStack {
                     Text(detail.description).fontWeight(.bold).padding(8)
@@ -118,21 +120,8 @@ struct SpellDetail: View {
     var spell: Spell
     
     @State var detailShow = false
-    @State var selectedDetail: Viewable = Equipment()
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Spacer()
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                } ) {
-                    Text("Close").fontWeight(.bold).padding(5).offset(y:-2)
-                }.frame(width: 100, height: 50, alignment: .center)
-                
-            }
-            Text(spell.name)
-                .font(Font.system(size: 25, weight: .bold, design: .default))
-                .frame(maxWidth: .infinity, alignment: .center)
             HStack{
                 Text("Level:")
                 Text("\(spell.level)")
