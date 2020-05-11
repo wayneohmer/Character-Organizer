@@ -34,6 +34,7 @@ struct DiceView: View {
     @ObservedObject var dice:FyreDice
     @ObservedObject var pickerhelper:PickerHelper = PickerHelper()
     @State var saveCheck = ["Save","Check"]
+    @State var sign = "+"
 
     
     var body: some View {
@@ -79,39 +80,59 @@ struct DiceView: View {
                     VStack {
                         self.diceButton(name: "Clear", width:longWidth, action: {self.dice.clear()})
                         HStack {
-                            self.diceButton(name: "+1d4", width:diceWith, action: {self.dice.add(multipier: 1, d: 4)})
-                            self.diceButton(name: "+1d6", width:diceWith, action: {self.dice.add(multipier: 1, d: 6)})
-                            self.diceButton(name: "+1d8", width:diceWith, action: {self.dice.add(multipier: 1, d: 8)})
+                            self.diceButton(width:diceWith, d: 4)
+                            self.diceButton(width:diceWith, d: 6)
+                            self.diceButton(width:diceWith, d: 8)
                         }
                         HStack {
-                            self.diceButton(name: "+1d10", width:diceWith, action: {self.dice.add(multipier: 1, d: 10)})
-                            self.diceButton(name: "+1d12", width:diceWith, action: {self.dice.add(multipier: 1, d: 12)})
-                            self.diceButton(name: "+1d20", width:diceWith, action: {self.dice.add(multipier: 1, d: 20)})
+                            self.diceButton(width:diceWith, d: 10)
+                            self.diceButton(width:diceWith, d: 12)
+                            self.diceButton(width:diceWith, d: 20)
                         }
-                        self.diceButton(name: "oops", width:longWidth, action: {})
+                        self.diceButton(name: "oops", width:longWidth, action: {
+                            if let oops = self.dice.oopsStack.last {
+                                switch oops.type {
+                                case .buttonTouch:
+                                    self.dice.replaceWith(fyreDice:FyreDice(with:oops.fyreDice, includeResult:true))
+                                case .roll:
+                                    self.dice.rollValue = FyreDice(with:oops.fyreDice, includeResult:true).rollValue
+                                    self.dice.diceResults = FyreDice(with:oops.fyreDice, includeResult:true).diceResults
+                                default:
+                                    break
+                                }
+                                self.dice.oopsStack.removeLast()
+                            }
+                        })
                     }.padding(3)
                     VStack {
                         
-                        self.diceButton(name: "Roll", width:longModWidth, action: { self.dice.roll() })
+                        self.diceButton(name: "Roll", width:longModWidth, action: {
+                            self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.roll))
+                            self.dice.roll()
+                            
+                        })
                         HStack {
-                            self.diceButton(name: "+1", width:modwidth, action: {self.dice.modifier += 1})
-                            self.diceButton(name: "+2", width:modwidth, action: {self.dice.modifier += 2})
-                            self.diceButton(name: "+3", width:modwidth, action: {self.dice.modifier += 3})
-                            self.diceButton(name: "+4", width:modwidth, action: {self.dice.modifier += 4})
-                            self.diceButton(name: "+5", width:modwidth, action: {self.dice.modifier += 5})
+                            self.diceButton(width:modwidth, modifier: 1)
+                            self.diceButton(width:modwidth, modifier: 2)
+                            self.diceButton(width:modwidth, modifier: 3)
+                            self.diceButton(width:modwidth, modifier: 4)
+                            self.diceButton(width:modwidth, modifier: 5)
                         }
                         HStack {
-                            self.diceButton(name: "+6", width:modwidth, action: {self.dice.modifier += 6})
-                            self.diceButton(name: "+7", width:modwidth, action: {self.dice.modifier += 7})
-                            self.diceButton(name: "+8", width:modwidth, action: {self.dice.modifier += 8})
-                            self.diceButton(name: "+9", width:modwidth, action: {self.dice.modifier += 9})
-                            self.diceButton(name: "+10", width:modwidth, action: {self.dice.modifier += 10})
+                            self.diceButton(width:modwidth, modifier: 6)
+                            self.diceButton(width:modwidth, modifier: 7)
+                            self.diceButton(width:modwidth, modifier: 8)
+                            self.diceButton(width:modwidth, modifier: 9)
+                            self.diceButton(width:modwidth, modifier: 10)
+                            
                         }
                         HStack {
-                            self.diceButton(name: "+20", width:bmodwidth, action: {self.dice.modifier += 20})
-                            self.diceButton(name: "+30", width:bmodwidth, action: {self.dice.modifier += 30})
-                            self.diceButton(name: "+40", width:bmodwidth, action: {self.dice.modifier += 40})
-                            self.diceButton(name: "-", width:bmodwidth, action: {})
+                            self.diceButton(width:bmodwidth, modifier: 20)
+                            self.diceButton(width:bmodwidth, modifier: 30)
+                            self.diceButton(width:bmodwidth, modifier: 40)
+                            self.diceButton(name: "\(sign)", width:bmodwidth, action: {
+                                self.sign = self.sign == "+" ? "-" : "+"
+                            })
                         }
                     }.padding(3)
                 }
@@ -140,9 +161,28 @@ struct DiceView: View {
         .background(Color.black)
     }
     
-    func diceButton(name:String, width:CGFloat, action: @escaping () -> Void ) -> some View {
-        return Button(action: action) {
-            Text("\(name)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+    func diceButton(name:String = "", width:CGFloat, modifier: Int = 0, d:Int = 0, action: (() -> Void)? = nil) -> some View {
+        return Button(action: {
+            if let action = action {
+                action()
+            } else {
+                self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.buttonTouch))
+
+                if modifier != 0 {
+                    self.dice.modifier += self.sign == "+" ? modifier : -modifier
+                    return
+                } else if d != 0 {
+                    self.dice.add(multipier: self.sign == "+" ? 1 : -1, d: d)
+                }
+            }
+        }) {
+            if name != "" {
+                Text("\(name)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+            } else if d != 0 {
+                Text("\(sign)d\(d)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+            } else if modifier != 0 {
+                Text("\(sign)\(modifier)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+            }
         }
         .foregroundColor(Color.white)
         .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))

@@ -17,8 +17,8 @@ class FyreDice: ObservableObject {
     let threeDieSound = "3dice"
     let tenDieSound = "10dice"
     var soundUrls = [String: CFURL]()
-    
-   
+    var oopsStack = [Oops]()
+       
     @Published var dice = [Int:Int]()
     @Published var diceResults = [Int:Int]()
     @Published var modifier = 0
@@ -183,9 +183,15 @@ class FyreDice: ObservableObject {
     func add(multipier:Int, d die:Int) {
         if var newValue = self.dice[die] {
             newValue += multipier
-            self.dice[die] = newValue
+            if newValue > 0 {
+                self.dice[die] = newValue
+            } else {
+                self.dice.removeValue(forKey: die)
+            }
         } else {
-            self.dice[die] = multipier
+            if multipier > 0 {
+                self.dice[die] = multipier
+            }
         }
     }
     

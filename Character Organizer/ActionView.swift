@@ -12,8 +12,10 @@ struct ActionView: View {
     @State var selection = 0
     @State var character = Character.shared
     @State var model = Character.shared.model
-    @State var showingDice = false
-    
+    @State var showingInitDice = false
+    @State var showingStrDice = false
+    @State var showingDexDice = false
+
     var diceDetails = DiceDetails()
 
     var lightGray = Color(.lightGray)
@@ -76,23 +78,32 @@ struct ActionView: View {
     var attributes: some View {
         VStack(spacing:8) {
             VStack  {
-                self.attrButton(name: "STR", action: { self.attributeTouched(title:"Strength", mod: Int(Character.shared.strMod) ?? 0) })
+                self.attrButton(name: "STR", action: {
+                    self.showingStrDice = true
+                    self.attributeTouched(title:"Strength", mod: Int(Character.shared.strMod) ?? 0)
+                    
+                })
                 self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
-
+            .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            
             VStack  {
-                self.attrButton(name: "DEX", action: { self.attributeTouched(title:"Dexterity", mod: Int(Character.shared.dexMod) ?? 0) })
+                self.attrButton(name: "DEX", action: {
+                    self.showingDexDice = true
+                    self.attributeTouched(title:"Dexterity", mod: Int(Character.shared.dexMod) ?? 0)
+                    
+                })
                 self.attrText(Character.shared.dex)
                 self.attrModifier(Character.shared.dexMod)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
-
+            .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
                 self.attrButton(name: "CON", action: { self.attributeTouched(title:"Constitution", mod: Int(Character.shared.conMod) ?? 0) })
                 self.attrText(Character.shared.con)
@@ -128,6 +139,7 @@ struct ActionView: View {
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
             .background(Color.white)
+            
         }.padding(8)
 
     }
@@ -173,7 +185,7 @@ struct ActionView: View {
                                 
                                 Button(action: {
                                     self.diceDetails.title = "Initiative"
-                                    self.showingDice = true
+                                    self.showingInitDice = true
                                     self.diceDetails.isSave = false
                                 }){
                                     Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
@@ -181,7 +193,7 @@ struct ActionView: View {
                                 .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
-                                
+                                .popover(isPresented: self.$showingInitDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
                                 
                                 self.attributes
                             }
@@ -192,13 +204,12 @@ struct ActionView: View {
                             Spacer()
                         }
                     }
-                 }.sheet(isPresented: self.$showingDice, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+                 }
 
                 Spacer()
             }.onAppear(){
                 //forces redraw
-                self.showingDice = true
-                self.showingDice = false
+               
             }
 
             .tabItem {
@@ -226,7 +237,7 @@ struct ActionView: View {
     }
     
     func attributeTouched(title:String, mod:Int) {
-        self.showingDice = true
+        //self.showingDice = true
         self.diceDetails.title = title
         self.diceDetails.isSave = true
         self.diceDetails.dice = FyreDice(with: [20:1], modifier: mod)
