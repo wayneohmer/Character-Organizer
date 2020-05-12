@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.armorClass = "10"
         Character.shared.speed = "10"
         Character.shared.currentHP = "35"
+        Character.shared.maxHP = "35"
+        Character.shared.tempHP = "0"
         Character.shared.str = "16"
         Character.shared.dex = "15"
         Character.shared.con = "17"

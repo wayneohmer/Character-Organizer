@@ -15,6 +15,7 @@ struct ActionView: View {
     @State var showingInitDice = false
     @State var showingStrDice = false
     @State var showingDexDice = false
+    @State var showingHP = false
 
     var diceDetails = DiceDetails()
 
@@ -22,16 +23,39 @@ struct ActionView: View {
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
 
     var hitPoints: some View {
-        VStack(spacing: 3){
-            Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
-            TextField("0", text: self.$character.currentHP)
+        HStack{
+            VStack(spacing: 3){
+                Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+                Text(self.character.currentHP)
+                    .onTapGesture {
+                        self.showingHP = true
+                }
                 .font(Font.system(size: 45, weight: .bold, design: .default))
                 .frame(maxWidth: 100, minHeight: 80)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
                 .multilineTextAlignment(.center)
                 .background(Color.white)
                 .foregroundColor(Color.black)
-        }.padding(8)
+                .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP) })
+                
+            }.padding(5)
+            VStack {
+                VStack {
+                    Text("Max").frame(maxWidth: 45).foregroundColor(Color.white)
+                    Text(character.maxHP)
+                        .frame(width: 45, height:30)
+                        .background(Color.white)
+                        .foregroundColor(Color.black)
+                }
+                VStack {
+                    Text("Temp").frame(maxWidth: 45).foregroundColor(Color.white)
+                    Text(character.tempHP)
+                        .frame(width: 45, height:30)
+                        .background(Color.white)
+                        .foregroundColor(Color.black)
+                }
+            }
+        }
     }
     
     var demographics: some View {

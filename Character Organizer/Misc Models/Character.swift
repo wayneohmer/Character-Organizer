@@ -88,6 +88,25 @@ class Character: ObservableObject {
             return "\(model.currentHP)"
         }
     }
+    
+    var maxHP:String {
+        set {
+            model.maxHP = Int(newValue) ?? 0
+        }
+        get {
+            return "\(model.maxHP)"
+        }
+    }
+    
+    var tempHP:String {
+        set {
+            model.tempHP = Int(newValue) ?? 0
+        }
+        get {
+            return "\(model.tempHP)"
+        }
+    }
+    
     var armorClass:String {
         set {
             model.armorClass = Int(newValue) ?? 0
@@ -198,6 +217,8 @@ struct CharacterModel: Codable {
     var characterClass:ClassModel?
     var alignment = ""
     var currentHP = 0
+    var maxHP = 0
+    var tempHP = 0
     var armorClass = 0
     var speed = 30
     var level = Int(1)
