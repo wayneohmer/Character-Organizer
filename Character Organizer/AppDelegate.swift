@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         Character.shared.proficiencies.formUnion(Set(Character.shared.charcaterClass.proficiencies))
         Character.shared.skills.insert(Skill.shared["/api/skills/animal-handling"] ?? Skill())
+        Character.shared.skills.insert(Skill.shared["/api/skills/athletics"] ?? Skill())
         Character.shared.model.equipment = [Equipment.shared["camel"] ?? Equipment(), Equipment.shared["plate"] ?? Equipment(), Equipment.shared["longsword"] ?? Equipment()]
         Character.shared.model.spells = [Spell.shared["magic-missile"] ?? Spell(), Spell.shared["fireball"] ?? Spell(), Spell.shared["blur"] ?? Spell() , Spell.shared["charm-person"] ?? Spell()]
         Character.shared.level = "2"
@@ -52,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.int = "9"
         Character.shared.wis = "7"
         Character.shared.cha = "20"
+        Character.shared.proficiencyBonus = "2"
         Character.shared.model.actions = [Action(name: "Action1", desc: "Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description "),Action(name: "Action2", desc: "Action 2 description"),Action(name: "Action3", desc: "Action 3 description")]
         
         return true

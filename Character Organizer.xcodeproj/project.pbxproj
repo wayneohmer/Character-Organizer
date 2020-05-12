@@ -24,6 +24,7 @@
 		2B16BCED23D80B4D00360928 /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B16BCEC23D80B4D00360928 /* Equipment.swift */; };
 		2B16BCEF23D8172800360928 /* 5e-SRD-StartingEquipment.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B16BCEE23D8172800360928 /* 5e-SRD-StartingEquipment.json */; };
 		2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */; };
+		2B1F45DF246B4E5E00CA6BC7 /* SkillCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */; };
 		2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B396238B2330000E022B /* FDFyreDice.swift */; };
 		2B25B399238B2B52000E022B /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B398238B2B52000E022B /* DiceView.swift */; };
 		2B27BF9523BFFEE0001719A0 /* 3dice.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B391238B22F8000E022B /* 3dice.aif */; };
@@ -84,6 +85,7 @@
 		2B16BCEC23D80B4D00360928 /* Equipment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
 		2B16BCEE23D8172800360928 /* 5e-SRD-StartingEquipment.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-StartingEquipment.json"; sourceTree = "<group>"; };
 		2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCreationView.swift; sourceTree = "<group>"; };
+		2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillCheckView.swift; sourceTree = "<group>"; };
 		2B25B391238B22F8000E022B /* 3dice.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 3dice.aif; sourceTree = "<group>"; };
 		2B25B392238B22F8000E022B /* DeathSound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = DeathSound.aif; sourceTree = "<group>"; };
 		2B25B393238B22F8000E022B /* 10dice.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 10dice.aif; sourceTree = "<group>"; };
@@ -180,7 +182,6 @@
 			children = (
 				2B068BEA23C2C879007893BC /* ClassView.swift */,
 				2B068BED23C2C920007893BC /* CharacterClass.swift */,
-				2BF2934D23C4F84300659673 /* Skill.swift */,
 				2BF2935123C505E000659673 /* Proficiency.swift */,
 			);
 			path = Classes;
@@ -196,6 +197,7 @@
 				2BE9EF2C23F0B05C00422D0D /* WeaponModels.swift */,
 				2BE92C6B23F9D0CE00044E68 /* Spell.swift */,
 				2B7B881D2427FE1800340A3E /* Action.swift */,
+				2BF2934D23C4F84300659673 /* Skill.swift */,
 			);
 			path = "Misc Models";
 			sourceTree = "<group>";
@@ -251,6 +253,7 @@
 				2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */,
 				2B7B881F2428015B00340A3E /* AttackCreationView.swift */,
 				2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */,
+				2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */,
 				2B16BCE723D80AC700360928 /* Creation */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -422,6 +425,7 @@
 				2B068BEE23C2C920007893BC /* CharacterClass.swift in Sources */,
 				2B16BCED23D80B4D00360928 /* Equipment.swift in Sources */,
 				2B068BE023C2B495007893BC /* Traits.swift in Sources */,
+				2B1F45DF246B4E5E00CA6BC7 /* SkillCheckView.swift in Sources */,
 				2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */,
 				2B2CF77F23D513F500167DB3 /* DescriptionView.swift in Sources */,
 				2B068BD223C26A6E007893BC /* RaceView.swift in Sources */,

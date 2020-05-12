@@ -8,14 +8,22 @@
 
 import SwiftUI
 
+class ObCharacer: ObservableObject {
+    @Published var character = Character.shared
+}
+
 struct ActionView: View {
     @State var selection = 0
-    @State var character = Character.shared
+    @ObservedObject var character = ObCharacer().character
     @State var model = Character.shared.model
     @State var showingInitDice = false
     @State var showingStrDice = false
     @State var showingDexDice = false
     @State var showingHP = false
+    @State var showingMaxHP = false
+    @State var showingTempHP = false
+    @State var showingAC = false
+    @State var showingSkills = false
 
     var diceDetails = DiceDetails()
 
@@ -26,34 +34,53 @@ struct ActionView: View {
         HStack{
             VStack(spacing: 3){
                 Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
-                Text(self.character.currentHP)
+                Text(self.character.effectiveHP)
                     .onTapGesture {
                         self.showingHP = true
                 }
                 .font(Font.system(size: 45, weight: .bold, design: .default))
-                .frame(maxWidth: 100, minHeight: 80)
+                .frame(maxWidth: 100, minHeight: 70)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
                 .multilineTextAlignment(.center)
-                .background(Color.white)
+                .background(self.hpColor())
                 .foregroundColor(Color.black)
-                .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP) })
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(hpBorderColor(), lineWidth: 4))
+
+                .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP, isHP: true) })
+                
+                Button(action: {self.character.currentHP = self.character.maxHP}, label: {
+                    Text("Set Max").foregroundColor(Color.white).fontWeight(.bold)
+                })
+                    .frame(width: 100, height: 40, alignment: .center)
+                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                .cornerRadius(5)
+                .padding(3)
                 
             }.padding(5)
             VStack {
                 VStack {
                     Text("Max").frame(maxWidth: 45).foregroundColor(Color.white)
                     Text(character.maxHP)
+                        .onTapGesture {
+                            self.showingMaxHP = true
+                        }
                         .frame(width: 45, height:30)
                         .background(Color.white)
                         .foregroundColor(Color.black)
+                        .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.maxHP, isHP: false) })
                 }
                 VStack {
                     Text("Temp").frame(maxWidth: 45).foregroundColor(Color.white)
                     Text(character.tempHP)
+                        .onTapGesture {
+                                self.showingTempHP = true
+                        }
                         .frame(width: 45, height:30)
                         .background(Color.white)
                         .foregroundColor(Color.black)
+                        .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.tempHP, isHP: false) })
                 }
+                Spacer()
             }
         }
     }
@@ -91,12 +118,16 @@ struct ActionView: View {
             Text("AC").fontWeight(.bold).frame(width: 110).foregroundColor(Color.white)
             Text(character.armorClass)
                 .padding(8)
-                .font(Font.system(size: 35, weight: .bold, design: .default))
+                .font(Font.system(size: 40, weight: .bold, design: .default))
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
                 .background(Color.white)
                 .foregroundColor(Color.black)
+                .onTapGesture {
+                    self.showingAC = true
+                }
+            .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.armorClass, isHP: false) })
             Spacer()
-        }.padding(5)
+        }.padding(5).frame(width:80)
     }
     
     var attributes: some View {
@@ -174,39 +205,28 @@ struct ActionView: View {
             VStack {
                  HStack {
                     VStack {
-                            HStack{
-                                Image("Wayne").resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 90, height:90)
-                                    .padding(3)
-                                demographics
-
-                            }
-                            VStack {
-                                HStack {
-                                    hitPoints
-                                    HStack {
-                                        armorClass
-                                    }.frame(width:60, height:110)
-                                    VStack {
-                                        Text("")
-                                            .foregroundColor(Color.white)
-                                            .font(Font.system(size: 18, weight: .bold, design: .default))
-                                        
-                                        Spacer()
-                                    }
-                                    Spacer()
-                                }.frame(height:110)
-                            }
+                        HStack{
+                            Image("Wayne").resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 90, height:90)
+                                .padding(3)
+                            demographics
+                            
+                        }
+                        HStack {
+                            hitPoints
+                            armorClass
+                            Spacer()
+                        }.frame(height:140)
                         HStack {
                             VStack(spacing:5) {
-                                Button(action: {}){
-                                    Text("Conditions").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                                Button(action: { self.showingSkills = true }){
+                                    Text("Skill").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
                                 }
                                 .frame(width:120, height:40)
                                 .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
-                                
+                                .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
                                 Button(action: {
                                     self.diceDetails.title = "Initiative"
                                     self.showingInitDice = true
@@ -288,6 +308,18 @@ struct ActionView: View {
         return Text(text)
             .frame(width: 55, alignment: .center)
             .foregroundColor(Color.black)
+    }
+    
+    func hpColor() -> Color {
+        let r = Double(self.character.model.currentHP)/Double(self.character.model.maxHP)
+        return Color(red: 1.0, green: r, blue: r)
+    }
+    
+    func hpBorderColor() -> Color {
+        if self.character.model.tempHP > 0 {
+            return (Color.green)
+        }
+        return Color(.black)
     }
 }
 

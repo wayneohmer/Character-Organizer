@@ -14,6 +14,8 @@ struct NumberEditor: View {
 
     @State var value:String
     @Binding var modifiedValue:String
+    @State var isHP:Bool
+    @ObservedObject var character = ObCharacer().character
 
     var body: some View {
         VStack{
@@ -82,13 +84,30 @@ struct NumberEditor: View {
                         self.presentationMode.wrappedValue.dismiss()
 
                     }, label: {
-                        Text("Heal").font(Font.system(size: 20, weight: .bold, design: .default))
-                            .frame(width: 100, height: 40, alignment: .center)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(.blue), .black]), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(5)
+                        if isHP {
+                            Text("Heal").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(.blue), .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                        } else {
+                            Text("Add").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                            
+                        }
                     })
                     Button(action: {
-                        let damage = Int(self.value) ?? 0
+                        var damage = Int(self.value) ?? 0
+                        if self.character.model.tempHP > 0 {
+                            if damage > self.character.model.tempHP {
+                                damage -= self.character.model.tempHP
+                                self.character.model.tempHP = 0
+                            } else {
+                                self.character.model.tempHP -= damage
+                                damage = 0
+                            }
+                        }
                         var modvalue = Int(self.modifiedValue) ?? 0
                         modvalue -= damage
                         self.modifiedValue = "\(modvalue)"
@@ -96,24 +115,44 @@ struct NumberEditor: View {
 
                         
                     }, label: {
-                        Text("Damage").font(Font.system(size: 20, weight: .bold, design: .default))
-                        .frame(width: 100, height: 40, alignment: .center)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(.red), .black]), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(5)
-                        .padding(3)
-
-
+                        if isHP {
+                            Text("Damage").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(.red), .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                                .padding(3)
+                        } else {
+                            Text("Subtract").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .frame(width: 100, height: 40, alignment: .center)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                                .cornerRadius(5)
+                            
+                        }
+                        
                     })
                 }
+                Button(action: {
+                    self.modifiedValue = "\(self.value)"
+                    self.presentationMode.wrappedValue.dismiss()
+                    
+                }, label: {
+                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default))
+                    .frame(width: 100, height: 40, alignment: .center)
+                    .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                    .cornerRadius(5)
+                    .padding(3)
+
+                })
                 Spacer()
 
             }
             Spacer()
         }
-        .frame(width: 250, height: 400)
+        .frame(width: 250, height: 450)
         .foregroundColor(Color.white)
         .background(Color(red: 0.15, green: 0.15, blue: 0.15))
-        .cornerRadius(5)
+        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color(.white), lineWidth: 4))
+        .cornerRadius(15)
 
     }
     
@@ -143,10 +182,8 @@ struct NumberEditor: View {
 }
 
 
-
-
 struct NumberEditor_Previews: PreviewProvider {
     static var previews: some View {
-        NumberEditor(value: "0", modifiedValue: .constant("35"))
+        NumberEditor(value: "0", modifiedValue: .constant("35"), isHP: false)
     }
 }

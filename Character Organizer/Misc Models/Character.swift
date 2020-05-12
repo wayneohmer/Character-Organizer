@@ -83,6 +83,9 @@ class Character: ObservableObject {
     var currentHP:String {
         set {
             model.currentHP = Int(newValue) ?? 0
+            if model.currentHP > model.maxHP {
+                model.currentHP = model.maxHP
+            }
         }
         get {
             return "\(model.currentHP)"
@@ -106,6 +109,15 @@ class Character: ObservableObject {
             return "\(model.tempHP)"
         }
     }
+    
+    var effectiveHP:String {
+           set {
+               model.tempHP = Int(newValue) ?? 0
+           }
+           get {
+            return "\(model.currentHP + model.tempHP)"
+           }
+       }
     
     var armorClass:String {
         set {
@@ -166,6 +178,14 @@ class Character: ObservableObject {
             return "\(model.cha)"
         }
     }
+    var proficiencyBonus:String {
+        set {
+            model.proficiencyBonus = Int(newValue) ?? 0
+        }
+        get {
+            return "\(model.proficiencyBonus)"
+        }
+    }
     
     var actions:[Action] { return model.actions }
     
@@ -175,6 +195,12 @@ class Character: ObservableObject {
     var intMod:String { return modString(model.int) }
     var wisMod:String { return modString(model.wis) }
     var chaMod:String { return modString(model.cha) }
+    
+    var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
+    
+    func modValue (_ attribute:Int) -> Int {
+        return Int((attribute - 10)/2)
+    }
     
     func modString(_ attribute:Int) -> String {
         
@@ -228,6 +254,7 @@ struct CharacterModel: Codable {
     var wis = Int(1)
     var con = Int(1)
     var cha = Int(1)
+    var proficiencyBonus = Int(1)
     var alingment1Idx:Int = 1
     var alingment2Idx:Int = 1
 

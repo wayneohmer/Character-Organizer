@@ -142,6 +142,10 @@ struct SpellDetail: View {
                 Text("School:")
                 Text("\(spell.school?.name ?? "")").fontWeight(.bold)
             }
+            HStack{
+                Text("Duration:")
+                Text("\(spell.concentration ? "Concentration - " : "")\(spell.duration)").fontWeight(.bold)
+            }
             ScrollView {
                 Text(spell.description).fontWeight(.bold)
             }
