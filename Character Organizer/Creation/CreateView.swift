@@ -76,12 +76,16 @@ struct CreateView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+                    .background(Color(.lightGray))
+                    .cornerRadius(8)
                     Picker("Alignment", selection: $character.model.alingment2Idx) {
                         ForEach(0 ..< Character.aligment2.count) { index in
                             Text(Character.aligment2[index])
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+                    .background(Color(.lightGray))
+                    .cornerRadius(8)
                     
                 }
                 Spacer()

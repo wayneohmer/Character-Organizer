@@ -19,6 +19,10 @@ struct ActionView: View {
     @State var showingInitDice = false
     @State var showingStrDice = false
     @State var showingDexDice = false
+    @State var showingConDice = false
+    @State var showingIntDice = false
+    @State var showingWisDice = false
+    @State var showingChaDice = false
     @State var showingHP = false
     @State var showingMaxHP = false
     @State var showingTempHP = false
@@ -49,7 +53,7 @@ struct ActionView: View {
                 .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP, isHP: true) })
                 
                 Button(action: {self.character.currentHP = self.character.maxHP}, label: {
-                    Text("Set Max").foregroundColor(Color.white).fontWeight(.bold)
+                    Text("Set Max").foregroundColor(Color.white).fontWeight(.bold).offset(x: 0, y: -3)
                 })
                     .frame(width: 100, height: 40, alignment: .center)
                 .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
@@ -67,6 +71,8 @@ struct ActionView: View {
                         .frame(width: 45, height:30)
                         .background(Color.white)
                         .foregroundColor(Color.black)
+                        .cornerRadius(5)
+
                         .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.maxHP, isHP: false) })
                 }
                 VStack {
@@ -78,6 +84,8 @@ struct ActionView: View {
                         .frame(width: 45, height:30)
                         .background(Color.white)
                         .foregroundColor(Color.black)
+                        .cornerRadius(5)
+
                         .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.tempHP, isHP: false) })
                 }
                 Spacer()
@@ -86,52 +94,49 @@ struct ActionView: View {
     }
     
     var demographics: some View {
-        return
-            VStack {
-                Text(character.name)
-                    .font(Font.system(size: 20, weight: .bold, design: .default))
-                    .foregroundColor(Color.white)
-                    .padding(8)
-                HStack {
-                    Text("Race:").foregroundColor(Color.white)
-                    Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
-                    Text("Alignment:").foregroundColor(Color.white)
-                    Text(Character.shared.alingment).fontWeight(.bold).foregroundColor(Color.white)
-                    Text("Speed:").foregroundColor(Color.white)
-                    Text(Character.shared.speed).fontWeight(.bold).foregroundColor(Color.white)
-                    Text("Level:").foregroundColor(Color.white)
-                    Text(Character.shared.level).fontWeight(.bold).foregroundColor(Color.white)
-                    
-                    Spacer()
-                    
-                }.padding(8)
-                HStack {
-                    Text("Languages:").foregroundColor(Color.white)
-                    Text(Character.shared.languageString).fontWeight(.bold).foregroundColor(Color.white)
-                    Spacer()
-                }.padding(8)
+        VStack {
+            Text(character.name)
+                .font(Font.system(size: 20, weight: .bold, design: .default))
+                .foregroundColor(Color.white)
+                .padding(8)
+            HStack {
+                Text("Race:").foregroundColor(Color.white)
+                Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
+                Text("Class:").foregroundColor(Color.white)
+                Text(Character.shared.charcaterClass.name).fontWeight(.bold).foregroundColor(Color.white)
+                Text("Level:").foregroundColor(Color.white)
+                Text(Character.shared.level).fontWeight(.bold).foregroundColor(Color.white)
+                Spacer()
+                
+            }.padding(8)
+            HStack {
+                Text("Alignment:").foregroundColor(Color.white)
+                Text(Character.shared.alingment).fontWeight(.bold).foregroundColor(Color.white)
+                Text("Languages:").foregroundColor(Color.white)
+                Text(Character.shared.languageString).fontWeight(.bold).foregroundColor(Color.white)
+                Spacer()
+            }.padding(8)
         }
     }
     
     var armorClass: some View {
         VStack(spacing: 3){
-            Text("AC").fontWeight(.bold).frame(width: 110).foregroundColor(Color.white)
+            Text("AC").fontWeight(.bold).frame(width: 80).foregroundColor(Color.white)
             Text(character.armorClass)
                 .padding(8)
                 .font(Font.system(size: 40, weight: .bold, design: .default))
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-                .background(Color.white)
+                .background(Image("ACicon").resizable().frame(width: 80, height: 80, alignment: .center))
                 .foregroundColor(Color.black)
                 .onTapGesture {
                     self.showingAC = true
                 }
             .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.armorClass, isHP: false) })
             Spacer()
-        }.padding(5).frame(width:80)
+        }.padding(5).frame(width:90)
     }
     
     var attributes: some View {
-        VStack(spacing:8) {
+        VStack(spacing:24) {
             VStack  {
                 self.attrButton(name: "STR", action: {
                     self.showingStrDice = true
@@ -141,59 +146,69 @@ struct ActionView: View {
                 self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
             .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
                 self.attrButton(name: "DEX", action: {
                     self.showingDexDice = true
                     self.attributeTouched(title:"Dexterity", mod: Int(Character.shared.dexMod) ?? 0)
-                    
                 })
                 self.attrText(Character.shared.dex)
                 self.attrModifier(Character.shared.dexMod)
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
+                
             .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                self.attrButton(name: "CON", action: { self.attributeTouched(title:"Constitution", mod: Int(Character.shared.conMod) ?? 0) })
+                self.attrButton(name: "CON", action: {
+                    
+                    self.showingConDice = true
+                    self.attributeTouched(title:"Constitution", mod: Int(Character.shared.conMod) ?? 0)
+                    
+                })
                 self.attrText(Character.shared.con)
                 self.attrModifier(Character.shared.conMod)
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
-
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
+                
+            .popover(isPresented: self.$showingConDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            
             VStack  {
-                self.attrButton(name: "INT", action: { self.attributeTouched(title:"Intelligence", mod: Int(Character.shared.intMod) ?? 0) })
+                self.attrButton(name: "INT", action: {
+                    self.showingIntDice = true
+                    self.attributeTouched(title:"Intelligence", mod: Int(Character.shared.intMod) ?? 0)
+                    
+                })
                 self.attrText(Character.shared.int)
                 self.attrModifier(Character.shared.intMod)
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
-
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
+                
+            .popover(isPresented: self.$showingIntDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                self.attrButton(name: "WIS", action: { self.attributeTouched(title:"Wisdom", mod: Int(Character.shared.wisMod) ?? 0) })
+                self.attrButton(name: "WIS", action: {
+                    self.showingWisDice = true
+                    self.attributeTouched(title:"Wisdom", mod: Int(Character.shared.wisMod) ?? 0)
+                    
+                })
                 self.attrText(Character.shared.wis)
                 self.attrModifier(Character.shared.wisMod)
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
-
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
+                
+            .popover(isPresented: self.$showingWisDice, arrowEdge: .leading, content: {
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                self.attrButton(name: "CHA", action: { self.attributeTouched(title:"Charisma", mod: Int(Character.shared.chaMod) ?? 0) })
+                self.attrButton(name: "CHA", action: {
+                    self.showingChaDice = true
+                    self.attributeTouched(title:"Charisma", mod: Int(Character.shared.chaMod) ?? 0) })
                 self.attrText(Character.shared.cha)
                 self.attrModifier(Character.shared.chaMod)
+                    .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-            .background(Color.white)
+            .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
+
             
         }.padding(8)
 
@@ -241,18 +256,23 @@ struct ActionView: View {
                                 
                                 self.attributes
                             }
-                            
-                            List(character.actions) { action in
-                                return ActionRow(action:action)
+                            VStack{
+                                ForEach(character.actions) { action in
+                                    if action.weapon != nil {
+                                        WeaponAction(action: action)
+                                    } else {
+                                        ActionRow(action:action)
+                                    }
+                                }
+                                Spacer()
+
                             }
-                            Spacer()
                         }
                     }
                  }
 
                 Spacer()
             }.onAppear(){
-                //forces redraw
                
             }
 
@@ -281,7 +301,6 @@ struct ActionView: View {
     }
     
     func attributeTouched(title:String, mod:Int) {
-        //self.showingDice = true
         self.diceDetails.title = title
         self.diceDetails.isSave = true
         self.diceDetails.dice = FyreDice(with: [20:1], modifier: mod)
@@ -300,8 +319,10 @@ struct ActionView: View {
     func attrText(_ text:String) -> some View {
         Text(text).multilineTextAlignment(.center)
             .font(Font.system(size: 25, weight: .bold, design: .default))
-            .frame(width: 70)
+            .frame(width: 70, height: 35)
+            .offset(x: 0, y: -3)
             .foregroundColor(Color.black)
+            
     }
     
     func attrModifier(_ text:String) -> some View {
@@ -327,17 +348,18 @@ struct ActionRow: View {
     var action:Action
     
     var body: some View {
-        return HStack {
+        HStack {
             Spacer()
             VStack {
                 Text(self.action.name)
                     .foregroundColor(Color.white)
                     .font(Font.system(size: 25, weight: .bold, design: .default)).padding(4)
                 Text(self.action.desc).foregroundColor(Color.white).offset(y:-6)
-                }
-            .background(Color.black)
+            }
             Spacer()
-        }.overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+        }
+        .background(Color.black)
+        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
     }
     
 }

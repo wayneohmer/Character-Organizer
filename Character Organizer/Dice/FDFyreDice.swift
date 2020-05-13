@@ -81,6 +81,10 @@ class FyreDice: ObservableObject {
         return false
     }
     
+    var model:FyreDiceModel {
+        return FyreDiceModel(dice: self.dice, modifier: self.modifier)
+    }
+    
     var display:String {
         var returnString = ""
         for (die,multiplier) in self.dice.sorted(by: {$0 < $1}) {
@@ -278,5 +282,12 @@ class Oops {
         self.type = type
     }
 
+}
+
+struct FyreDiceModel: Codable, Identifiable {
+    
+    var id = UUID()
+    var dice = [Int:Int]()
+    var modifier = 0
 }
 

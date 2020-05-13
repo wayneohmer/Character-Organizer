@@ -12,6 +12,12 @@ class DiceDetails: ObservableObject {
     @Published var title = "Junk"
     @Published var isSave = true
     @Published var dice = FyreDice()
+    
+    convenience init(title:String, isSave:Bool = false) {
+        self.init()
+        self.title = title
+        self.isSave = isSave
+    }
 }
 
 class PickerHelper: ObservableObject {
@@ -35,7 +41,6 @@ struct DiceView: View {
     @ObservedObject var pickerhelper:PickerHelper = PickerHelper()
     @State var saveCheck = ["Save","Check"]
     @State var sign = "+"
-
     
     var body: some View {
         
@@ -59,20 +64,24 @@ struct DiceView: View {
                             .font(Font.system(size: 20, weight: .bold, design: .default))
                             .frame(width: 240, height:40, alignment: .center)
                             .background(Color.black)
-                        .padding(5)
-
+                            .cornerRadius(5)
+                            .padding(5)
+                        
                         Text(self.dice.resultDisplay)
                             .padding(8)
                             .font(Font.system(size: 20, weight: .bold, design: .default))
                             .frame(width: 240, height:40, alignment: .center)
                             .background(Color.black)
-                        .padding(5)
+                            .cornerRadius(5)
+                            .padding(5)
                     }
                     Spacer()
                     Text(self.dice.rollValueString).padding(10)
                         .font(Font.system(size: 50, weight: .bold, design: .default)).frame(width: 150)
                         .frame(width: 250, alignment: .center)
                         .background(Color.black)
+                        .cornerRadius(5)
+
                     .padding(5)
                     }.foregroundColor(Color.white).padding(5)
                 
@@ -154,11 +163,12 @@ struct DiceView: View {
             }
             .background(background)
             .frame(width: 550, alignment: .center)
-            
+            .cornerRadius(10)
             Spacer()
-
+            
         }
         .background(Color.black)
+       
     }
     
     func diceButton(name:String = "", width:CGFloat, modifier: Int = 0, d:Int = 0, action: (() -> Void)? = nil) -> some View {
@@ -177,11 +187,17 @@ struct DiceView: View {
             }
         }) {
             if name != "" {
-                Text("\(name)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+                Text("\(name)").fontWeight(.bold).padding(3)
+                    .offset(x:0, y:-3)
+                    .frame(width: width, height: 40, alignment: .center)
             } else if d != 0 {
-                Text("\(sign)d\(d)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+                Text("\(sign)d\(d)").fontWeight(.bold).padding(3)
+                    .offset(x:0, y:-3)
+                    .frame(width: width, height: 40, alignment: .center)
             } else if modifier != 0 {
-                Text("\(sign)\(modifier)").fontWeight(.bold).padding(3).frame(width: width, height: 40, alignment: .center)
+                Text("\(sign)\(modifier)").fontWeight(.bold).padding(3)
+                    .offset(x:0, y:-3)
+                    .frame(width: width, height: 40, alignment: .center)
             }
         }
         .foregroundColor(Color.white)
@@ -189,8 +205,6 @@ struct DiceView: View {
         .cornerRadius(5)
         .padding(3)
     }
-
-    
 }
 
 struct DiceView_Previews: PreviewProvider {

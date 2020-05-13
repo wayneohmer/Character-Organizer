@@ -44,12 +44,21 @@ struct EquipmentDetail: View {
     
     var equipment: Equipment
     @State var detailShow = false
+    @State var showAttack = false
     @State var selectedDetail: Viewable = Equipment()
 
     var body: some View {
         HStack{
             VStack(alignment: .leading, spacing: 8) {
                 if equipment.equipment_category == "Weapon" {
+                    Button(action: {
+                        self.showAttack = true
+                    }, label: {
+                        Text("Make Attack")
+                    })
+                    .sheet(isPresented: self.$showAttack, content: {
+                        AttackCreationView(weapon: self.equipment)
+                    })
                     HStack {
                         Text("Category: ")
                         Text(equipment.category_range ?? "").bold()

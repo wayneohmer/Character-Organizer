@@ -21,10 +21,12 @@ struct NumberEditor: View {
         VStack{
             HStack{
                 Text("\(value)")
-                    .font(Font.system(size: 50, weight: .bold, design: .default))
-                    .frame(width: 100, height: 100)
+                    .font(Font.system(size: 60, weight: .bold, design: .default))
+                    .frame(width: 160, height: 100)
                     .background(Color(.black))
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth:2)).foregroundColor(Color.white)
+                    .minimumScaleFactor(0.1)
+                    .lineLimit(1)
                     .padding()
                     
                 VStack {
@@ -117,12 +119,16 @@ struct NumberEditor: View {
                     }, label: {
                         if isHP {
                             Text("Damage").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .offset(x: 0, y: -3)
+
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.red), .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
                                 .padding(3)
                         } else {
                             Text("Subtract").font(Font.system(size: 20, weight: .bold, design: .default))
+                                .offset(x: 0, y: -3)
+
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
                                 .cornerRadius(5)
@@ -136,7 +142,8 @@ struct NumberEditor: View {
                     self.presentationMode.wrappedValue.dismiss()
                     
                 }, label: {
-                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default))
+                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default)).offset(x: 0, y: -3)
+                    .offset(x: 0, y: -3)
                     .frame(width: 100, height: 40, alignment: .center)
                     .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
                     .cornerRadius(5)
@@ -170,7 +177,10 @@ struct NumberEditor: View {
                 }
                 
             }, label: {
-                Text("\(buttonValue)").fontWeight(.bold).padding(3).frame(width: 65, height: 45, alignment: .center)
+                Text("\(buttonValue)").fontWeight(.bold)
+                    .padding(3)
+                    .frame(width: 65, height: 45, alignment: .center)
+                    .offset(x: 0, y: -3)
             })
             .foregroundColor(Color.white)
             .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))

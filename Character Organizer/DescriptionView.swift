@@ -37,7 +37,7 @@ struct DescriptionView: View {
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
                 .background(Color.black)
                 AttacksView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
-                    .sheet(isPresented: self.$attacksShowing, content:  { EquipmentPicker(character: self.$character) })
+                    .sheet(isPresented: self.$attacksShowing, content:  { AttackCreationView() })
                 EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
                     .sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
                 SpellsView(character: $character, selectedDetail: $selectedDetail, spellsShowing: $spellsShowing, detailShowing: $detailShowing)

@@ -14,7 +14,9 @@ class Character: ObservableObject {
     
     static let aligment1 = ["Lawful","Neutral","Chaotic"]
     static let aligment2 = ["Good","Neutral","Evil"]
-    
+    static let AttributeDict = ["STR":"Strength","DEX":"Dexterity","CON":"Constution","INT":"Intelligence","WIS":"Wisdom","CHA":"Charisma"]
+    static let AttributeArray = ["Strength","Dexterity","Constution","Intelligence","Wisdom","Charisma"]
+
     @Published var model = CharacterModel()
     
     var name:String {
@@ -195,6 +197,8 @@ class Character: ObservableObject {
     var intMod:String { return modString(model.int) }
     var wisMod:String { return modString(model.wis) }
     var chaMod:String { return modString(model.cha) }
+    
+    var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
     
     var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
     

@@ -16,7 +16,15 @@ struct Action: Codable, Identifiable {
     var attack_bonus: Int?
     var damage_dice: String?
     var damage_bonus: Int?
+    var isPoficient = false
+    var attrIndex = 0
+    var damageDice: FyreDiceModel?
     var spell: Spell?
+    var weapon: Equipment?
+    
+    var damageFyreDice:FyreDice {
+        return FyreDice(with: damageDice?.dice ?? [0:0], modifier: damageDice?.modifier ?? 0)
+    }
 
     init(name:String, desc: String) {
         self.name = name

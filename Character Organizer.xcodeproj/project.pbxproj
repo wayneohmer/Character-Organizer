@@ -33,6 +33,8 @@
 		2B27BF9823BFFEE0001719A0 /* Awww.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B394238B22F8000E022B /* Awww.aif */; };
 		2B27BF9923BFFEE0001719A0 /* 1die.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B395238B22F8000E022B /* 1die.aif */; };
 		2B2CF77F23D513F500167DB3 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2CF77E23D513F500167DB3 /* DescriptionView.swift */; };
+		2B4D5CEA246C8E6C003AAC3C /* DicePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */; };
+		2B4D5CEC246CA421003AAC3C /* WeaponAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */; };
 		2B68909D236B812700EC8948 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B68909C236B812700EC8948 /* AppDelegate.swift */; };
 		2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B68909E236B812700EC8948 /* SceneDelegate.swift */; };
 		2B6890A1236B812700EC8948 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6890A0236B812700EC8948 /* ActionView.swift */; };
@@ -94,6 +96,8 @@
 		2B25B396238B2330000E022B /* FDFyreDice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDFyreDice.swift; sourceTree = "<group>"; };
 		2B25B398238B2B52000E022B /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
 		2B2CF77E23D513F500167DB3 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
+		2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DicePickerView.swift; sourceTree = "<group>"; };
+		2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeaponAction.swift; sourceTree = "<group>"; };
 		2B689099236B812700EC8948 /* Character Organizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Character Organizer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B68909C236B812700EC8948 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B68909E236B812700EC8948 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 		2B068BD023C26A40007893BC /* Dice */ = {
 			isa = PBXGroup;
 			children = (
+				2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */,
 				2B25B398238B2B52000E022B /* DiceView.swift */,
 				2B25B396238B2330000E022B /* FDFyreDice.swift */,
 			);
@@ -254,6 +259,7 @@
 				2B7B881F2428015B00340A3E /* AttackCreationView.swift */,
 				2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */,
 				2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */,
+				2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */,
 				2B16BCE723D80AC700360928 /* Creation */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -406,9 +412,11 @@
 			files = (
 				2BCA2CB9246A1C7A0066DBD6 /* NumberEditor.swift in Sources */,
 				2B68909D236B812700EC8948 /* AppDelegate.swift in Sources */,
+				2B4D5CEC246CA421003AAC3C /* WeaponAction.swift in Sources */,
 				2B25B399238B2B52000E022B /* DiceView.swift in Sources */,
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
 				2B7B88202428015B00340A3E /* AttackCreationView.swift in Sources */,
+				2B4D5CEA246C8E6C003AAC3C /* DicePickerView.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ActionView.swift in Sources */,
 				2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */,
 				2B16BCE523D80A6E00360928 /* UtiliyStructs.swift in Sources */,
