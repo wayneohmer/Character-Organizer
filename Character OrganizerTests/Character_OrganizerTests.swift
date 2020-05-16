@@ -18,7 +18,26 @@ class Character_OrganizerTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
+    func testSpell() {
+         // (\\d\\d|\\d)
+        Spell.getSpells()
+        //let regex = try! NSRegularExpression(pattern: "(melee|ranged) spell attack")
+        let regex = try! NSRegularExpression(pattern: "(\\d\\d|\\d)d(\\d\\d|\\d) \\+ (\\d\\d|\\d)|(\\d\\d|\\d)d(\\d\\d|\\d)")
+        for (_,spell) in Spell.shared {
+            let desc = spell.desc.joined(separator: " ")
+            let range = NSRange(location: 0, length: desc.count)
+            let matches = regex.matches(in: desc, range: range)
+            if matches.count > 0 {
+                let val = matches.map {
+                    String(desc[Range($0.range, in: desc)!])
+                }
+                print("\(spell.name) \(val)")
+            }
+            
+        }
+    }
+    
     func testExample() {
         var fileURL: URL?
 
@@ -46,12 +65,4 @@ class Character_OrganizerTests: XCTestCase {
             XCTAssert(false, error.localizedDescription)
         }
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

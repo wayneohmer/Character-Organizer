@@ -73,6 +73,7 @@ struct NumberEditor: View {
                     })
                         .foregroundColor(Color.white)
                         .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                        .offset(x: 0, y: -3)
                         .cornerRadius(5)
                         .padding(3)
                 }
@@ -90,11 +91,15 @@ struct NumberEditor: View {
                             Text("Heal").font(Font.system(size: 20, weight: .bold, design: .default))
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.blue), .black]), startPoint: .top, endPoint: .bottom))
+                                .offset(x: 0, y: -3)
+
                                 .cornerRadius(5)
                         } else {
                             Text("Add").font(Font.system(size: 20, weight: .bold, design: .default))
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                                .offset(x: 0, y: -3)
+
                                 .cornerRadius(5)
                             
                         }
@@ -142,7 +147,7 @@ struct NumberEditor: View {
                     self.presentationMode.wrappedValue.dismiss()
                     
                 }, label: {
-                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default)).offset(x: 0, y: -3)
+                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default))
                     .offset(x: 0, y: -3)
                     .frame(width: 100, height: 40, alignment: .center)
                     .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))

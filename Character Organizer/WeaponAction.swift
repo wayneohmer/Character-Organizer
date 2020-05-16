@@ -19,25 +19,40 @@ struct WeaponAction: View {
                 .default)).padding(4)
             HStack{
                 Text("Weapon:")
-                Text(self.attackBonus())
+                Text("(\(action.weapon?.weapon_range ?? "")" )
+                Text("\(Character.AttributeArray[action.attrIndex]))")
+                Text(self.attackBonusString())
                 Text("damage: \(action.damageFyreDice.display)")
-                Text(self.damagebonus())
-                Text(action.weapon?.damage?.damage_type?.name ?? "")
+                Text(self.damagebonusString())
+                Text(action.damageType ?? "")
+                Spacer()
+            }
+            HStack {
+                Text(action.desc)
                 Spacer()
             }
         }.onTapGesture {
             self.showingDice = true
-        }
+        }.padding()
         .sheet(isPresented: self.$showingDice, content: {
-            DiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: Character.shared.attrBonusArray[self.action.attrIndex] + (self.action.attack_bonus ?? 0)))
+            AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice?.dice ?? [:], modifier: self.damageBonus()))
         })
         .foregroundColor(Color.white)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
         .background(Color(.black))
+        
     }
     
-    func attackBonus() -> String {
-        let bonus = Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus ?? 0)
+    func attackBonus() -> Int {
+        return Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus ?? 0)
+    }
+    
+    func damageBonus() -> Int {
+        return (action.attrDamage ? Character.shared.attrBonusArray[action.attrIndex] : 0) + (action.damage_bonus ?? 0)
+    }
+    
+    func attackBonusString() -> String {
+        let bonus = self.attackBonus()
         if bonus == 0 {
             return ""
         } else {
@@ -45,8 +60,8 @@ struct WeaponAction: View {
         }
     }
     
-    func damagebonus() -> String {
-        let bonus = Character.shared.attrBonusArray[action.attrIndex] + (action.damage_bonus ?? 0)
+    func damagebonusString() -> String {
+        let bonus = self.damageBonus()
         if bonus == 0 {
             return ""
         } else {

@@ -15,6 +15,7 @@ struct DescriptionView: View {
     @State var character = Character.shared
     @State var showingDice = false
     @State var selectedDetail:Viewable = Proficiency()
+    @State var selectedAttack = Action()
     @State var detailShowing = false
     @State var equipmentShowing = false
     @State var spellsShowing = false
@@ -36,8 +37,9 @@ struct DescriptionView: View {
                 .padding(5)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
                 .background(Color.black)
-                AttacksView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
-                    .sheet(isPresented: self.$attacksShowing, content:  { AttackCreationView() })
+                AttacksView(character: $character, selectedAttack: $selectedAttack, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
+                    .sheet(isPresented: self.$attacksShowing, content:  { AttackCreationView(actionIdx: self.character.actions.firstIndex(where:
+                        { self.selectedAttack.id == $0.id} ) ?? 0, oldAction:self.selectedAttack) })
                 EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
                     .sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
                 SpellsView(character: $character, selectedDetail: $selectedDetail, spellsShowing: $spellsShowing, detailShowing: $detailShowing)
@@ -102,23 +104,46 @@ struct DemographicsView:  View {
 struct AttacksView: View {
     
     @Binding var character:Character
-    @Binding var selectedDetail:Viewable
+    @Binding var selectedAttack:Action
     @Binding var detailShowing:Bool
     @Binding var attacksShowing:Bool
-
+    
     
     var body: some View {
-        HStack{
-            Text("Attacks").fontWeight(.bold).foregroundColor(Color.white)
-            Button(action:{
-                self.attacksShowing = true
-            }) {
-                Text("+").fontWeight(.bold).foregroundColor(Color.white)
+        VStack {
+            HStack{
+                Text("Attacks").fontWeight(.bold).foregroundColor(Color.white)
+                Button(action:{
+                    self.attacksShowing = true
+                }) {
+                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
+                }.padding(5)
             }
-        }.padding(5)
+            VStack(alignment: .leading){
+                HStack {
+                    if character.weaponAttacks.count > 0 {
+                        Text("Weapons:").font(Font.system(size: 20, weight: .bold))
+                        AttackTypeView(actions: character.weaponAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                    }
+                }
+                HStack {
+                    if character.spellAttacks.count > 0 {
+                        Text("Spells:").font(Font.system(size: 20, weight: .bold))
+                        AttackTypeView(actions: character.actions, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                    }
+                }
+                HStack {
+                    Text("Others:").font(Font.system(size: 20, weight: .bold))
+                    AttackTypeView(actions: character.otherAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                    
+                }
+            }.padding(8)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                .background(Color.black)
+        }
     }
-    
 }
+
 
 
 struct SpellsView:  View {
@@ -225,6 +250,7 @@ struct SpellLevelView:  View {
     }
 }
 
+
 struct EquipmentView:  View {
     
     @Binding var character:Character
@@ -284,6 +310,28 @@ struct DetailTextView:  View {
             .padding(4)
             .background(Color(red: 0.15, green: 0.15, blue: 0.15))
             .cornerRadius(8)
+    }
+}
+
+struct AttackTypeView:  View {
+    
+    var actions:[Action]
+    @Binding var selectedAttack:Action
+    @Binding var attacksShowing:Bool
+    
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack { ForEach(actions) { action in
+                Text(action.name).onTapGesture {
+                    self.selectedAttack = action
+                    self.attacksShowing = true
+                }.font(Font.system(size: 18))
+                    .padding(4)
+                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+                    .cornerRadius(8)
+                }
+            }
+        }
     }
 }
 

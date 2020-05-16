@@ -256,16 +256,18 @@ struct ActionView: View {
                                 
                                 self.attributes
                             }
-                            VStack{
-                                ForEach(character.actions) { action in
-                                    if action.weapon != nil {
-                                        WeaponAction(action: action)
-                                    } else {
-                                        ActionRow(action:action)
+                            ScrollView(.vertical) {
+                                VStack{
+                                    ForEach(character.actions) { action in
+                                        if action.weapon != nil {
+                                            WeaponAction(action: action)
+                                        } else {
+                                            ActionRow(action:action)
+                                        }
                                     }
+                                    Spacer()
+                                    
                                 }
-                                Spacer()
-
                             }
                         }
                     }

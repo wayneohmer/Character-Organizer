@@ -190,7 +190,11 @@ class Character: ObservableObject {
     }
     
     var actions:[Action] { return model.actions }
-    
+    var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
+    var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
+    var spellAttacks:[Action] { return attackActions.filter({ $0.spell != nil }) }
+    var otherAttacks:[Action] { return attackActions.filter({ $0.spell == nil && $0.weapon == nil }) }
+
     var strMod:String { return modString(model.str) }
     var dexMod:String { return modString(model.dex) }
     var conMod:String { return modString(model.con) }

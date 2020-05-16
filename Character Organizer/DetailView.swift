@@ -12,6 +12,7 @@ struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var detail: Viewable
+    var dismissNow = false
     
     var body: some View {
         VStack {
@@ -37,11 +38,22 @@ struct DetailView: View {
             }
             Spacer()
         }.background(Color.black).foregroundColor(Color.white)
+            .onAppear(){
+                if self.dismissNow {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+        }.onAppear(){
+            if self.dismissNow {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        }
     }
 }
 
 struct EquipmentDetail: View {
     
+    @Environment(\.presentationMode) var presentationMode
+
     var equipment: Equipment
     @State var detailShow = false
     @State var showAttack = false
@@ -54,8 +66,12 @@ struct EquipmentDetail: View {
                     Button(action: {
                         self.showAttack = true
                     }, label: {
-                        Text("Make Attack")
+                        Text("Make Attack").padding(8)
+
                     })
+                    .foregroundColor(Color.white)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                    .cornerRadius(5)
                     .sheet(isPresented: self.$showAttack, content: {
                         AttackCreationView(weapon: self.equipment)
                     })
@@ -170,3 +186,9 @@ protocol Viewable {
 
 }
 
+
+struct DetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}

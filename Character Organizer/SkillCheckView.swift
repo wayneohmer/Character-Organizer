@@ -18,33 +18,43 @@ struct SkillCheckView: View {
     
     var diceDetails = DiceDetails()
 
-
     var body: some View {
         VStack{
             HStack {
                 Spacer()
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                } ) {
-                    Text("Close").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-                }.frame(width: 100, height: 50, alignment: .center)
-            }
-            VStack {
-                ForEach(skills) { skill in
-                    Text("\(skill.name) - \(skill.ability_score?.name ?? "") \(self.bonusFor(skill:skill))")
-                        .font(Font.system(size: 25, weight: .bold, design: .default))
-                        .padding(8)
-                        .foregroundColor(self.nameColor(skill: skill))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .onTapGesture {
+                VStack {
+                    ForEach(skills) { skill in
+                        Button(action: {
                             self.skillTouched(title: skill.name, mod: self.bonusFor(skill: skill))
                             self.rollShowing = true
+                        }, label: {
+                            Text("\(skill.name) - \(Character.AttributeDict[skill.ability_score?.name ?? ""] ?? "") \(self.bonusFor(skill:skill))")
+                                .font(Font.system(size: 20, weight: .bold, design: .default))
+                                .foregroundColor(self.nameColor(skill: skill))
+                                .padding(10)
+                                .frame(width: 500)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                                .offset(x: 0, y: -3)
+                                .cornerRadius(8)
+                                .padding(5)
+                        })
+                        
                     }
-                    .sheet(isPresented: self.$rollShowing, content: {DiceView(details: self.diceDetails, dice: self.diceDetails.dice)})
+                    Spacer()
                 }
+                .sheet(isPresented: self.$rollShowing, content: { ModalDiceView (details: self.diceDetails, dice: self.diceDetails.dice)})
+                .offset(x: 50, y: 0)
+                VStack {
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } ) {
+                        Text("Close").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                    }.frame(width: 100, height: 50, alignment: .center)
+                    Spacer()
+                }.offset(x: 50, y: 0)
                 Spacer()
             }.padding()
-            Spacer()
+            
         }
         .foregroundColor(Color.white)
         .background(Color(red: 0.15, green: 0.15, blue: 0.15))
