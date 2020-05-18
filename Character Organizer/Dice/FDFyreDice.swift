@@ -133,8 +133,16 @@ class FyreDice: ObservableObject {
         return returnString
     }
     
+    var dieModel:FyreDiceModel {
+        return FyreDiceModel(dice: self.dice, modifier: self.modifier)
+    }
+    
     init() {
         self.makeSystemSoundUrls()
+    }
+    
+    convenience init(with model:FyreDiceModel ) {
+        self.init(with: model.dice, modifier: model.modifier)
     }
     
     convenience init(with die:[Int:Int], modifier:Int) {
@@ -284,7 +292,7 @@ class Oops {
 
 }
 
-struct FyreDiceModel: Codable, Identifiable {
+struct FyreDiceModel: Codable, Identifiable, Hashable {
     
     var id = UUID()
     var dice = [Int:Int]()

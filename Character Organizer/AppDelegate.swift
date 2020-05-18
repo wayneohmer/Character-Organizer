@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.wis = "7"
         Character.shared.cha = "20"
         Character.shared.proficiencyBonus = "2"
-        Character.shared.model.actions = [Action(name: "Action1", desc: "Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description Action 1 description "),Action(name: "Action2", desc: "Action 2 description"),Action(name: "Action3", desc: "Action 3 description")]
+        Character.shared.model.actions = [Action]()
         
         return true
     }

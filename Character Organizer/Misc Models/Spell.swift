@@ -9,9 +9,9 @@
 import Foundation
 
 struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
+   
     
     static var shared = [String: Spell]()
-
     
     var description:String { return desc.joined(separator: "\n\n") }
 
@@ -31,6 +31,99 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     var classes:[Descriptor]?
     var subclasses:[Descriptor]?
     var url = ""
+    var damageDiceModel: FyreDiceModel?
+    
+    var damageDice:FyreDice? {
+        if let model = damageDiceModel {
+            return FyreDice(with: model)
+        }
+        return nil
+    }
+    
+    var isAttack:Bool { return attackType != "" }
+    
+    var attackType: String {
+        let regex = try! NSRegularExpression(pattern: "(melee|ranged) spell attack")
+        let desc = self.desc.joined(separator: " ")
+        let range = NSRange(location: 0, length: desc.count)
+        let matches = regex.matches(in: desc, range: range)
+        if matches.count > 0 {
+            let val = matches.map {
+                String(desc[Range($0.range, in: desc)!])
+            }[0]
+            
+            let words = val.split(separator: " ").map(String.init)
+            if words.count > 0 {
+                return String(words[0])
+            }
+        }
+        return ""
+    }
+    
+    var saveType:String {
+        let regex = try! NSRegularExpression(pattern: "(strength|dexteriy) saveing throw")
+        let desc = self.desc.joined(separator: " ")
+        let range = NSRange(location: 0, length: desc.count)
+        let matches = regex.matches(in: desc, range: range)
+        if matches.count > 0 {
+            let val = matches.map {
+                String(desc[Range($0.range, in: desc)!])
+                }[0]
+            
+            let words = val.split(separator: " ").map(String.init)
+            if words.count > 0 {
+                return String(words[0])
+            }
+        }
+        return ""
+    }
+    
+    var damageType:String {
+           let regex = try! NSRegularExpression(pattern: "(acid|bludgeoning|fire|cold|force|lightning|necrotic|piercing|poison|psychic|radiant|slashing|thunder) damage")
+           let desc = self.desc.joined(separator: " ")
+           let range = NSRange(location: 0, length: desc.count)
+           let matches = regex.matches(in: desc, range: range)
+           if matches.count > 0 {
+               let val = matches.map {
+                   String(desc[Range($0.range, in: desc)!])
+                   }[0]
+               
+               let words = val.split(separator: " ").map(String.init)
+               if words.count > 0 {
+                return String(words[0]).capitalized
+               }
+           }
+           return ""
+       }
+    
+    var likelyDice: FyreDice? {
+        
+        let regex = try! NSRegularExpression(pattern: "(\\d\\d|\\d)d(\\d\\d|\\d) \\+ (\\d\\d|\\d)|(\\d\\d|\\d)d(\\d\\d|\\d)")
+        let desc = self.desc.joined(separator: " ")
+        let range = NSRange(location: 0, length: desc.count)
+        let matches = regex.matches(in: desc, range: range)
+        if matches.count > 0 {
+            let val = matches.map {
+                String(desc[Range($0.range, in: desc)!])
+            }[0]
+            
+            let words = val.split(separator: " ").map(String.init)
+            if words.count > 0 {
+                let damageArray = words[0].split(separator: "d").map(String.init)
+                if damageArray.count == 2 {
+                    if let d = Int(damageArray[0]), let m = Int(damageArray[1]) {
+                        let mod = words.count > 2 ? Int(words[2]) ?? 0 : 0
+                        return FyreDice(with: [m:d], modifier: mod)
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
+    static func == (lhs: Spell, rhs: Spell) -> Bool {
+        return lhs.index == rhs.index
+    }
     
     static func < (lhs: Spell, rhs: Spell) -> Bool {
         if lhs.level == rhs.level {

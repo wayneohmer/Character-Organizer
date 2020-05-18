@@ -28,6 +28,8 @@ struct ActionView: View {
     @State var showingTempHP = false
     @State var showingAC = false
     @State var showingSkills = false
+    @State var showingSpeed = false
+    @State var showingProfBonus = false
 
     var diceDetails = DiceDetails()
 
@@ -90,6 +92,38 @@ struct ActionView: View {
                 }
                 Spacer()
             }
+        }
+    }
+    
+    var speedProf: some View {
+        VStack {
+            VStack {
+                Text("Speed").frame(maxWidth: 60).foregroundColor(Color.white)
+                Text(character.speed)
+                    .onTapGesture {
+                        self.showingSpeed = true
+                    }
+                    .frame(width: 60, height:30)
+                    .background(Color.white)
+                    .foregroundColor(Color.black)
+                    .cornerRadius(5)
+
+                    .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.speed, isHP: false) })
+            }
+            VStack {
+                Text("Prof").frame(maxWidth: 60).foregroundColor(Color.white)
+                Text(character.proficiencyBonus)
+                    .onTapGesture {
+                            self.showingProfBonus = true
+                    }
+                    .frame(width: 60, height:30)
+                    .background(Color.white)
+                    .foregroundColor(Color.black)
+                    .cornerRadius(5)
+
+                    .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.proficiencyBonus, isHP: false) })
+            }
+            Spacer()
         }
     }
     
@@ -231,6 +265,7 @@ struct ActionView: View {
                         HStack {
                             hitPoints
                             armorClass
+                            speedProf
                             Spacer()
                         }.frame(height:140)
                         HStack {
@@ -265,10 +300,10 @@ struct ActionView: View {
                                             ActionRow(action:action)
                                         }
                                     }
+                                    HStack{ Spacer() }
                                     Spacer()
-                                    
                                 }
-                            }
+                            }.background(Color.black)
                         }
                     }
                  }
@@ -284,20 +319,20 @@ struct ActionView: View {
                 }
             }.background(background)
                 .tag(0)
-            DescriptionView()
-                .tabItem {
+                DescriptionView()
+            .tabItem {
                     VStack {
                         Text("Description")
                     }
             }.background(background)
-            .tag(1)
-            CreateView()
-                .tabItem {
+                .tag(1)
+                CreateView()
+            .tabItem {
                     VStack {
                         Text("Create")
                     }
             }.background(background)
-            .tag(2)
+                .tag(2)
         }
         
     }

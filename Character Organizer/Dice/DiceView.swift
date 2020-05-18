@@ -91,6 +91,7 @@ struct DiceView: View {
     @State var saveCheck = ["Save","Check"]
     @State var sign = "+"
     var showAdvantage = true
+    var isProficientSave = false
     
     var body: some View {
         
@@ -202,7 +203,9 @@ struct DiceView: View {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                     .padding(10)
-                    .onReceive(self.pickerhelper.objectWillChange, perform: { self.dice.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2  })
+                    .onReceive(self.pickerhelper.objectWillChange, perform: {
+                        self.dice.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2
+                    })
             }
         }
         .background(background)

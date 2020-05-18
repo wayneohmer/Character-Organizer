@@ -22,20 +22,14 @@ class Character_OrganizerTests: XCTestCase {
     func testSpell() {
          // (\\d\\d|\\d)
         Spell.getSpells()
-        //let regex = try! NSRegularExpression(pattern: "(melee|ranged) spell attack")
-        let regex = try! NSRegularExpression(pattern: "(\\d\\d|\\d)d(\\d\\d|\\d) \\+ (\\d\\d|\\d)|(\\d\\d|\\d)d(\\d\\d|\\d)")
         for (_,spell) in Spell.shared {
-            let desc = spell.desc.joined(separator: " ")
-            let range = NSRange(location: 0, length: desc.count)
-            let matches = regex.matches(in: desc, range: range)
-            if matches.count > 0 {
-                let val = matches.map {
-                    String(desc[Range($0.range, in: desc)!])
-                }
-                print("\(spell.name) \(val)")
+ 
+            if spell.attackType != "" {
+                print(spell.name+spell.attackType)
             }
             
         }
+        
     }
     
     func testExample() {

@@ -11,6 +11,7 @@ import SwiftUI
 struct AttackCreationView: View {
     
     var weapon:Equipment?
+    var spell:Spell?
     let attackTypes = ["Weapon","Spell"]
     let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
 
@@ -193,13 +194,33 @@ struct AttackCreationView: View {
                     self.damageTypeIdx = self.damageTypes.firstIndex(of: weapon.damage?.damage_type?.name ?? "") ?? 0
                     self.action.desc = weapon.desc?.joined(separator: "\n") ?? ""
                     if let damageString = weapon.damage?.damage_dice {
-                        let damageArray = damageString.split(separator: "d")
+                        let damageArray = damageString.split(separator: "d").map(String.init)
                         if damageArray.count == 2 {
                             if let d = Int(damageArray[0]), let m = Int(damageArray[1]) {
                                 self.damageDice = FyreDice(with: [m:d], modifier: 0)
                             }
                         }
                     }
+                } else if let spell = self.spell {
+                    self.action.spell = spell
+                    self.action.name = spell.name
+                    self.action.desc = spell.description
+                    if let dice = spell.damageDice {
+                        self.damageDice = dice
+                        if dice.modifier != 0 {
+                            self.damageBonus = "\(dice.modifier)"
+                            self.damageDice.modifier = 0
+                        }
+                    } else if let dice = spell.likelyDice {
+                        self.damageDice = dice
+                        if dice.modifier != 0 {
+                            self.damageBonus = "\(dice.modifier)"
+                            self.damageDice.modifier = 0
+                        }
+                    }
+                    self.attrDamage = false
+                    self.damageTypeIdx = self.damageTypes.firstIndex(of: spell.damageType ) ?? 0
+                    
                 }
             }
         }

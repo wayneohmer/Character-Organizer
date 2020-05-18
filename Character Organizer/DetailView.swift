@@ -141,7 +141,8 @@ struct EquipmentDetail: View {
 struct SpellDetail: View {
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @State var showAttack = false
+
     var spell: Spell
     
     @State var detailShow = false
@@ -171,6 +172,18 @@ struct SpellDetail: View {
                 Text("Duration:")
                 Text("\(spell.concentration ? "Concentration - " : "")\(spell.duration)").fontWeight(.bold)
             }
+            Button(action: {
+                self.showAttack = true
+            }, label: {
+                Text("Make Attack").padding(8)
+                
+            })
+                .foregroundColor(Color.white)
+                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                .cornerRadius(5)
+                .sheet(isPresented: self.$showAttack, content: {
+                    AttackCreationView(spell: self.spell)
+                })
             ScrollView {
                 Text(spell.description).fontWeight(.bold)
             }
