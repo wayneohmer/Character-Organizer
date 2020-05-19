@@ -47,6 +47,7 @@
 		2B7B88202428015B00340A3E /* AttackCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7B881F2428015B00340A3E /* AttackCreationView.swift */; };
 		2BBFC05623EA41FA0019E819 /* EquipmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */; };
 		2BCA2CB9246A1C7A0066DBD6 /* NumberEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */; };
+		2BD7108324731F01004D7A69 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD7108224731F01004D7A69 /* Formatters.swift */; };
 		2BE92C6A23F9C04F00044E68 /* 5e-SRD-Spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */; };
 		2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6B23F9D0CE00044E68 /* Spell.swift */; };
 		2BE92C6E23F9D4CD00044E68 /* SpellPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */; };
@@ -114,6 +115,7 @@
 		2B7B881F2428015B00340A3E /* AttackCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackCreationView.swift; sourceTree = "<group>"; };
 		2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentPicker.swift; sourceTree = "<group>"; };
 		2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberEditor.swift; sourceTree = "<group>"; };
+		2BD7108224731F01004D7A69 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Spells.json"; sourceTree = "<group>"; };
 		2BE92C6B23F9D0CE00044E68 /* Spell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spell.swift; sourceTree = "<group>"; };
 		2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellPicker.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */,
 				2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */,
 				2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */,
+				2BD7108224731F01004D7A69 /* Formatters.swift */,
 				2B16BCE723D80AC700360928 /* Creation */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -428,6 +431,7 @@
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
 				2B7B881E2427FE1800340A3E /* Action.swift in Sources */,
+				2BD7108324731F01004D7A69 /* Formatters.swift in Sources */,
 				2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */,
 				2B6890BF236B84B300EC8948 /* Character.swift in Sources */,
 				2B068BEE23C2C920007893BC /* CharacterClass.swift in Sources */,

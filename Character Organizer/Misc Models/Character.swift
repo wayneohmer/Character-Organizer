@@ -8,6 +8,49 @@
 
 import UIKit
 
+enum Attribute: String {
+    case STR
+    case DEX
+    case CON
+    case INT
+    case WIS
+    case CHA
+    
+    func desc() -> String {
+        switch self {
+        case .STR:
+            return "Strength"
+        case .DEX:
+            return "Dexterity"
+        case .CON:
+            return "Constution"
+        case .INT:
+            return "Intelligence"
+        case .WIS:
+            return "Wisdom"
+        case .CHA:
+            return "Charisma"
+        }
+    }
+    func idx() -> Int {
+           switch self {
+           case .STR:
+               return 0
+           case .DEX:
+               return 1
+           case .CON:
+               return 2
+           case .INT:
+               return 3
+           case .WIS:
+               return 4
+           case .CHA:
+               return 5
+           }
+       }
+}
+
+
 class Character: ObservableObject {
     
     static let shared = Character()
@@ -189,6 +232,11 @@ class Character: ObservableObject {
         }
     }
     
+    var attrDict:[Attribute: Int] { return [.STR:model.str, .DEX:model.dex, .CON:model.con, .INT:model.int, .WIS:model.wis, .CHA:model.cha] }
+    var attrArray:[Int] { return [model.str, model.dex, model.con, model.int, model.wis, model.cha] }
+    var attrBonusDict:[Attribute: Int] { return [.STR:modValue(model.str),.DEX:modValue(model.dex),.CON:modValue(model.con),.INT:modValue(model.int),.WIS:modValue(model.wis),.CHA:modValue(model.cha)] }
+    var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
+
     var actions:[Action] { return model.actions }
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
     var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
@@ -201,10 +249,6 @@ class Character: ObservableObject {
     var intMod:String { return modString(model.int) }
     var wisMod:String { return modString(model.wis) }
     var chaMod:String { return modString(model.cha) }
-    
-    var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
-    
-    var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
     
     func modValue (_ attribute:Int) -> Int {
         return Int((attribute - 10)/2)

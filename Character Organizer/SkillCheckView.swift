@@ -61,7 +61,10 @@ struct SkillCheckView: View {
     }
     
     func bonusFor(skill:Skill) -> Int {
-        let attrbonus = self.character.bonusDict[skill.ability_score?.name ?? ""] ?? 0
+        var attrbonus = 0
+        if let attribute = Attribute(rawValue: skill.ability_score?.name ?? "") {
+            attrbonus = self.character.attrBonusDict[attribute] ?? 0
+        }
         let profbonus = self.character.skills.contains(skill) ? self.character.model.proficiencyBonus : 0
         return attrbonus + profbonus
     }

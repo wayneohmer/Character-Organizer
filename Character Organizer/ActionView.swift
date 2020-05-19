@@ -54,14 +54,7 @@ struct ActionView: View {
 
                 .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP, isHP: true) })
                 
-                Button(action: {self.character.currentHP = self.character.maxHP}, label: {
-                    Text("Set Max").foregroundColor(Color.white).fontWeight(.bold).offset(x: 0, y: -3)
-                })
-                    .frame(width: 100, height: 40, alignment: .center)
-                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                .padding(3)
-                
+                GrayButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }
             }.padding(5)
             VStack {
                 VStack {
@@ -171,12 +164,12 @@ struct ActionView: View {
     
     var attributes: some View {
         VStack(spacing:24) {
+            
             VStack  {
-                self.attrButton(name: "STR", action: {
+                GrayButton(text: Attribute.STR.rawValue, width: 70, height: 30) {
                     self.showingStrDice = true
-                    self.attributeTouched(title:"Strength", mod: Int(Character.shared.strMod) ?? 0)
-                    
-                })
+                    self.attributeTouched(title:Attribute.STR.desc(), mod: Int(Character.shared.strMod) ?? 0)
+                }
                 self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
             }
@@ -184,23 +177,21 @@ struct ActionView: View {
             .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
-                self.attrButton(name: "DEX", action: {
+                GrayButton(text: Attribute.DEX.rawValue, width: 70, height: 30){
                     self.showingDexDice = true
-                    self.attributeTouched(title:"Dexterity", mod: Int(Character.shared.dexMod) ?? 0)
-                })
+                    self.attributeTouched(title:Attribute.DEX.rawValue, mod: Int(Character.shared.dexMod) ?? 0)
+                }
                 self.attrText(Character.shared.dex)
                 self.attrModifier(Character.shared.dexMod)
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
-                
             .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            
             VStack  {
-                self.attrButton(name: "CON", action: {
-                    
+                GrayButton(text: Attribute.CON.rawValue, width: 70, height: 30){
                     self.showingConDice = true
-                    self.attributeTouched(title:"Constitution", mod: Int(Character.shared.conMod) ?? 0)
-                    
-                })
+                    self.attributeTouched(title:Attribute.CON.desc(), mod: Int(Character.shared.conMod) ?? 0)
+                }
                 self.attrText(Character.shared.con)
                 self.attrModifier(Character.shared.conMod)
             }
@@ -209,11 +200,11 @@ struct ActionView: View {
             .popover(isPresented: self.$showingConDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
-                self.attrButton(name: "INT", action: {
+                GrayButton(text: Attribute.INT.rawValue, width: 70, height: 30){
                     self.showingIntDice = true
-                    self.attributeTouched(title:"Intelligence", mod: Int(Character.shared.intMod) ?? 0)
+                    self.attributeTouched(title:Attribute.INT.desc(), mod: Int(Character.shared.intMod) ?? 0)
                     
-                })
+                }
                 self.attrText(Character.shared.int)
                 self.attrModifier(Character.shared.intMod)
             }
@@ -221,11 +212,11 @@ struct ActionView: View {
                 
             .popover(isPresented: self.$showingIntDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                self.attrButton(name: "WIS", action: {
+                GrayButton(text: Attribute.WIS.rawValue, width: 70, height: 30){
                     self.showingWisDice = true
-                    self.attributeTouched(title:"Wisdom", mod: Int(Character.shared.wisMod) ?? 0)
+                    self.attributeTouched(title:Attribute.WIS.desc(), mod: Int(Character.shared.wisMod) ?? 0)
                     
-                })
+                }
                 self.attrText(Character.shared.wis)
                 self.attrModifier(Character.shared.wisMod)
             }
@@ -234,15 +225,15 @@ struct ActionView: View {
             .popover(isPresented: self.$showingWisDice, arrowEdge: .leading, content: {
                 DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                self.attrButton(name: "CHA", action: {
+                GrayButton(text: Attribute.CHA.rawValue, width: 70, height: 30) {
                     self.showingChaDice = true
-                    self.attributeTouched(title:"Charisma", mod: Int(Character.shared.chaMod) ?? 0) })
+                    self.attributeTouched(title:Attribute.CHA.desc(), mod: Int(Character.shared.chaMod) ?? 0)
+                }
                 self.attrText(Character.shared.cha)
                 self.attrModifier(Character.shared.chaMod)
-                    .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+                .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
-
             
         }.padding(8)
 
@@ -270,23 +261,15 @@ struct ActionView: View {
                         }.frame(height:140)
                         HStack {
                             VStack(spacing:5) {
-                                Button(action: { self.showingSkills = true }){
-                                    Text("Skill").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
+                                GrayButton(text: "Skill", width: 120) {
+                                    self.showingSkills = true
                                 }
-                                .frame(width:120, height:40)
-                                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                                .cornerRadius(5)
                                 .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
-                                Button(action: {
+                                GrayButton(text: "Initiative", width: 120){
                                     self.diceDetails.title = "Initiative"
                                     self.showingInitDice = true
                                     self.diceDetails.isSave = false
-                                }){
-                                    Text("Initiative").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
                                 }
-                                .frame(width:120, height:40)
-                                .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-                                .cornerRadius(5)
                                 .popover(isPresented: self.$showingInitDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
                                 
                                 self.attributes
@@ -341,16 +324,6 @@ struct ActionView: View {
         self.diceDetails.title = title
         self.diceDetails.isSave = true
         self.diceDetails.dice = FyreDice(with: [20:1], modifier: mod)
-    }
-    
-    func attrButton(name:String, action: @escaping () -> Void ) -> some View {
-        return Button(action: action) {
-            Text("\(name)").fontWeight(.bold).padding(3).frame(alignment: .center)
-        }
-        .frame(maxWidth: 70, maxHeight: 35)
-        .foregroundColor(Color.white)
-        .background(LinearGradient(gradient: Gradient(colors: [lightGray, .black]), startPoint: .top, endPoint: .bottom))
-        .cornerRadius(5)
     }
     
     func attrText(_ text:String) -> some View {

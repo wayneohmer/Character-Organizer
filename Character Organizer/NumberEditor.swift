@@ -27,21 +27,13 @@ struct NumberEditor: View {
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth:2)).foregroundColor(Color.white)
                     .minimumScaleFactor(0.1)
                     .lineLimit(1)
-                    .padding()
                     
                 VStack {
-                    Button(action: {self.value = "0"}, label: {
-                        Text("X").font(Font.system(size: 30, weight: .bold, design: .default))
-                            .frame(width: 40, height: 40, alignment: .center)
-                            .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                            .cornerRadius(5)
-                        
-                    })
+                    GrayButton(text: "X", width: 40) { self.value = "0" }
                     Spacer()
-                }.frame(height: 100, alignment: .center)
-
+                }.frame(height: 100)
                 Spacer()
-            }
+            }.padding()
             VStack{
                 HStack{
                     NumberButton(buttonValue: 1, value: $value)
@@ -61,21 +53,14 @@ struct NumberEditor: View {
                 HStack {
                     Text("").frame(width: 65, height: 45).padding(3)
                     NumberButton(buttonValue: 0, value: $value)
-                    Button(action:{
+                    GrayButton(text:"<", width: 65, height: 45) {
                         if self.value.count > 1 {
                             self.value = String(self.value.dropLast())
                         } else {
                             self.value = "0"
                         }
                         
-                    }, label: {
-                        Text("<").fontWeight(.bold).padding(3).frame(width: 65, height: 45, alignment: .center)
-                    })
-                        .foregroundColor(Color.white)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                        .offset(x: 0, y: -3)
-                        .cornerRadius(5)
-                        .padding(3)
+                    }
                 }
                 Spacer()
                 HStack {
@@ -88,14 +73,14 @@ struct NumberEditor: View {
 
                     }, label: {
                         if isHP {
-                            Text("Heal").font(Font.system(size: 20, weight: .bold, design: .default))
+                            Text("Heal").fontWeight(.bold)
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.blue), .black]), startPoint: .top, endPoint: .bottom))
                                 .offset(x: 0, y: -3)
 
                                 .cornerRadius(5)
                         } else {
-                            Text("Add").font(Font.system(size: 20, weight: .bold, design: .default))
+                            Text("Add").fontWeight(.bold)
                                 .frame(width: 100, height: 40, alignment: .center)
                                 .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
                                 .offset(x: 0, y: -3)
@@ -123,7 +108,7 @@ struct NumberEditor: View {
                         
                     }, label: {
                         if isHP {
-                            Text("Damage").font(Font.system(size: 20, weight: .bold, design: .default))
+                            Text("Damage").fontWeight(.bold)
                                 .offset(x: 0, y: -3)
 
                                 .frame(width: 100, height: 40, alignment: .center)
@@ -131,7 +116,7 @@ struct NumberEditor: View {
                                 .cornerRadius(5)
                                 .padding(3)
                         } else {
-                            Text("Subtract").font(Font.system(size: 20, weight: .bold, design: .default))
+                            Text("Subtract").fontWeight(.bold)
                                 .offset(x: 0, y: -3)
 
                                 .frame(width: 100, height: 40, alignment: .center)
@@ -142,19 +127,10 @@ struct NumberEditor: View {
                         
                     })
                 }
-                Button(action: {
+               GrayButton(text:"Set", width: 100) {
                     self.modifiedValue = "\(self.value)"
                     self.presentationMode.wrappedValue.dismiss()
-                    
-                }, label: {
-                    Text("Set").font(Font.system(size: 20, weight: .bold, design: .default))
-                    .offset(x: 0, y: -3)
-                    .frame(width: 100, height: 40, alignment: .center)
-                    .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                    .cornerRadius(5)
-                    .padding(3)
-
-                })
+                }
                 Spacer()
 
             }
@@ -174,24 +150,13 @@ struct NumberEditor: View {
         @Binding var value:String
         
         var body: some View {
-            Button(action:{
+            GrayButton(text:"\(buttonValue)",width: 65, height: 45) {
                 if self.value == "0" {
                     self.value = "\(self.buttonValue)"
                 } else {
                     self.value = self.value + "\(self.buttonValue)"
                 }
-                
-            }, label: {
-                Text("\(buttonValue)").fontWeight(.bold)
-                    .padding(3)
-                    .frame(width: 65, height: 45, alignment: .center)
-                    .offset(x: 0, y: -3)
-            })
-            .foregroundColor(Color.white)
-            .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-            .cornerRadius(5)
-            .padding(3)
-            
+            }
         }
     }
 }
