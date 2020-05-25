@@ -189,7 +189,18 @@ class Character: ObservableObject {
         }
     }
     
+    var casterAttributeIdx:Int? {
+        set {
+            model.casterAttributeIdx = newValue
+        }
+        get {
+            return model.casterAttributeIdx
+        }
+    }
+    
+    
     var actions:[Action] { return model.actions }
+    
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
     var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
     var spellAttacks:[Action] { return attackActions.filter({ $0.spell != nil }) }
@@ -206,20 +217,7 @@ class Character: ObservableObject {
     
     var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
     
-    func modValue (_ attribute:Int) -> Int {
-        return Int((attribute - 10)/2)
-    }
-    
-    func modString(_ attribute:Int) -> String {
-        
-        let result = Int((attribute - 10)/2)
-        if result > 0 {
-            return "+\(result)"
-        }
-        return "\(result)"
-        
-    }
-    
+  
     var languages = Set<Descriptor>()
     var languageString:String {
         let langs = languages.map({ $0.name })
@@ -241,6 +239,33 @@ class Character: ObservableObject {
     var spells:[Spell] { return model.spells }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
+    
+    func modValue (_ attribute:Int) -> Int {
+        return Int((attribute - 10)/2)
+    }
+    
+    func modString(_ attribute:Int) -> String {
+        
+        let result = Int((attribute - 10)/2)
+        if result > 0 {
+            return "+\(result)"
+        }
+        return "\(result)"
+        
+    }
+    
+    func addSpellAction(_ spell: Spell) {
+        var action = Action()
+        action.spell = spell
+        action.name = spell.name
+        action.isAttack = spell.isAttack
+        action.attrIndex = self.casterAttributeIdx ?? 0
+        action.timingString = spell.timeing?.rawValue ?? "long"
+        if let dice = spell.likelyDice {
+            action.damageDice = dice.model
+        }
+        self.model.actions.append(action)
+    }
 
 }
 
@@ -265,6 +290,7 @@ struct CharacterModel: Codable {
     var proficiencyBonus = Int(1)
     var alingment1Idx:Int = 1
     var alingment2Idx:Int = 1
+    var casterAttributeIdx: Int?
 
     var actions = [Action]()
     var equipment = [Equipment]()

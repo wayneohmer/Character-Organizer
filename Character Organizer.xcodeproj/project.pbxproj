@@ -57,6 +57,7 @@
 		2BF2934E23C4F84300659673 /* Skill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF2934D23C4F84300659673 /* Skill.swift */; };
 		2BF2935023C5042F00659673 /* 5e-SRD-Proficiencies.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF2934F23C5042F00659673 /* 5e-SRD-Proficiencies.json */; };
 		2BF2935223C505E000659673 /* Proficiency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF2935123C505E000659673 /* Proficiency.swift */; };
+		B01D027D247AF71200F58FFB /* SpellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B01D027C247AF71200F58FFB /* SpellAction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		2BF2934D23C4F84300659673 /* Skill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skill.swift; sourceTree = "<group>"; };
 		2BF2934F23C5042F00659673 /* 5e-SRD-Proficiencies.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Proficiencies.json"; sourceTree = "<group>"; };
 		2BF2935123C505E000659673 /* Proficiency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proficiency.swift; sourceTree = "<group>"; };
+		B01D027C247AF71200F58FFB /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,7 +261,7 @@
 				2B7B881F2428015B00340A3E /* AttackCreationView.swift */,
 				2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */,
 				2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */,
-				2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */,
+				B01D027E247AF71D00F58FFB /* New Group */,
 				2B16BCE723D80AC700360928 /* Creation */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -290,6 +292,15 @@
 				2B6890B5236B812D00EC8948 /* Info.plist */,
 			);
 			path = "Character OrganizerTests";
+			sourceTree = "<group>";
+		};
+		B01D027E247AF71D00F58FFB /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				2B4D5CEB246CA421003AAC3C /* WeaponAction.swift */,
+				B01D027C247AF71200F58FFB /* SpellAction.swift */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,6 +445,7 @@
 				2B16BCED23D80B4D00360928 /* Equipment.swift in Sources */,
 				2B068BE023C2B495007893BC /* Traits.swift in Sources */,
 				2B1F45DF246B4E5E00CA6BC7 /* SkillCheckView.swift in Sources */,
+				B01D027D247AF71200F58FFB /* SpellAction.swift in Sources */,
 				2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */,
 				2B2CF77F23D513F500167DB3 /* DescriptionView.swift in Sources */,
 				2B068BD223C26A6E007893BC /* RaceView.swift in Sources */,

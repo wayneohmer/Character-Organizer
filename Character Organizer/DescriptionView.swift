@@ -129,7 +129,7 @@ struct AttacksView: View {
                 HStack {
                     if character.spellAttacks.count > 0 {
                         Text("Spells:").font(Font.system(size: 20, weight: .bold))
-                        AttackTypeView(actions: character.actions, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                        AttackTypeView(actions: character.spellAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
                     }
                 }
                 HStack {
