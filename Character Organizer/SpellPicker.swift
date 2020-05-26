@@ -28,6 +28,9 @@ struct SpellPicker: View {
                 Button(action: {
                     let newSpells = Set(self.character.spells).union(self.selectedSpells)
                     self.character.model.spells = Array(newSpells)
+                    for spell in self.selectedSpells {
+                        self.character.addSpellAction(spell)
+                    }
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
                     Text("Close").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)

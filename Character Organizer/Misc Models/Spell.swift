@@ -61,7 +61,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     }
     
     var saveType:String {
-        let regex = try! NSRegularExpression(pattern: "(strength|dexteriy) saveing throw")
+        let regex = try! NSRegularExpression(pattern: "(strength|dexteriy|constitution|intelligence|wisdom|charisma) saveing throw")
         let desc = self.desc.joined(separator: " ")
         let range = NSRange(location: 0, length: desc.count)
         let matches = regex.matches(in: desc, range: range)
@@ -95,6 +95,22 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
            }
            return ""
        }
+    
+    var timeing: ActionTiming? {
+        
+        switch self.casting_time {
+        case "1 action":
+            return .Action
+        case "1 reaction":
+            return .Reaction
+        case "1 bonus action":
+            return .BonusAction
+        default:
+            return .Long
+            
+        }
+        
+    }
     
     var likelyDice: FyreDice? {
         

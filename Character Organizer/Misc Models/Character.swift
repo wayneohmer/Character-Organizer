@@ -232,12 +232,23 @@ class Character: ObservableObject {
         }
     }
     
+    var casterAttributeIdx:Int? {
+        set {
+            model.casterAttributeIdx = newValue
+        }
+        get {
+            return model.casterAttributeIdx
+        }
+    }
+    
+    
     var attrDict:[Attribute: Int] { return [.STR:model.str, .DEX:model.dex, .CON:model.con, .INT:model.int, .WIS:model.wis, .CHA:model.cha] }
     var attrArray:[Int] { return [model.str, model.dex, model.con, model.int, model.wis, model.cha] }
     var attrBonusDict:[Attribute: Int] { return [.STR:modValue(model.str),.DEX:modValue(model.dex),.CON:modValue(model.con),.INT:modValue(model.int),.WIS:modValue(model.wis),.CHA:modValue(model.cha)] }
     var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
 
     var actions:[Action] { return model.actions }
+    
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
     var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
     var spellAttacks:[Action] { return attackActions.filter({ $0.spell != nil }) }
@@ -249,6 +260,10 @@ class Character: ObservableObject {
     var intMod:String { return modString(model.int) }
     var wisMod:String { return modString(model.wis) }
     var chaMod:String { return modString(model.cha) }
+    
+    var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
+    
+    var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
     
     func modValue (_ attribute:Int) -> Int {
         return Int((attribute - 10)/2)
@@ -264,6 +279,7 @@ class Character: ObservableObject {
         
     }
     
+  
     var languages = Set<Descriptor>()
     var languageString:String {
         let langs = languages.map({ $0.name })
@@ -285,6 +301,33 @@ class Character: ObservableObject {
     var spells:[Spell] { return model.spells }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
+    
+    func modValue (_ attribute:Int) -> Int {
+        return Int((attribute - 10)/2)
+    }
+    
+    func modString(_ attribute:Int) -> String {
+        
+        let result = Int((attribute - 10)/2)
+        if result > 0 {
+            return "+\(result)"
+        }
+        return "\(result)"
+        
+    }
+    
+    func addSpellAction(_ spell: Spell) {
+        var action = Action()
+        action.spell = spell
+        action.name = spell.name
+        action.isAttack = spell.isAttack
+        action.attrIndex = self.casterAttributeIdx ?? 0
+        action.timingString = spell.timeing?.rawValue ?? "long"
+        if let dice = spell.likelyDice {
+            action.damageDice = dice.model
+        }
+        self.model.actions.append(action)
+    }
 
 }
 
@@ -309,6 +352,7 @@ struct CharacterModel: Codable {
     var proficiencyBonus = Int(1)
     var alingment1Idx:Int = 1
     var alingment2Idx:Int = 1
+    var casterAttributeIdx: Int?
 
     var actions = [Action]()
     var equipment = [Equipment]()

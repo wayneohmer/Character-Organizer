@@ -32,6 +32,8 @@ struct ActionView: View {
     @State var showingProfBonus = false
 
     var diceDetails = DiceDetails()
+    var filterTimeings: [ActionTiming] = [.All, .Action, .BonusAction, .Reaction, .Long]
+    @State var actionFilterIdx: Int = 0
 
     var lightGray = Color(.lightGray)
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
@@ -274,19 +276,31 @@ struct ActionView: View {
                                 
                                 self.attributes
                             }
-                            ScrollView(.vertical) {
-                                VStack{
-                                    ForEach(character.actions) { action in
-                                        if action.weapon != nil {
-                                            WeaponAction(action: action)
-                                        } else {
-                                            ActionRow(action:action)
-                                        }
+                            VStack {
+                                Picker("Filter", selection: $actionFilterIdx) {
+                                    ForEach(0 ..< self.filterTimeings.count) { idx in
+                                        Text(self.filterTimeings[idx].rawValue)
                                     }
-                                    HStack{ Spacer() }
-                                    Spacer()
                                 }
-                            }.background(Color.black)
+                                .pickerStyle(SegmentedPickerStyle())
+                                .background(Color(.lightGray))
+                                .cornerRadius(8)
+                                ScrollView(.vertical) {
+                                    VStack{
+                                        ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 })) { action in
+                                            if action.weapon != nil {
+                                                WeaponAction(action: action)
+                                            } else if action.spell != nil {
+                                                SpellAction(action:action)
+                                            } else {
+                                                ActionRow(action:action)
+                                            }
+                                        }
+                                        HStack{ Spacer() }
+                                        Spacer()
+                                    }
+                                }.background(Color.black)
+                            }
                         }
                     }
                  }

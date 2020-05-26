@@ -63,18 +63,6 @@ struct EquipmentDetail: View {
         HStack{
             VStack(alignment: .leading, spacing: 8) {
                 if equipment.equipment_category == "Weapon" {
-                    Button(action: {
-                        self.showAttack = true
-                    }, label: {
-                        Text("Make Attack").padding(8)
-
-                    })
-                    .foregroundColor(Color.white)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                    .cornerRadius(5)
-                    .sheet(isPresented: self.$showAttack, content: {
-                        AttackCreationView(weapon: self.equipment)
-                    })
                     HStack {
                         Text("Category: ")
                         Text(equipment.category_range ?? "").bold()
@@ -106,6 +94,18 @@ struct EquipmentDetail: View {
                     ForEach(equipment.special ?? [String](), id:\.self) { line in
                         Text(line)
                     }
+                    Button(action: {
+                        self.showAttack = true
+                    }, label: {
+                        Text("Make Attack").padding(8)
+                        
+                    })
+                        .foregroundColor(Color.white)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(5)
+                        .sheet(isPresented: self.$showAttack, content: {
+                            AttackCreationView(weapon: self.equipment)
+                        })
                     
                 } else if equipment.equipment_category == "Armor" {
                     HStack {
