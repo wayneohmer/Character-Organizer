@@ -17,7 +17,8 @@ enum ActionTiming: String, CaseIterable {
     case All
 }
 
-struct Action: Codable, Identifiable {
+struct Action: Codable, Identifiable, Comparable, Viewable {
+    
     
     var id = UUID()
     var name: String = ""
@@ -34,11 +35,31 @@ struct Action: Codable, Identifiable {
     var damageDice: FyreDiceModel?
     var spell: Spell?
     var weapon: Equipment?
+    var description: String {
+        if let weapon = weapon {
+            return weapon.description
+        } else if let spell = spell {
+            return spell.description
+        }
+        return desc
+    }
     
     var timing:ActionTiming { return ActionTiming(rawValue: timingString ?? "Long") ?? .Long }
     
     var damageFyreDice:FyreDice {
         return FyreDice(with: damageDice?.dice ?? [0:0], modifier: damageDice?.modifier ?? 0)
+    }
+    
+    static func < (lhs: Action, rhs: Action) -> Bool {
+        if let lhsSpell = lhs.spell, let  rhsSpell = rhs.spell {
+            if lhsSpell.level == rhsSpell.level {
+                return lhsSpell.name < rhsSpell.name
+            } else {
+                return lhsSpell.level < rhsSpell.level
+            }
+        } else {
+            return lhs.name < rhs.name
+        }
     }
     
 }

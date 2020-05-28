@@ -16,13 +16,12 @@ struct GrayButton: View {
     var body: some View {
         HStack {
             Button(action: action) {
-                Text("\(text)").fontWeight(.bold).padding(3).frame(alignment: .center).offset(y:-3)
+                Text("\(text)").fontWeight(.bold).padding(3).frame(alignment: .center).offset(y:-2)
             }
             .frame(width: width, height: height)
             .foregroundColor(Color.white)
             .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
             .cornerRadius(5)
-            
             
         }
     }

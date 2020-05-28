@@ -15,8 +15,10 @@ struct DescriptionView: View {
     @State var character = Character.shared
     @State var showingDice = false
     @State var selectedDetail:Viewable = Proficiency()
+    @State var selectedAction:Action = Action()
     @State var selectedAttack = Action()
     @State var detailShowing = false
+    @State var actionShowing = false
     @State var equipmentShowing = false
     @State var spellsShowing = false
     @State var attacksShowing = false
@@ -33,16 +35,23 @@ struct DescriptionView: View {
                     TraitsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
                     
                 }
-                .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedDetail ) })
+                .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedDetail, isFromInventory: true ) })
+                .sheet(isPresented: self.$actionShowing, content:  { SpellActionEditor(action: self.selectedAction ) })
                 .padding(5)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
                 .background(Color.black)
                 AttacksView(character: $character, selectedAttack: $selectedAttack, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
-                    .sheet(isPresented: self.$attacksShowing, content:  { AttackCreationView(actionIdx: self.character.actions.firstIndex(where:
-                        { self.selectedAttack.id == $0.id} ) ?? 0, oldAction:self.selectedAttack) })
+                    .sheet(isPresented: self.$attacksShowing, content:  {
+                        AttackCreationView(actionIdx: self.character.actions.firstIndex(where:
+                            {
+                                self.selectedAttack.id == $0.id
+                                
+                        } ) ?? 0, oldAction:self.selectedAttack)
+                        
+                    })
                 EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
                     .sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
-                SpellsView(character: $character, selectedDetail: $selectedDetail, spellsShowing: $spellsShowing, detailShowing: $detailShowing)
+                SpellsView(character: $character, selectedAction: $selectedAction, spellsShowing: $spellsShowing, actionShowing: $actionShowing)
                     .sheet(isPresented: self.$spellsShowing, content:  { SpellPicker(character: self.$character) })
                 Spacer()
             }
@@ -149,10 +158,12 @@ struct AttacksView: View {
 struct SpellsView:  View {
     
     @Binding var character:Character
-    @Binding var selectedDetail:Viewable
+    @Binding var selectedAction:Action
     @Binding var spellsShowing:Bool
-    @Binding var detailShowing:Bool
+    @Binding var actionShowing:Bool
     
+    var levelNames = ["Cantrips","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"]
+
     var body: some View {
         VStack {
             HStack{
@@ -165,70 +176,17 @@ struct SpellsView:  View {
             }.padding(5)
             if character.spells.count > 0 {
                 VStack(alignment: .leading) {
-                    HStack {
-                        if character.spells.filter({ $0.level == 0 }).count > 0 {
-                            Text("Cantrips:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 0 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                    ForEach ( 0 ..< 9) { index in
+                        HStack {
+                            if self.character.spells.filter({ $0.level == index }).count > 0 {
+                                Text("\(self.levelNames[index] ):").font(Font.system(size: 20, weight: .bold))
+                                SpellLevelView(spells: self.character.spellActions.filter({ $0.spell?.level == index}), selectedAction: self.$selectedAction, actionShowing: self.$actionShowing)
+                            }
                         }
                     }
-                    HStack {
-                        if character.spells.filter({ $0.level == 1 }).count > 0 {
-                            Text("1st:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 1 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 2 }).count > 0 {
-                            Text("2nd:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 2 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 3 }).count > 0 {
-                            Text("3rd:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 3 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 4 }).count > 0 {
-                            Text("4th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 4 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 5 }).count > 0 {
-                            Text("5th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 5 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 6 }).count > 0 {
-                            Text("6th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 6 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 7 }).count > 0 {
-                            Text("7th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 7 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 8 }).count > 0 {
-                            Text("8th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 8 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    HStack {
-                        if character.spells.filter({ $0.level == 9 }).count > 0 {
-                            Text("9th:").font(Font.system(size: 20, weight: .bold))
-                            SpellLevelView(spells: character.spells.filter({ $0.level == 9 }), selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                        }
-                    }
-                    
-                    }.padding(8)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                .background(Color.black)
+                }.padding(8)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    .background(Color.black)
             }
         }
     }
@@ -236,14 +194,15 @@ struct SpellsView:  View {
 
 struct SpellLevelView:  View {
     
-    var spells:[Spell]
-    @Binding var selectedDetail:Viewable
-    @Binding var detailShowing:Bool
+    var spells:[Action]
+    @Binding var selectedAction:Action
+    @Binding var actionShowing:Bool
     
     var body: some View {
         ScrollView(.horizontal) {
-            HStack{ ForEach(spells.sorted()) { spell in
-                DetailTextView(thing: spell, selectedDetail: self.$selectedDetail, detailShowing: self.$detailShowing)
+            HStack{
+                ForEach(spells.sorted()) { action in
+                    DetailTextActionView(action: action, selectedAction: self.$selectedAction, actionShowing: self.$actionShowing)
                 }
             }
         }
@@ -301,11 +260,27 @@ struct DetailTextView:  View {
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     
-    
     var body: some View {
         Text(thing.name).onTapGesture {
             self.selectedDetail = self.thing
             self.detailShowing = true
+        }.font(Font.system(size: 18))
+            .padding(4)
+            .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+            .cornerRadius(8)
+    }
+}
+
+struct DetailTextActionView:  View {
+    
+    let action:Action
+    @Binding var selectedAction:Action
+    @Binding var actionShowing:Bool
+    
+    var body: some View {
+        Text(action.name).onTapGesture {
+            self.selectedAction = self.action
+            self.actionShowing = true
         }.font(Font.system(size: 18))
             .padding(4)
             .background(Color(red: 0.15, green: 0.15, blue: 0.15))

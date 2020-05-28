@@ -33,7 +33,7 @@ struct SpellAction: View {
                 Spacer()
             }
             if showDesc {
-                Text(action.spell?.desc.joined(separator: "\n") ?? "")
+                Text(action.spell?.description ?? "")
             }
         }.onTapGesture {
             self.showingDice = true

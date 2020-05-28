@@ -12,7 +12,6 @@ struct AttackCreationView: View {
     
     var weapon:Equipment?
     var spell:Spell?
-    let attackTypes = ["Weapon","Spell"]
     let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
 
     @Environment(\.presentationMode) var presentationMode
@@ -68,20 +67,6 @@ struct AttackCreationView: View {
                 .foregroundColor(Color.black)
                 .padding(16)
             VStack{
-                HStack{
-                    Text("Type: ")
-                    Picker("", selection: $selectedType) {
-                        ForEach(0 ..< attackTypes.count) { index in
-                            Text(self.attackTypes[index])
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .frame(width: 500)
-                    .background(Color(.lightGray))
-                    .cornerRadius(8)
-
-                    Spacer()
-                }
                 HStack{
                 Text("Attribute:")
                 Picker("", selection: $selectedAttr) {

@@ -12,7 +12,7 @@ struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var detail: Viewable
-    var dismissNow = false
+    var isFromInventory = false
     
     var body: some View {
         VStack {
@@ -27,7 +27,7 @@ struct DetailView: View {
             }
             Text(detail.name).font(.title).foregroundColor(Color.white).padding(5)
             if detail is Equipment {
-                EquipmentDetail(equipment:detail as! Equipment)
+                EquipmentDetail(equipment:detail as! Equipment, isFromInventory: isFromInventory )
             } else if detail is Spell {
                 SpellDetail(spell: detail as! Spell)
             } else {
@@ -38,27 +38,20 @@ struct DetailView: View {
             }
             Spacer()
         }.background(Color.black).foregroundColor(Color.white)
-            .onAppear(){
-                if self.dismissNow {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
-        }.onAppear(){
-            if self.dismissNow {
-                self.presentationMode.wrappedValue.dismiss()
-            }
-        }
+        
     }
 }
 
 struct EquipmentDetail: View {
     
     @Environment(\.presentationMode) var presentationMode
-
+    
     var equipment: Equipment
     @State var detailShow = false
     @State var showAttack = false
+    @State var isFromInventory: Bool
     @State var selectedDetail: Viewable = Equipment()
-
+    
     var body: some View {
         HStack{
             VStack(alignment: .leading, spacing: 8) {
@@ -94,18 +87,15 @@ struct EquipmentDetail: View {
                     ForEach(equipment.special ?? [String](), id:\.self) { line in
                         Text(line)
                     }
-                    Button(action: {
-                        self.showAttack = true
-                    }, label: {
-                        Text("Make Attack").padding(8)
-                        
-                    })
-                        .foregroundColor(Color.white)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(5)
-                        .sheet(isPresented: self.$showAttack, content: {
-                            AttackCreationView(weapon: self.equipment)
+                    if self.isFromInventory {
+                        GrayButton(text: "Make Attack", width: 150, action: {
+                            self.showAttack = true
                         })
+                            
+                            .sheet(isPresented: self.$showAttack, content: {
+                                AttackCreationView(weapon: self.equipment)
+                            })
+                    }
                     
                 } else if equipment.equipment_category == "Armor" {
                     HStack {
@@ -138,14 +128,11 @@ struct EquipmentDetail: View {
     }
 }
 
-struct SpellDetail: View {
-    
-    @Environment(\.presentationMode) var presentationMode
-    @State var showAttack = false
 
+struct SpellHeader: View {
+    
     var spell: Spell
     
-    @State var detailShow = false
     var body: some View {
         VStack(alignment: .leading) {
             HStack{
@@ -172,23 +159,29 @@ struct SpellDetail: View {
                 Text("Duration:")
                 Text("\(spell.concentration ? "Concentration - " : "")\(spell.duration)").fontWeight(.bold)
             }
-            Button(action: {
-                self.showAttack = true
-            }, label: {
-                Text("Make Attack").padding(8)
-                
-            })
-                .foregroundColor(Color.white)
-                .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
-                .cornerRadius(5)
-                .sheet(isPresented: self.$showAttack, content: {
-                    AttackCreationView(spell: self.spell)
-                })
+        }
+    }
+}
+
+struct SpellDetail: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    var spell: Spell
+    var action: Action?
+    
+    @State var showAttack = false
+    @State var detailShow = false
+    @State var isAttack = false
+    @State var showingSpellDice = false
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            SpellHeader(spell: spell)
             ScrollView {
                 Text(spell.description).fontWeight(.bold)
             }
-            Spacer()
-            }.padding().background(Color.black).foregroundColor(Color.white)
+        }.padding()
     }
 }
 
@@ -196,7 +189,7 @@ protocol Viewable {
     
     var name:String { get }
     var description:String { get }
-
+    
 }
 
 

@@ -209,6 +209,7 @@ struct DiceView: View {
             }
         }
         .background(background)
+        .cornerRadius(5)
         .frame(width: 550, alignment: .center)
         
     }

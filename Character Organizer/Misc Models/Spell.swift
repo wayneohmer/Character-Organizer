@@ -13,12 +13,20 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     static var shared = [String: Spell]()
     
-    var description:String { return desc.joined(separator: "\n\n") }
+    var description:String {
+        var str = desc.joined(separator: "\n\n")
+        if let higherLevel = higher_level {
+            str.append("\n\n\(higherLevel.joined(separator: "\n\n"))")
+        }
+        return str
+        
+    }
 
     var id:String { return index }
     var index = ""
     var name = ""
     var desc = [String]()
+    var higher_level: [String]? 
     var range = ""
     var components = [String]()
     var material:String?

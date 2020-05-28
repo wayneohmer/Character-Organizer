@@ -260,26 +260,7 @@ class Character: ObservableObject {
     var intMod:String { return modString(model.int) }
     var wisMod:String { return modString(model.wis) }
     var chaMod:String { return modString(model.cha) }
-    
-    var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
-    
-    var bonusDict:[String: Int] { return ["STR":modValue(model.str),"DEX":modValue(model.dex),"CON":modValue(model.con),"INT":modValue(model.int),"WIS":modValue(model.wis),"CHA":modValue(model.cha)] }
-    
-    func modValue (_ attribute:Int) -> Int {
-        return Int((attribute - 10)/2)
-    }
-    
-    func modString(_ attribute:Int) -> String {
         
-        let result = Int((attribute - 10)/2)
-        if result > 0 {
-            return "+\(result)"
-        }
-        return "\(result)"
-        
-    }
-    
-  
     var languages = Set<Descriptor>()
     var languageString:String {
         let langs = languages.map({ $0.name })
@@ -299,6 +280,7 @@ class Character: ObservableObject {
     }
     var equipment:[Equipment] { return model.equipment }
     var spells:[Spell] { return model.spells }
+    var spellActions:[Action] { return model.actions.filter({ $0.spell != nil }) }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
     

@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.skills.insert(Skill.shared["/api/skills/animal-handling"] ?? Skill())
         Character.shared.skills.insert(Skill.shared["/api/skills/athletics"] ?? Skill())
         Character.shared.model.equipment = [Equipment.shared["camel"] ?? Equipment(), Equipment.shared["plate"] ?? Equipment(), Equipment.shared["longsword"] ?? Equipment()]
-        Character.shared.model.spells = [Spell.shared["magic-missile"] ?? Spell(), Spell.shared["acid-arrow"] ?? Spell(), Spell.shared["blur"] ?? Spell() , Spell.shared["charm-person"] ?? Spell()]
+        Character.shared.model.spells = [Spell.shared["light"] ?? Spell(), Spell.shared["magic-missile"] ?? Spell(), Spell.shared["acid-arrow"] ?? Spell(), Spell.shared["blur"] ?? Spell() , Spell.shared["charm-person"] ?? Spell()]
         Character.shared.level = "2"
         Character.shared.armorClass = "10"
         Character.shared.speed = "10"
