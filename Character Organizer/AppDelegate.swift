@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.skills.insert(Skill.shared["/api/skills/animal-handling"] ?? Skill())
         Character.shared.skills.insert(Skill.shared["/api/skills/athletics"] ?? Skill())
         Character.shared.model.equipment = [Equipment.shared["camel"] ?? Equipment(), Equipment.shared["plate"] ?? Equipment(), Equipment.shared["longsword"] ?? Equipment()]
-        Character.shared.model.spells = [Spell.shared["light"] ?? Spell(), Spell.shared["magic-missile"] ?? Spell(), Spell.shared["acid-arrow"] ?? Spell(), Spell.shared["blur"] ?? Spell() , Spell.shared["charm-person"] ?? Spell()]
+        Character.shared.model.spells = [Spell.shared["light"] ?? Spell(), Spell.shared["magic-missile"] ?? Spell(), Spell.shared["acid-arrow"] ?? Spell(), Spell.shared["shield"] ?? Spell() , Spell.shared["spiritual-weapon"] ?? Spell()]
         Character.shared.level = "2"
         Character.shared.armorClass = "10"
         Character.shared.speed = "10"
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.cha = "20"
         Character.shared.casterAttributeIdx = 3
         Character.shared.proficiencyBonus = "2"
-        Character.shared.model.actions = [Action]()
+        Character.shared.model.actions = Set<Action>()
         for spell in Character.shared.model.spells {
             Character.shared.addSpellAction(spell)
         }

@@ -12,6 +12,7 @@ struct GrayButton: View {
     var text: String
     var width: CGFloat
     var height: CGFloat = 40.0
+    var color: Color = Color(.lightGray)
     var action:() -> Void
     var body: some View {
         HStack {
@@ -20,7 +21,7 @@ struct GrayButton: View {
             }
             .frame(width: width, height: height)
             .foregroundColor(Color.white)
-            .background(LinearGradient(gradient: Gradient(colors: [Color(.lightGray), .black]), startPoint: .top, endPoint: .bottom))
+            .background(LinearGradient(gradient: Gradient(colors: [color, .black]), startPoint: .top, endPoint: .bottom))
             .cornerRadius(5)
             
         }

@@ -241,13 +241,12 @@ class Character: ObservableObject {
         }
     }
     
-    
     var attrDict:[Attribute: Int] { return [.STR:model.str, .DEX:model.dex, .CON:model.con, .INT:model.int, .WIS:model.wis, .CHA:model.cha] }
     var attrArray:[Int] { return [model.str, model.dex, model.con, model.int, model.wis, model.cha] }
     var attrBonusDict:[Attribute: Int] { return [.STR:modValue(model.str),.DEX:modValue(model.dex),.CON:modValue(model.con),.INT:modValue(model.int),.WIS:modValue(model.wis),.CHA:modValue(model.cha)] }
     var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
 
-    var actions:[Action] { return model.actions }
+    var actions:Set<Action> { return model.actions }
     
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
     var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
@@ -299,16 +298,18 @@ class Character: ObservableObject {
     }
     
     func addSpellAction(_ spell: Spell) {
-        var action = Action()
+        var action = Action(spell:spell)
         action.spell = spell
         action.name = spell.name
         action.isAttack = spell.isAttack
         action.attrIndex = self.casterAttributeIdx ?? 0
         action.timingString = spell.timeing?.rawValue ?? "long"
+        action.damageType = spell.damageType
+
         if let dice = spell.likelyDice {
             action.damageDice = dice.model
         }
-        self.model.actions.append(action)
+        self.model.actions.insert(action)
     }
 
 }
@@ -336,7 +337,7 @@ struct CharacterModel: Codable {
     var alingment2Idx:Int = 1
     var casterAttributeIdx: Int?
 
-    var actions = [Action]()
+    var actions = Set<Action>()
     var equipment = [Equipment]()
     var spells = [Spell]()
 }

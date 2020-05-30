@@ -12,11 +12,20 @@ struct WeaponAction: View {
     
     var action:Action
     @State var showingDice = false
-    
+    @State var showDesc = false
+
     var body: some View {
         VStack {
-            Text(action.name).font(Font.system(size: 25, weight: .bold, design:
-                .default)).padding(4)
+            HStack{
+                GrayButton(text: self.showDesc ? " - " : " + ", width: 30, height:30,  action: {
+                    self.showDesc.toggle()
+                })
+                Spacer()
+                Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
+                Spacer()
+                
+            }.padding(4)
+            
             HStack{
                 Text("Weapon:")
                 Text("(\(action.weapon?.weapon_range ?? "")" )
@@ -28,12 +37,14 @@ struct WeaponAction: View {
                 Spacer()
             }
             HStack {
-                Text(action.desc)
+                if showDesc {
+                    Text(action.desc)
+                }
                 Spacer()
             }
         }.onTapGesture {
             self.showingDice = true
-        }.padding()
+            }.padding(5)
         .sheet(isPresented: self.$showingDice, content: {
             AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice?.dice ?? [:], modifier: self.damageBonus()))
         })
@@ -44,11 +55,11 @@ struct WeaponAction: View {
     }
     
     func attackBonus() -> Int {
-        return Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus ?? 0)
+        return Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus)
     }
     
     func damageBonus() -> Int {
-        return (action.attrDamage ? Character.shared.attrBonusArray[action.attrIndex] : 0) + (action.damage_bonus ?? 0)
+        return (action.attrDamage ? Character.shared.attrBonusArray[action.attrIndex] : 0) + (action.damage_bonus)
     }
     
     func attackBonusString() -> String {

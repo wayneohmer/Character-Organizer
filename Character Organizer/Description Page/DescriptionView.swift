@@ -11,6 +11,10 @@ import SwiftUI
 
 struct DescriptionView: View {
     
+    enum SheetType {
+        case detail, spellPicker, spellAction, attackAction, equipment, equipmentPicker
+    }
+    
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
     @State var character = Character.shared
     @State var showingDice = false
@@ -18,45 +22,38 @@ struct DescriptionView: View {
     @State var selectedAction:Action = Action()
     @State var selectedAttack = Action()
     @State var detailShowing = false
-    @State var actionShowing = false
-    @State var equipmentShowing = false
-    @State var spellsShowing = false
-    @State var attacksShowing = false
-
+    @State var sheetType = DescriptionView.SheetType.detail
+ 
     var body: some View {
         VStack {
             DemographicsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-            ScrollView{
-                
-                VStack {
-                    
-                    ProficiencieView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                    SkillsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                    TraitsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                    
-                }
-                .sheet(isPresented: self.$detailShowing, content:  { DetailView(detail: self.selectedDetail, isFromInventory: true ) })
-                .sheet(isPresented: self.$actionShowing, content:  { SpellActionEditor(action: self.selectedAction ) })
-                .padding(5)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
-                .background(Color.black)
-                AttacksView(character: $character, selectedAttack: $selectedAttack, detailShowing: $detailShowing, attacksShowing: $attacksShowing)
-                    .sheet(isPresented: self.$attacksShowing, content:  {
-                        AttackCreationView(actionIdx: self.character.actions.firstIndex(where:
-                            {
-                                self.selectedAttack.id == $0.id
-                                
-                        } ) ?? 0, oldAction:self.selectedAttack)
-                        
-                    })
-                EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, equipmentShowing: $equipmentShowing)
-                    .sheet(isPresented: self.$equipmentShowing, content:  { EquipmentPicker(character: self.$character) })
-                SpellsView(character: $character, selectedAction: $selectedAction, spellsShowing: $spellsShowing, actionShowing: $actionShowing)
-                    .sheet(isPresented: self.$spellsShowing, content:  { SpellPicker(character: self.$character) })
-                Spacer()
+            VStack {
+                ProficiencieView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                SkillsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                TraitsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
             }
+            .padding(5)
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
+            .background(Color.black)
+            AttacksView(character: $character, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType)
+            EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+            SpellsView(character: $character, selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
+            Spacer()
+        }.sheet(isPresented: self.$detailShowing, content:  {
             
-        }
+            if self.sheetType == .detail {
+                DetailView(detail: self.selectedDetail, isFromInventory: true )
+            }  else if self.sheetType == .equipmentPicker {
+                EquipmentPicker(character: self.$character)
+            } else if self.sheetType == .spellPicker {
+                SpellPicker(character: self.$character)
+            } else if self.sheetType == .spellAction {
+                SpellActionEditor(action: self.selectedAction)
+            } else if self.sheetType == .attackAction {
+                Text("Attack")
+                //AttackCreationView(action:self.selectedAttack, oldAction:self.selectedAttack)
+            }
+        })
         .foregroundColor(Color(.white))
         .background(background)
         .onAppear(){
@@ -115,7 +112,7 @@ struct AttacksView: View {
     @Binding var character:Character
     @Binding var selectedAttack:Action
     @Binding var detailShowing:Bool
-    @Binding var attacksShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
     
     
     var body: some View {
@@ -123,7 +120,8 @@ struct AttacksView: View {
             HStack{
                 Text("Attacks").fontWeight(.bold).foregroundColor(Color.white)
                 Button(action:{
-                    self.attacksShowing = true
+                    self.sheetType = .attackAction
+                    self.detailShowing = true
                 }) {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }.padding(5)
@@ -132,18 +130,18 @@ struct AttacksView: View {
                 HStack {
                     if character.weaponAttacks.count > 0 {
                         Text("Weapons:").font(Font.system(size: 20, weight: .bold))
-                        AttackTypeView(actions: character.weaponAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                        AttackTypeView(actions: character.weaponAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType )
                     }
                 }
                 HStack {
                     if character.spellAttacks.count > 0 {
                         Text("Spells:").font(Font.system(size: 20, weight: .bold))
-                        AttackTypeView(actions: character.spellAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                        AttackTypeView(actions: character.spellAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType)
                     }
                 }
                 HStack {
                     Text("Others:").font(Font.system(size: 20, weight: .bold))
-                    AttackTypeView(actions: character.otherAttacks, selectedAttack: $selectedAttack, attacksShowing: $attacksShowing)
+                    AttackTypeView(actions: character.otherAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType)
                     
                 }
             }.padding(8)
@@ -156,12 +154,12 @@ struct AttacksView: View {
 
 
 struct SpellsView:  View {
-    
+
     @Binding var character:Character
     @Binding var selectedAction:Action
-    @Binding var spellsShowing:Bool
-    @Binding var actionShowing:Bool
-    
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
     var levelNames = ["Cantrips","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"]
 
     var body: some View {
@@ -169,7 +167,8 @@ struct SpellsView:  View {
             HStack{
                 Text("Spells").fontWeight(.bold).foregroundColor(Color.white)
                 Button(action:{
-                    self.spellsShowing = true
+                    self.detailShowing = true
+                    self.sheetType = .spellPicker
                 }) {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
@@ -180,7 +179,7 @@ struct SpellsView:  View {
                         HStack {
                             if self.character.spells.filter({ $0.level == index }).count > 0 {
                                 Text("\(self.levelNames[index] ):").font(Font.system(size: 20, weight: .bold))
-                                SpellLevelView(spells: self.character.spellActions.filter({ $0.spell?.level == index}), selectedAction: self.$selectedAction, actionShowing: self.$actionShowing)
+                                SpellLevelView(spells: self.character.spellActions.filter({ $0.spell?.level == index}), selectedAction: self.$selectedAction, detailShowing: self.$detailShowing, sheetType: self.$sheetType)
                             }
                         }
                     }
@@ -193,16 +192,17 @@ struct SpellsView:  View {
 }
 
 struct SpellLevelView:  View {
-    
+
     var spells:[Action]
     @Binding var selectedAction:Action
-    @Binding var actionShowing:Bool
-    
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         ScrollView(.horizontal) {
             HStack{
                 ForEach(spells.sorted()) { action in
-                    DetailTextActionView(action: action, selectedAction: self.$selectedAction, actionShowing: self.$actionShowing)
+                    DetailTextActionView(action: action, selectedAction: self.$selectedAction, detailShowing: self.$detailShowing, sheetType: self.$sheetType )
                 }
             }
         }
@@ -211,18 +211,19 @@ struct SpellLevelView:  View {
 
 
 struct EquipmentView:  View {
-    
+
     @Binding var character:Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
-    @Binding var equipmentShowing:Bool
-    
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         VStack {
             HStack{
                 Text("Equipment").fontWeight(.bold).foregroundColor(Color.white)
                 Button(action:{
-                    self.equipmentShowing = true
+                    self.sheetType = .equipmentPicker
+                    self.detailShowing = true
                 }) {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
@@ -231,21 +232,21 @@ struct EquipmentView:  View {
                 HStack {
                     if character.weapons.count > 0 {
                         Text("Weapons:").font(Font.system(size: 20, weight: .bold))
-                        EquipmentTypeView(equipment: character.weapons , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        EquipmentTypeView(equipment: character.weapons , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
                     }
                 }
                 HStack {
                     if character.armor.count > 0 {
                         Text("Armor:").font(Font.system(size: 20, weight: .bold))
-                        EquipmentTypeView(equipment: character.armor , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+                        EquipmentTypeView(equipment: character.armor , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
                     }
                 }
                 HStack {
                     Text("Other Shit:").font(Font.system(size: 20, weight: .bold))
                     EquipmentTypeView(equipment: Array(character.equipment.filter({
                         $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
-                    })) , selectedDetail: $selectedDetail, detailShowing: $detailShowing)
-                    
+                    })) , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+
                 }
             }.padding(8)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
@@ -259,10 +260,12 @@ struct DetailTextView:  View {
     let thing:Viewable
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
-    
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         Text(thing.name).onTapGesture {
             self.selectedDetail = self.thing
+            self.sheetType = .detail
             self.detailShowing = true
         }.font(Font.system(size: 18))
             .padding(4)
@@ -272,15 +275,18 @@ struct DetailTextView:  View {
 }
 
 struct DetailTextActionView:  View {
-    
+
     let action:Action
     @Binding var selectedAction:Action
-    @Binding var actionShowing:Bool
-    
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
+
     var body: some View {
         Text(action.name).onTapGesture {
             self.selectedAction = self.action
-            self.actionShowing = true
+            self.detailShowing = true
+            self.sheetType = .spellAction
         }.font(Font.system(size: 18))
             .padding(4)
             .background(Color(red: 0.15, green: 0.15, blue: 0.15))
@@ -292,14 +298,16 @@ struct AttackTypeView:  View {
     
     var actions:[Action]
     @Binding var selectedAttack:Action
-    @Binding var attacksShowing:Bool
-    
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         ScrollView(.horizontal) {
             HStack { ForEach(actions) { action in
                 Text(action.name).onTapGesture {
                     self.selectedAttack = action
-                    self.attacksShowing = true
+                    self.detailShowing = true
+                    self.sheetType = .attackAction
                 }.font(Font.system(size: 18))
                     .padding(4)
                     .background(Color(red: 0.15, green: 0.15, blue: 0.15))
@@ -315,11 +323,13 @@ struct EquipmentTypeView:  View {
     var equipment:[Equipment]
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
     
     var body: some View {
         ScrollView(.horizontal) {
             HStack{ ForEach(equipment.sorted()) { equipment in
-                DetailTextView(thing: equipment, selectedDetail: self.$selectedDetail, detailShowing: self.$detailShowing)
+                DetailTextView(thing: equipment, selectedDetail: self.$selectedDetail, detailShowing: self.$detailShowing, sheetType: self.$sheetType)
                 }
             }
         }
@@ -331,7 +341,8 @@ struct ProficiencieView:  View {
     @Binding var character:Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
-    
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         
         HStack {
@@ -339,7 +350,7 @@ struct ProficiencieView:  View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.proficiencies) ) { proficiency in
-                        DetailTextView(thing: proficiency, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
+                        DetailTextView(thing: proficiency, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing, sheetType:self.$sheetType)
                     }
                 }
             }
@@ -352,14 +363,15 @@ struct SkillsView:  View {
     @Binding var character:Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
-    
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         HStack {
             Text("Skills:").font(Font.system(size: 20, weight: .bold))
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.skills) ) { skill in
-                       DetailTextView(thing: skill, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
+                        DetailTextView(thing: skill, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing, sheetType:self.$sheetType)
                     }
                 }
             }
@@ -372,14 +384,15 @@ struct TraitsView:  View {
     @Binding var character:Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
-    
+    @Binding var sheetType:DescriptionView.SheetType
+
     var body: some View {
         HStack {
             Text("Traits:").font(Font.system(size: 20, weight: .bold))
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(Array(character.traits) ) { trait in
-                         DetailTextView(thing: trait, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing)
+                        DetailTextView(thing: trait, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing, sheetType:self.$sheetType)
                     }
                 }
             }

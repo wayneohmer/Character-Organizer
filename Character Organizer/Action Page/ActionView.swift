@@ -54,8 +54,8 @@ struct ActionView: View {
                 .foregroundColor(Color.black)
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(hpBorderColor(), lineWidth: 4))
 
-                .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.currentHP, isHP: true) })
-                
+                .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.currentHP, isHP: true) })
+
                 GrayButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }
             }.padding(5)
             VStack {
@@ -70,7 +70,7 @@ struct ActionView: View {
                         .foregroundColor(Color.black)
                         .cornerRadius(5)
 
-                        .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.maxHP, isHP: false) })
+                    .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
                 }
                 VStack {
                     Text("Temp").frame(maxWidth: 45).foregroundColor(Color.white)
@@ -83,7 +83,7 @@ struct ActionView: View {
                         .foregroundColor(Color.black)
                         .cornerRadius(5)
 
-                        .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.tempHP, isHP: false) })
+                    .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.tempHP, isHP: false) })
                 }
                 Spacer()
             }
@@ -103,7 +103,7 @@ struct ActionView: View {
                     .foregroundColor(Color.black)
                     .cornerRadius(5)
 
-                    .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.speed, isHP: false) })
+                .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.speed, isHP: false) })
             }
             VStack {
                 Text("Prof").frame(maxWidth: 60).foregroundColor(Color.white)
@@ -116,7 +116,7 @@ struct ActionView: View {
                     .foregroundColor(Color.black)
                     .cornerRadius(5)
 
-                    .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.proficiencyBonus, isHP: false) })
+                .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.proficiencyBonus, isHP: false) })
             }
             Spacer()
         }
@@ -159,7 +159,7 @@ struct ActionView: View {
                 .onTapGesture {
                     self.showingAC = true
                 }
-            .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.armorClass, isHP: false) })
+            .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.armorClass, isHP: false) })
             Spacer()
         }.padding(5).frame(width:90)
     }
@@ -287,7 +287,7 @@ struct ActionView: View {
                                 .cornerRadius(8)
                                 ScrollView(.vertical) {
                                     VStack{
-                                        ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 })) { action in
+                                        ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 }).sorted()) { action in
                                             if action.weapon != nil {
                                                 WeaponAction(action: action)
                                             } else if action.spell != nil {

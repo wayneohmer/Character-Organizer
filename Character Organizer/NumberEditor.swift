@@ -13,7 +13,7 @@ struct NumberEditor: View {
     @Environment(\.presentationMode) var presentationMode
 
     @State var value:String
-    @Binding var modifiedValue:String
+    @Binding var modifiedValue:Int
     @State var isHP:Bool
     @ObservedObject var character = ObCharacer().character
 
@@ -66,9 +66,7 @@ struct NumberEditor: View {
                 HStack {
                     Button(action: {
                         let heal = Int(self.value) ?? 0
-                        var modvalue = Int(self.modifiedValue) ?? 0
-                        modvalue += heal
-                        self.modifiedValue = "\(modvalue)"
+                        self.modifiedValue += heal
                         self.presentationMode.wrappedValue.dismiss()
 
                     }, label: {
@@ -100,9 +98,7 @@ struct NumberEditor: View {
                                 damage = 0
                             }
                         }
-                        var modvalue = Int(self.modifiedValue) ?? 0
-                        modvalue -= damage
-                        self.modifiedValue = "\(modvalue)"
+                        self.modifiedValue -= damage
                         self.presentationMode.wrappedValue.dismiss()
 
                         
@@ -128,7 +124,7 @@ struct NumberEditor: View {
                     })
                 }
                GrayButton(text:"Set", width: 100) {
-                    self.modifiedValue = "\(self.value)"
+                    self.modifiedValue = Int(self.value) ?? 0
                     self.presentationMode.wrappedValue.dismiss()
                 }
                 Spacer()
@@ -164,6 +160,6 @@ struct NumberEditor: View {
 
 struct NumberEditor_Previews: PreviewProvider {
     static var previews: some View {
-        NumberEditor(value: "0", modifiedValue: .constant("35"), isHP: false)
+        NumberEditor(value: "0", modifiedValue: .constant(35), isHP: false)
     }
 }

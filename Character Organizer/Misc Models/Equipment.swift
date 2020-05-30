@@ -87,6 +87,18 @@ struct Equipment: Codable, Viewable, Comparable, Identifiable, Hashable {
         return returnValue
     }
     
+    func damageDice() -> FyreDice {
+        if let damageString = self.damage?.damage_dice {
+            let damageArray = damageString.split(separator: "d").map(String.init)
+            if damageArray.count == 2 {
+                if let d = Int(damageArray[0]), let m = Int(damageArray[1]) {
+                    return FyreDice(with: [m:d], modifier: 0)
+                }
+            }
+        }
+        return FyreDice()
+    }
+    
     static func getEquipment(){
         
         let path = Bundle.main.path(forResource: "5e-SRD-Equipment", ofType: "json")!

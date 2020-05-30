@@ -93,7 +93,8 @@ struct EquipmentDetail: View {
                         })
                             
                             .sheet(isPresented: self.$showAttack, content: {
-                                AttackCreationView(weapon: self.equipment)
+                                Text("Attack")
+                                //AttackCreationView(weapon: self.equipment, toHitBonus: <#Binding<String>#>)
                             })
                     }
                     

@@ -16,9 +16,16 @@ struct SpellAction: View {
     
     var body: some View {
         VStack {
-            Text(action.name).font(Font.system(size: 25, weight: .bold, design:
-                .default)).padding(4)
-            HStack{
+            HStack {
+                GrayButton(text: self.showDesc ? " - " : " + ", width: 30, height:30,  action: {
+                    withAnimation(.default,  { self.showDesc.toggle() } )
+                })
+                Spacer()
+                Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
+                Spacer()
+
+            }.padding(4)
+            HStack {
                 Text("Spell:")
                 Text("level: \(action.spell?.level ?? 0)" )
                 Text("Casting Time: \(action.spell?.casting_time ?? "")")
@@ -28,16 +35,13 @@ struct SpellAction: View {
                 }
                 Spacer()
             }
-            HStack{
-                Button(action: { self.showDesc.toggle()}, label: { Text (self.showDesc ? " - " : " + ") })
-                Spacer()
-            }
+           
             if showDesc {
                 Text(action.spell?.description ?? "")
             }
         }.onTapGesture {
             self.showingDice = true
-        }.padding()
+        }.padding(5)
         .sheet(isPresented: self.$showingDice, content: {
             self.sheetView
         })
@@ -59,11 +63,11 @@ struct SpellAction: View {
     }
     
     func attackBonus() -> Int {
-        return Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus ?? 0)
+        return Character.shared.attrBonusArray[action.attrIndex] + (action.attack_bonus)
     }
     
     func damageBonus() -> Int {
-        return (action.attrDamage ? Character.shared.attrBonusArray[action.attrIndex] : 0) + (action.damage_bonus ?? 0)
+        return (action.attrDamage ? Character.shared.attrBonusArray[action.attrIndex] : 0) + (action.damage_bonus)
     }
     
 }
