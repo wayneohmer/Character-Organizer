@@ -24,8 +24,8 @@ struct AttackCreationView: View {
     
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
     @State var showingToHitBonus = false
-    @State var showingDamageDice = false
     @State var showingDamageBonus = false
+    @State var showingDamageDice = false
     @State var desc = ""
     @State var isNew = true
     
@@ -72,73 +72,78 @@ struct AttackCreationView: View {
                 .cornerRadius(8)
             }
             HStack {
-                Text("To Hit -").font(Font.system(size: 25, weight: .bold, design: .default))
-
-                Toggle(isOn:self.$action.isProficient) {
-                    Text("Proficient:")
-                }.frame(width:150)
-                Text("Bonus:")
-                Text("\(self.action.attack_bonus)")
-                    .onTapGesture {
-                        self.showingToHitBonus = true
-                }
-                .frame(width: 45, height:30)
-                .background(Color.white)
-                .foregroundColor(Color.black)
-                .cornerRadius(5)
-                .popover(isPresented: $showingToHitBonus, content: {
-                    NumberEditor(value: "0", modifiedValue: self.$action.attack_bonus , isHP: false)
-                })
-                Spacer()
-                Text(self.toHitTotal()).font(Font.system(size: 25, weight: .bold, design: .default))
-
-            }
-            HStack {
-                Text("Damage - ").font(Font.system(size: 25, weight: .bold, design: .default))
-
-                Text("Dice:")
-                Text(self.damageDice.display)
-                    .onTapGesture {
-                        self.showingDamageDice = true
-                }
-                .frame(width: 75, height:30)
-                .background(Color.white)
-                .foregroundColor(Color.black)
-                .cornerRadius(5)
-                .popover(isPresented: $showingDamageDice, content: {
-                    DicePickerView(details: self.diceDetails, dice: FyreDice(with: self.action.damageDice ?? FyreDiceModel()))
-                })
-                Text("Bonus:")
-
-                Text("\(action.damage_bonus)").onTapGesture {
-                    self.showingDamageBonus = true
-                }
-                .frame(width: 45, height:30)
-                .background(Color.white)
-                .foregroundColor(Color.black)
-                .cornerRadius(5)
-                .popover(isPresented: $showingDamageBonus, content: {
-                    NumberEditor(value: "0", modifiedValue: self.$action.damage_bonus, isHP: false)
-                })
-                Toggle(isOn:$action.attrDamage) {
-                    Text("Add Attrbiute:")
-                }.frame(width:170)
-                Spacer()
-                Text(self.damageTotal()).font(Font.system(size: 25, weight: .bold, design: .default))
-            }
-            HStack {
-                Text("Type:")
-                Picker("", selection: $damageTypeIdx) {
-                    ForEach(0 ..< self.damageTypes.count) { index in
-                        Text(String(self.damageTypes[index]))
+                VStack {
+                    HStack {
+                    Text("To Hit: \(self.toHitTotal())").font(Font.system(size: 20, weight: .bold, design: .default))
+                        Spacer()
+                    }
+                    HStack {
+                        Toggle(isOn:self.$action.isProficient) {
+                            Text("Proficient:")
+                        }.frame(width:150)
+                        Text("Bonus:")
+                        Text("\(self.action.attack_bonus)")
+                            .onTapGesture {
+                                self.showingToHitBonus = true
+                        }
+                        .frame(width: 45, height:30)
+                        .background(Color.white)
+                        .foregroundColor(Color.black)
+                        .cornerRadius(5)
+                        .popover(isPresented: $showingToHitBonus, content: {
+                            NumberEditor(value: "0", modifiedValue: self.$action.attack_bonus , isHP: false)
+                        })
+                        
+                        Spacer()
+                    }
+                    HStack{
+                        Text("Damage: \(self.damageTotal())").font(Font.system(size: 20, weight: .bold, design: .default))
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Dice:")
+                        Text(action.damageFyreDice.display).onTapGesture {
+                            self.showingDamageDice = true
+                        }
+                        .frame(width: 70, height:30)
+                        .background(Color.white)
+                        .foregroundColor(Color.black)
+                        .cornerRadius(5)
+                        .popover(isPresented: $showingDamageDice, content: {
+                            DicePickerView(details: DiceDetails(title: self.action.name), diceModel: self.$action.damageDice)
+                        })
+                        Text("Bonus:")
+                        Text("\(action.damage_bonus)").onTapGesture {
+                            self.showingDamageBonus = true
+                        }
+                        .frame(width: 45, height:30)
+                        .background(Color.white)
+                        .foregroundColor(Color.black)
+                        .cornerRadius(5)
+                        .popover(isPresented: $showingDamageBonus, content: {
+                            NumberEditor(value: "0", modifiedValue: self.$action.damage_bonus, isHP: false)
+                        })
+                        Toggle(isOn:$action.attrDamage) {
+                            Text("Add Attrbiute:")
+                        }.frame(width:170)
+                        Spacer()
                     }
                 }
-                .pickerStyle(WheelPickerStyle())
-                .background(Color(.lightGray))
-                .frame(width: 170, height: 100)
-                .cornerRadius(8)
-                Spacer()
+                HStack {
+                    Text("Type:")
+                    Picker("", selection: $action.damageTypeIndex) {
+                        ForEach(0 ..< self.damageTypes.count) { index in
+                            Text(String(self.damageTypes[index]))
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .background(Color(.lightGray))
+                    .frame(width: 170, height: 100)
+                    .cornerRadius(8)
+                }
             }
+            
+            
 //            TextField("Description",text: $desc)
 //                .frame(height: 50, alignment: .center)
 //                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
@@ -158,7 +163,7 @@ struct AttackCreationView: View {
                 self.selectedType = oldAction.weapon != nil ? 0 : 1
                 self.action.attrIndex = oldAction.attrIndex
                 self.action.isProficient = oldAction.isProficient
-                self.damageDice = FyreDice(with: oldAction.damageDice?.dice ?? [:], modifier: 0)
+                self.damageDice = FyreDice(with: oldAction.damageDice)
                 self.damageTypeIdx = self.damageTypes.firstIndex(of: oldAction.damageType ?? "") ?? 0
                 self.desc = oldAction.desc
                 self.isNew = false

@@ -204,7 +204,7 @@ struct DiceView: View {
                 }.pickerStyle(SegmentedPickerStyle())
                     .padding(10)
                     .onReceive(self.pickerhelper.objectWillChange, perform: {
-                        self.dice.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2
+                        self.dice.model.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2
                     })
             }
         }
@@ -222,7 +222,7 @@ struct DiceView: View {
                 self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.buttonTouch))
                 
                 if modifier != 0 {
-                    self.dice.modifier += self.sign == "+" ? modifier : -modifier
+                    self.dice.model.modifier += self.sign == "+" ? modifier : -modifier
                     return
                 } else if d != 0 {
                     self.dice.add(multipier: self.sign == "+" ? 1 : -1, d: d)

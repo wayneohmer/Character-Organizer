@@ -298,13 +298,14 @@ class Character: ObservableObject {
     }
     
     func addSpellAction(_ spell: Spell) {
-        var action = Action(spell:spell)
+        var action = Action()
         action.spell = spell
         action.name = spell.name
         action.isAttack = spell.isAttack
         action.attrIndex = self.casterAttributeIdx ?? 0
         action.timingString = spell.timeing?.rawValue ?? "long"
         action.damageType = spell.damageType
+        action.damageTypeIndex = DamageType.shared.map({$0.value.name}).sorted().firstIndex(of: spell.damageType) ?? 0
 
         if let dice = spell.likelyDice {
             action.damageDice = dice.model

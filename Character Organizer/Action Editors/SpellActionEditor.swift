@@ -14,16 +14,13 @@ struct SpellActionEditor: View  {
     let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
 
     @State var action: Action
-    @State var isAttack = false
     @State var showingSpellDice = false
     @State var showAttack = false
     @State var showAlert = false
     @ObservedObject var character = ObCharacer().character
     
-    @State var selectedAttr = 0
     @State var damageTypeIdx = 0
     @State var isProficient = true
-    @State var attrDamage = true
     @State var toHitBonus:String = "0"
     @State var damageBonus:String = "0"
     @State var damageDice = FyreDice()    
@@ -58,15 +55,15 @@ struct SpellActionEditor: View  {
                     VStack(alignment: .leading) {
                         VStack {
                             HStack {
-                                Toggle(isOn: $isAttack ) { Text("Attack?")}.frame(width: 130, height: 40)
+                                Toggle(isOn: $action.isAttack ) { Text("Attack?")}.frame(width: 130, height: 40)
                                 Spacer()
                             }
-                            if isAttack {
+                            if action.isAttack {
                                 AttackCreationView(spell: self.spell, action: self.$action)
                             } else {
                                 HStack {
                                     Text("Dice:")
-                                    Text(self.spell.likelyDice?.display ?? "")
+                                    Text(action.damageFyreDice.display)
                                         .onTapGesture {
                                             self.showingSpellDice = true
                                     }
@@ -75,7 +72,7 @@ struct SpellActionEditor: View  {
                                     .foregroundColor(Color.black)
                                     .cornerRadius(5)
                                     .popover(isPresented: $showingSpellDice, content: {
-                                        DicePickerView(details: DiceDetails(title: self.action.name), dice: FyreDice(with: self.action.damageDice ?? FyreDiceModel()))
+                                        DicePickerView(details: DiceDetails(title: self.action.name), diceModel: self.$action.damageDice)
                                     })
                                     Spacer()
                                     
@@ -94,19 +91,14 @@ struct SpellActionEditor: View  {
         .padding()
         .background(Color(.black))
         .foregroundColor(.white)
-        .onAppear(){
-            self.isAttack = self.action.isAttack
-        }
+        
     }
     
     func saveAction(){
-        self.action.attrIndex = self.selectedAttr
-        self.action.attrDamage = self.attrDamage
-        self.action.damageDice = self.damageDice.model
-        self.action.damageType = self.damageTypes[self.damageTypeIdx]
         if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
             self.character.model.actions.remove(action)
         }
+        self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
         self.character.model.actions.insert(self.action)
     }
     

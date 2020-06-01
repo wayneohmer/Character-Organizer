@@ -46,7 +46,7 @@ struct WeaponAction: View {
             self.showingDice = true
             }.padding(5)
         .sheet(isPresented: self.$showingDice, content: {
-            AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice?.dice ?? [:], modifier: self.damageBonus()))
+            AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice))
         })
         .foregroundColor(Color.white)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))

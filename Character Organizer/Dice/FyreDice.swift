@@ -19,9 +19,11 @@ class FyreDice: ObservableObject {
     var soundUrls = [String: CFURL]()
     var oopsStack = [Oops]()
        
-    @Published var dice = [Int:Int]()
+    @Published var model:FyreDiceModel = FyreDiceModel()
+    var dice: [Int:Int] { return model.dice }
+    var modifier: Int { return model.modifier }
+
     @Published var diceResults = [Int:Int]()
-    @Published var modifier = 0
     @Published var rollValue = 0
     @Published var advantageDisplayString = ""
     
@@ -81,9 +83,7 @@ class FyreDice: ObservableObject {
         return false
     }
     
-    var model:FyreDiceModel {
-        return FyreDiceModel(dice: self.dice, modifier: self.modifier)
-    }
+   
     
     var display:String {
         var returnString = ""
@@ -147,14 +147,14 @@ class FyreDice: ObservableObject {
     
     convenience init(with die:[Int:Int], modifier:Int) {
         self.init()
-        self.dice = die
-        self.modifier = modifier
+        self.model.dice = die
+        self.model.modifier = modifier
     }
     
     convenience init(with fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {
         self.init()
-        self.dice = fyreDice.dice
-        self.modifier = fyreDice.modifier
+        self.model.dice = fyreDice.dice
+        self.model.modifier = fyreDice.modifier
         self.advantage = fyreDice.advantage
         self.disadvantage = fyreDice.disadvantage
         if isResultIncluded {
@@ -164,8 +164,8 @@ class FyreDice: ObservableObject {
     }
     
     func replaceWith(fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {
-        self.dice = fyreDice.dice
-        self.modifier = fyreDice.modifier
+        self.model.dice = fyreDice.dice
+        self.model.modifier = fyreDice.modifier
         self.advantage = fyreDice.advantage
         self.disadvantage = fyreDice.disadvantage
         if isResultIncluded {
@@ -196,23 +196,23 @@ class FyreDice: ObservableObject {
         if var newValue = self.dice[die] {
             newValue += multipier
             if newValue > 0 {
-                self.dice[die] = newValue
+                self.model.dice[die] = newValue
             } else {
-                self.dice.removeValue(forKey: die)
+                self.model.dice.removeValue(forKey: die)
             }
         } else {
             if multipier > 0 {
-                self.dice[die] = multipier
+                self.model.dice[die] = multipier
             }
         }
     }
     
     func clear() {
-        self.dice.removeAll()
+        self.model.dice.removeAll()
         self.diceResults.removeAll()
         self.rollValue = 0
         self.advantageDisplayString = ""
-        self.modifier = 0
+        self.model.modifier = 0
         self.advantage = false
         self.disadvantage = false
     }

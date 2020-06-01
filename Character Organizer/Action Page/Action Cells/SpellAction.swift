@@ -30,9 +30,7 @@ struct SpellAction: View {
                 Text("level: \(action.spell?.level ?? 0)" )
                 Text("Casting Time: \(action.spell?.casting_time ?? "")")
                 Text("Range: \(action.spell?.range ?? "")")
-                if action.damageDice != nil {
-                    Text("Damage: \(action.damageFyreDice.display)")
-                }
+                Text("Damage: \(action.damageFyreDice.display)")
                 Spacer()
             }
            
@@ -54,9 +52,9 @@ struct SpellAction: View {
     var sheetView: some View {
         var myView = AnyView(DetailView(detail:self.action.spell ?? Spell()))
         if self.action.isAttack {
-            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice?.dice ?? [:], modifier: self.damageBonus())))
-        } else if let diceModel = self.action.damageDice {
-            myView = AnyView(ModalDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: diceModel)))
+            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice)))
+        } else if self.action.damageDice.dice.count > 0 {
+            myView = AnyView(ModalDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: self.action.damageDice)))
         }
         return myView
         

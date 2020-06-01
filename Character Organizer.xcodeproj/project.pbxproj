@@ -25,7 +25,7 @@
 		2B16BCEF23D8172800360928 /* 5e-SRD-StartingEquipment.json in Resources */ = {isa = PBXBuildFile; fileRef = 2B16BCEE23D8172800360928 /* 5e-SRD-StartingEquipment.json */; };
 		2B1AEAE823C6A49C00C7826B /* StatCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1AEAE723C6A49C00C7826B /* StatCreationView.swift */; };
 		2B1F45DF246B4E5E00CA6BC7 /* SkillCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */; };
-		2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B396238B2330000E022B /* FDFyreDice.swift */; };
+		2B25B397238B2330000E022B /* FyreDice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B396238B2330000E022B /* FyreDice.swift */; };
 		2B25B399238B2B52000E022B /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B25B398238B2B52000E022B /* DiceView.swift */; };
 		2B27BF9523BFFEE0001719A0 /* 3dice.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B391238B22F8000E022B /* 3dice.aif */; };
 		2B27BF9623BFFEE0001719A0 /* DeathSound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2B25B392238B22F8000E022B /* DeathSound.aif */; };
@@ -96,7 +96,7 @@
 		2B25B393238B22F8000E022B /* 10dice.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 10dice.aif; sourceTree = "<group>"; };
 		2B25B394238B22F8000E022B /* Awww.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Awww.aif; sourceTree = "<group>"; };
 		2B25B395238B22F8000E022B /* 1die.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1die.aif; sourceTree = "<group>"; };
-		2B25B396238B2330000E022B /* FDFyreDice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDFyreDice.swift; sourceTree = "<group>"; };
+		2B25B396238B2330000E022B /* FyreDice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FyreDice.swift; sourceTree = "<group>"; };
 		2B25B398238B2B52000E022B /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
 		2B2CF77E23D513F500167DB3 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
 		2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DicePickerView.swift; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 			children = (
 				2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */,
 				2B25B398238B2B52000E022B /* DiceView.swift */,
-				2B25B396238B2330000E022B /* FDFyreDice.swift */,
+				2B25B396238B2330000E022B /* FyreDice.swift */,
 			);
 			path = Dice;
 			sourceTree = "<group>";
@@ -479,7 +479,7 @@
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
 				2B7B881E2427FE1800340A3E /* Action.swift in Sources */,
 				2BD7108324731F01004D7A69 /* Formatters.swift in Sources */,
-				2B25B397238B2330000E022B /* FDFyreDice.swift in Sources */,
+				2B25B397238B2330000E022B /* FyreDice.swift in Sources */,
 				2B6890BF236B84B300EC8948 /* Character.swift in Sources */,
 				2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */,
 				2B068BEE23C2C920007893BC /* CharacterClass.swift in Sources */,

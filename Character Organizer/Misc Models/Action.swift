@@ -26,12 +26,13 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var damage_dice: String?
     var damage_bonus: Int = 0
     var damageType: String?
+    var damageTypeIndex: Int = 0
     var isProficient = false
     var attrDamage = false
     var attrIndex = 0
     var isAttack = false
     var timingString: String?
-    var damageDice: FyreDiceModel?
+    var damageDice: FyreDiceModel = FyreDiceModel()
     var spell: Spell?
     var weapon: Equipment?
     var description: String {
@@ -46,7 +47,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var timing:ActionTiming { return ActionTiming(rawValue: timingString ?? "Long") ?? .Long }
     
     var damageFyreDice:FyreDice {
-        return FyreDice(with: damageDice?.dice ?? [0:0], modifier: damageDice?.modifier ?? 0)
+        return FyreDice(with: damageDice.dice, modifier: damageDice.modifier)
     }
     
     func hash(into hasher: inout Hasher) {
