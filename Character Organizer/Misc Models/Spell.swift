@@ -14,32 +14,53 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     static var shared = [String: Spell]()
     
     var description:String {
-        var str = desc.joined(separator: "\n\n")
-        if let higherLevel = higher_level {
-            str.append("\n\n\(higherLevel.joined(separator: "\n\n"))")
+        var str = desc
+        if let higherLevel = higherLevel {
+            str.append("\n\n\(higherLevel))")
         }
         return str
         
     }
 
-    var id:String { return index }
-    var index = ""
+    var id:String { return name }
     var name = ""
-    var desc = [String]()
-    var higher_level: [String]? 
+    var desc : String
+    var higherLevel: String?
     var range = ""
-    var components = [String]()
+    var components: String
     var material:String?
     var duration = ""
     var ritual = false
     var concentration = false
-    var casting_time = ""
-    var level = 0
-    var school:Descriptor?
-    var classes:[Descriptor]?
-    var subclasses:[Descriptor]?
-    var url = ""
+    var castingTime = ""
+    var levelString = "0"
+    var school: String?
+    var classesString: String = ""
     var damageDiceModel: FyreDiceModel?
+   
+    enum CodingKeys: String, CodingKey {
+        case name = "Name"
+        case levelString = "Level"
+        case castingTime = "Casting Time"
+        case school = "Duration"
+        case duration = "School"
+        case range = "Range"
+        case components = "Components"
+        case desc = "Text"
+        case classesString = "Classes"
+        case higherLevel = "At Higher Levels"
+
+    }
+    
+    var level:Int {
+        
+        if levelString == "Cantrip" {
+            return 0
+        }
+        
+        return Int(levelString.prefix(1)) ?? 0
+        
+    }
     
     var damageDice:FyreDice? {
         if let model = damageDiceModel {
@@ -52,7 +73,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     var attackType: String {
         let regex = try! NSRegularExpression(pattern: "(melee|ranged) spell attack")
-        let desc = self.desc.joined(separator: " ")
+        let desc = self.desc
         let range = NSRange(location: 0, length: desc.count)
         let matches = regex.matches(in: desc, range: range)
         if matches.count > 0 {
@@ -70,7 +91,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     var saveType:String {
         let regex = try! NSRegularExpression(pattern: "(strength|dexteriy|constitution|intelligence|wisdom|charisma) saveing throw")
-        let desc = self.desc.joined(separator: " ")
+        let desc = self.desc
         let range = NSRange(location: 0, length: desc.count)
         let matches = regex.matches(in: desc, range: range)
         if matches.count > 0 {
@@ -88,7 +109,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     var damageType:String {
            let regex = try! NSRegularExpression(pattern: "(acid|bludgeoning|fire|cold|force|lightning|necrotic|piercing|poison|psychic|radiant|slashing|thunder) damage")
-           let desc = self.desc.joined(separator: " ")
+           let desc = self.desc
            let range = NSRange(location: 0, length: desc.count)
            let matches = regex.matches(in: desc, range: range)
            if matches.count > 0 {
@@ -106,7 +127,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     var timeing: ActionTiming? {
         
-        switch self.casting_time {
+        switch self.castingTime {
         case "1 action":
             return .Action
         case "1 reaction":
@@ -123,7 +144,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     var likelyDice: FyreDice? {
         
         let regex = try! NSRegularExpression(pattern: "(\\d\\d|\\d)d(\\d\\d|\\d) \\+ (\\d\\d|\\d)|(\\d\\d|\\d)d(\\d\\d|\\d)")
-        let desc = self.desc.joined(separator: " ")
+        let desc = self.desc
         let range = NSRange(location: 0, length: desc.count)
         let matches = regex.matches(in: desc, range: range)
         if matches.count > 0 {
@@ -145,8 +166,16 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
         return nil
     }
     
+    init() {
+        self.name = "Test"
+        self.desc = "Test Spell"
+        self.classesString = "Wizard"
+        self.components = ""
+        
+    }
+    
     static func == (lhs: Spell, rhs: Spell) -> Bool {
-        return lhs.index == rhs.index
+        return lhs.name == rhs.name
     }
     
     static func < (lhs: Spell, rhs: Spell) -> Bool {
@@ -160,8 +189,8 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     func hasClass(_ classes:Set<String>) -> Bool {
         
         for aClass in classes {
-            for desc in self.classes ?? [Descriptor]() {
-                if desc.name == aClass {
+            for desc in self.classesString.split(separator: ",").map(String.init).map({ $0.trimmingCharacters(in: .whitespaces)} ) {
+                if desc == aClass {
                     return true
                 }
             }
@@ -173,14 +202,14 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     static func getSpells(){
         
-        let path = Bundle.main.path(forResource: "5e-SRD-Spells", ofType: "json")!
+        let path = Bundle.main.path(forResource: "spells", ofType: "json")!
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             do {
                 let decoder = JSONDecoder()
                 let array = try decoder.decode([Spell].self, from: data)
                 for item in array {
-                    Spell.shared[item.index] = item
+                    Spell.shared[item.name] = item
                 }               
                 
             } catch {

@@ -10,13 +10,11 @@ import SwiftUI
 
 struct SpellActionEditor: View  {
     
-    @Environment(\.presentationMode) var presentationMode
     let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
 
     @State var action: Action
     @State var showingSpellDice = false
     @State var showAttack = false
-    @State var showAlert = false
     @ObservedObject var character = ObCharacer().character
     
     @State var damageTypeIdx = 0
@@ -27,32 +25,11 @@ struct SpellActionEditor: View  {
     
     var spell:Spell { return action.spell ?? Spell() }
     var background = Color(red: 0.07, green: 0.07, blue: 0.07)
-    var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
 
     var body: some View {
         VStack {
-            HStack {
-                GrayButton(text: "Detete", width: 100, color:Color(.red), action: {
-                    self.showAlert = true
-                })
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("Are You Sure?"),
-                              primaryButton: .destructive(Text("Die"), action: {
-                                self.deleteAction()
-                                self.presentationMode.wrappedValue.dismiss()
-                              }),
-                              secondaryButton: .cancel(Text("NO!")))
-                }
-                Spacer()
-                Text(action.name).font(.title).foregroundColor(Color.white).padding(5)
-                Spacer()
-                GrayButton(text: "Save", width: 100, color:Color(.green), action:{
-                    self.presentationMode.wrappedValue.dismiss()
-                    self.saveAction()
-                })
-            }
-            .padding(3)
-            .background(LinearGradient(gradient: Gradient(colors: [foreground, .black]), startPoint: .top, endPoint: .bottom))
+            
+            HeaderBarView(name: action.name, saveAction:self.saveAction, deleteAction: self.deleteAction)
             
             HStack {
                 VStack (alignment: .leading){
@@ -119,6 +96,6 @@ struct SpellActionEditor: View  {
 
 struct SpellActionEditor_Previews: PreviewProvider {
     static var previews: some View {
-        SpellActionEditor(action:Action(name:"Spell"))
+        SpellActionEditor(action:Action(weapon: Equipment()))
     }
 }

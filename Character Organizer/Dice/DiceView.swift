@@ -54,6 +54,7 @@ struct AttackDiceView: View {
     @ObservedObject var details:DiceDetails
     @ObservedObject var dice:FyreDice
     @ObservedObject var damageDice:FyreDice
+    var damageType = " "
 
     var body: some View {
         VStack {
@@ -66,7 +67,7 @@ struct AttackDiceView: View {
                 }.frame(width: 100, height: 50, alignment: .center)
             }
             DiceView(details: details, dice: dice)
-            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false)
+            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false, damageType: damageType)
             Spacer()
         }
         .background(Color(.black))
@@ -92,14 +93,20 @@ struct DiceView: View {
     @State var sign = "+"
     var showAdvantage = true
     var isProficientSave = false
-    
+    var damageType = " "
+    var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
+
     var body: some View {
-        
-      
         VStack {
-            Text(self.details.title).padding(8)
-                .font(Font.system(size: 20, weight: .bold, design: .default))
-                .foregroundColor(Color.white).padding(5)
+            HStack{
+                Spacer()
+                Text(self.details.title).padding(5)
+                    .font(Font.system(size: 20, weight: .bold, design: .default))
+                    .offset(x: 0, y: -2)
+                Spacer()
+            }
+            .background(LinearGradient(gradient: Gradient(colors: [foreground, .black]), startPoint: .top, endPoint: .bottom))
+            .foregroundColor(Color.white)
             HStack {
                 VStack {
                     Text(self.dice.display)
@@ -108,7 +115,6 @@ struct DiceView: View {
                         .frame(width: 240, height:40, alignment: .center)
                         .background(Color.black)
                         .cornerRadius(5)
-                        .padding(5)
                     
                     Text(self.dice.resultDisplay)
                         .padding(8)
@@ -116,19 +122,21 @@ struct DiceView: View {
                         .frame(width: 240, height:40, alignment: .center)
                         .background(Color.black)
                         .cornerRadius(5)
-                        .padding(5)
+                        .padding(3)
                 }
-                Spacer()
-                Text(self.dice.rollValueString).padding(10)
-                    .font(Font.system(size: 50, weight: .bold, design: .default)).frame(width: 150)
-                    .frame(width: 250, alignment: .center)
-                    .background(Color.black)
-                    .cornerRadius(5)
-                    
-                    .padding(5)
-            }.foregroundColor(Color.white).padding(5)
+                VStack {
+                    Text(self.dice.rollValueString)
+                        .font(Font.system(size: 50, weight: .bold, design: .default))
+                        .frame(width: 250, alignment: .center)
+                        .background(Color.black)
+                        .cornerRadius(5)
+                        .padding(5)
+                    Text (self.damageType)
+                }.offset(x: 0, y: -2)
+            }
+            .foregroundColor(Color.white)
             
-            HStack{
+            HStack {
                 VStack {
                     self.diceButton(name: "Clear", width:longWidth, action: {self.dice.clear()})
                     HStack {
@@ -194,7 +202,7 @@ struct DiceView: View {
                     Toggle(isOn: $dice.disadvantage ) { Text ("Disadvantage") }.padding(8).frame(width: 200).disabled(self.dice.dice[20] ?? 0 == 0)
                     Spacer()
                     
-                }.foregroundColor(Color.white).padding()
+                }.foregroundColor(Color.white)
             }
             if self.details.isSave {
                 Picker("SaveCheck", selection: $pickerhelper.saveCheckIndex) {
@@ -202,7 +210,6 @@ struct DiceView: View {
                         Text(self.saveCheck[index])
                     }
                 }.pickerStyle(SegmentedPickerStyle())
-                    .padding(10)
                     .onReceive(self.pickerhelper.objectWillChange, perform: {
                         self.dice.model.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2
                     })

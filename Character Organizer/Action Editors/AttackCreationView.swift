@@ -8,6 +8,50 @@
 
 import SwiftUI
 
+struct WeaponAttackView: View  {
+    
+    @State var action: Action
+
+    var background = Color(red: 0.15, green: 0.15, blue: 0.15)
+    @ObservedObject var character = ObCharacer().character
+
+    var body: some View {
+        VStack {
+            HeaderBarView(name: "", saveAction:self.saveAction, deleteAction: self.deleteAction)
+            
+            TextField("Name",text: self.$action.name).font(Font.system(size: 30, weight: .bold, design: .default))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .multilineTextAlignment(.center)
+                .background(Color.white)
+                .foregroundColor(Color.black)
+                .padding(16)
+            AttackCreationView(action: $action)
+            TextField("Description",text: $action.desc)
+                .frame(height: 50, alignment: .center)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .multilineTextAlignment(.center)
+                .background(Color.white)
+                .foregroundColor(Color.white)
+                .background(Color(.black))
+        }
+        .foregroundColor(.white)
+        .background(Color(.black))
+    }
+    func saveAction(){
+           if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
+               self.character.model.actions.remove(action)
+           }
+           self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
+           self.character.model.actions.insert(self.action)
+       }
+       
+       func deleteAction() {
+           if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
+               self.character.model.actions.remove(action)
+           }
+       }
+}
+
 struct AttackCreationView: View {
     
     var weapon:Equipment?
@@ -35,31 +79,6 @@ struct AttackCreationView: View {
     
     var body: some View {
         VStack {
-//            HStack {
-//                Spacer()
-//                Button(action: {
-//                    self.updateAction()
-//                    self.character.model.actions.insert(self.action)
-//                    self.presentationMode.wrappedValue.dismiss()
-//                } ) {
-//                    Text("\(self.isNew ? "Save" : "Copy")").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-//                }.frame(width: 100, height: 50, alignment: .center)
-//                if !self.isNew {
-//                    Button(action: {
-//                        self.updateAction()
-//                        self.character.model.actions.insert(self.action)
-//                        self.presentationMode.wrappedValue.dismiss()
-//                    } ) {
-//                        Text("Replace").fontWeight(.bold).foregroundColor(Color.white).padding(5).offset(y:-2)
-//                    }.frame(width: 100, height: 50, alignment: .center)
-//                }
-//            }
-//            TextField("Name",text: self.$action.name).font(Font.system(size: 30, weight: .bold, design: .default))
-//                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-//                .multilineTextAlignment(.center)
-//                .background(Color.white)
-//                .foregroundColor(Color.black)
-//                .padding(16)
             HStack{
                 Text("Attribute:")
                 Picker("", selection: self.$action.attrIndex) {
@@ -142,54 +161,12 @@ struct AttackCreationView: View {
                     .cornerRadius(8)
                 }
             }
-            
-            
-//            TextField("Description",text: $desc)
-//                .frame(height: 50, alignment: .center)
-//                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-//                .multilineTextAlignment(.center)
-//                .background(Color.white)
-//                .foregroundColor(Color.black)
-            Spacer()
+           Spacer()
         }
         .padding()
         .foregroundColor(Color.white)
         .background(Color(.black))
-        .onAppear(){
-            if let oldAction = self.oldAction {
-                self.action.name = oldAction.name
-                self.action.weapon = oldAction.weapon
-                self.action.spell = oldAction.spell
-                self.selectedType = oldAction.weapon != nil ? 0 : 1
-                self.action.attrIndex = oldAction.attrIndex
-                self.action.isProficient = oldAction.isProficient
-                self.damageDice = FyreDice(with: oldAction.damageDice)
-                self.damageTypeIdx = self.damageTypes.firstIndex(of: oldAction.damageType ?? "") ?? 0
-                self.desc = oldAction.desc
-                self.isNew = false
-            } else {
-                self.damageTypeIdx = self.damageTypes.firstIndex(of: self.action.damageType ?? "") ?? 0
-                if let weapon = self.weapon {
-                    self.action.weapon = weapon
-                    self.action.name =  self.weapon!.name
-                    if weapon.weapon_range == "Melee" {
-                        self.action.attrIndex = 0
-                    }
-                    if weapon.weapon_range == "Ranged" {
-                        self.action.attrIndex = 1
-                    }
-                    self.damageTypeIdx = self.damageTypes.firstIndex(of: weapon.damage?.damage_type?.name ?? "") ?? 0
-                    self.action.desc = weapon.desc?.joined(separator: "\n") ?? ""
-                    self.damageDice = weapon.damageDice()
-                }
-            }
-        }
-    }
-    
-    func updateAction() {
-        self.action.desc = self.desc
-        self.action.isAttack = true
-        self.action.damageType = self.damageTypes[self.damageTypeIdx]
+        
     }
     
     func toHitTotal() -> String {
@@ -209,6 +186,6 @@ struct AttackCreationView: View {
 
 struct AttackCreationView_Previews: PreviewProvider {
     static var previews: some View {
-        AttackCreationView(action: .constant(Action()))
+        WeaponAttackView(action: Action())
     }
 }

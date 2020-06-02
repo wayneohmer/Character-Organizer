@@ -51,7 +51,7 @@ struct DescriptionView: View {
                 SpellActionEditor(action: self.selectedAction)
             } else if self.sheetType == .attackAction {
                 Text("Attack")
-                //AttackCreationView(action:self.selectedAttack, oldAction:self.selectedAttack)
+                WeaponAttackView(action: self.selectedAttack)
             }
         })
         .foregroundColor(Color(.white))
@@ -114,7 +114,6 @@ struct AttacksView: View {
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
     
-    
     var body: some View {
         VStack {
             HStack{
@@ -126,31 +125,54 @@ struct AttacksView: View {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }.padding(5)
             }
-            VStack(alignment: .leading){
-                HStack {
-                    if character.weaponAttacks.count > 0 {
-                        Text("Weapons:").font(Font.system(size: 20, weight: .bold))
-                        AttackTypeView(actions: character.weaponAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType )
+            if character.weaponAttacks.count + character.otherAttacks.count > 0 {
+                
+                VStack(alignment: .leading){
+                    HStack {
+                        if character.weaponAttacks.count > 0 {
+                            Text("Weapons:").font(Font.system(size: 20, weight: .bold))
+                            AttackTypeView(actions: character.weaponAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType )
+                        }
                     }
-                }
-                HStack {
-                    if character.spellAttacks.count > 0 {
-                        Text("Spells:").font(Font.system(size: 20, weight: .bold))
-                        AttackTypeView(actions: character.spellAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType)
+                    if character.otherAttacks.count > 0 {
+                        HStack {
+                            Text("Others:").font(Font.system(size: 20, weight: .bold))
+                            AttackTypeView(actions: character.otherAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType)
+                            
+                        }
                     }
-                }
-                HStack {
-                    Text("Others:").font(Font.system(size: 20, weight: .bold))
-                    AttackTypeView(actions: character.otherAttacks, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType:$sheetType)
-                    
-                }
-            }.padding(8)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                .background(Color.black)
+                }.padding(8)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    .background(Color.black)
+            }
+            
         }
     }
 }
 
+struct AttackTypeView:  View {
+    
+    var actions:[Action]
+    @Binding var selectedAttack:Action
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack { ForEach(actions) { action in
+                Text(action.name).onTapGesture {
+                    self.selectedAttack = action
+                    self.detailShowing = true
+                    self.sheetType = .attackAction
+                }.font(Font.system(size: 18))
+                    .padding(4)
+                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+                    .cornerRadius(8)
+                }
+            }
+        }
+    }
+}
 
 
 struct SpellsView:  View {
@@ -294,29 +316,6 @@ struct DetailTextActionView:  View {
     }
 }
 
-struct AttackTypeView:  View {
-    
-    var actions:[Action]
-    @Binding var selectedAttack:Action
-    @Binding var detailShowing:Bool
-    @Binding var sheetType:DescriptionView.SheetType
-
-    var body: some View {
-        ScrollView(.horizontal) {
-            HStack { ForEach(actions) { action in
-                Text(action.name).onTapGesture {
-                    self.selectedAttack = action
-                    self.detailShowing = true
-                    self.sheetType = .attackAction
-                }.font(Font.system(size: 18))
-                    .padding(4)
-                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
-                    .cornerRadius(8)
-                }
-            }
-        }
-    }
-}
 
 struct EquipmentTypeView:  View {
     

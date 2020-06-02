@@ -28,7 +28,7 @@ struct SpellAction: View {
             HStack {
                 Text("Spell:")
                 Text("level: \(action.spell?.level ?? 0)" )
-                Text("Casting Time: \(action.spell?.casting_time ?? "")")
+                Text("Casting Time: \(action.spell?.castingTime ?? "")")
                 Text("Range: \(action.spell?.range ?? "")")
                 Text("Damage: \(action.damageFyreDice.display)")
                 Spacer()
@@ -37,22 +37,31 @@ struct SpellAction: View {
             if showDesc {
                 Text(action.spell?.description ?? "")
             }
-        }.onTapGesture {
-            self.showingDice = true
-        }.padding(5)
-        .sheet(isPresented: self.$showingDice, content: {
-            self.sheetView
-        })
+        }
+        .padding(5)
         .foregroundColor(Color.white)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
         .background(Color(.black))
-        
+        .onTapGesture {
+            self.showingDice = true
+        }
+        .sheet(isPresented: self.$showingDice, content: {
+            self.sheetView
+                ScrollView {
+                    Text(self.action.spell?.description ?? "")
+                        .background(Color(.black))
+                        .foregroundColor(Color(.white))
+                }.padding()
+            .background(Color(.black))
+                
+            })
+       
     }
     
     var sheetView: some View {
         var myView = AnyView(DetailView(detail:self.action.spell ?? Spell()))
         if self.action.isAttack {
-            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice.dice, modifier: self.damageBonus())))
+            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice.dice, modifier: self.damageBonus()), damageType: self.action.damageType ?? " "))
         } else if self.action.damageDice.dice.count > 0 {
             myView = AnyView(ModalDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: self.action.damageDice)))
         }

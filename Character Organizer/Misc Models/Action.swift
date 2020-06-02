@@ -19,7 +19,7 @@ enum ActionTiming: String, CaseIterable {
 
 struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     
-    var id = UUID()
+    var id:String { return name }
     var name: String = ""
     var desc: String = ""
     var attack_bonus: Int = 0
@@ -51,7 +51,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(name)
     }
     
     static func < (lhs: Action, rhs: Action) -> Bool {
@@ -64,6 +64,27 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
         } else {
             return lhs.name < rhs.name
         }
+    }
+    
+    static func fromWeapon (weapon: Equipment) -> Action {
+        
+        var action = Action()
+        
+        action.weapon = weapon
+        action.name = weapon.name
+        if weapon.weapon_range == "Melee" {
+            action.attrIndex = 0
+        } else if weapon.weapon_range == "Ranged" {
+            action.attrIndex = 1
+        }
+        action.damageDice = weapon.damageDice().model
+        action.damageType = weapon.damage?.damage_type?.name
+        action.isProficient = true
+        action.attrDamage = true
+        action.isAttack = true
+        action.damageTypeIndex = DamageType.shared.map({$0.value.name}).sorted().firstIndex(of: weapon.damage?.damage_type?.name ?? "") ?? 0
+
+        return action
     }
     
 }

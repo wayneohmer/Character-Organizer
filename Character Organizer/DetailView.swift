@@ -93,8 +93,8 @@ struct EquipmentDetail: View {
                         })
                             
                             .sheet(isPresented: self.$showAttack, content: {
-                                Text("Attack")
-                                //AttackCreationView(weapon: self.equipment, toHitBonus: <#Binding<String>#>)
+                                WeaponAttackView(action: Action.fromWeapon(weapon: self.equipment))
+                                
                             })
                     }
                     
@@ -146,15 +146,15 @@ struct SpellHeader: View {
             }
             HStack{
                 Text("Components:")
-                Text("\(spell.components.joined(separator: ","))").fontWeight(.bold)
+                Text("\(spell.components))").fontWeight(.bold)
             }
             HStack{
                 Text("Casting Time:")
-                Text(spell.casting_time).fontWeight(.bold)
+                Text(spell.castingTime).fontWeight(.bold)
             }
             HStack{
                 Text("School:")
-                Text("\(spell.school?.name ?? "")").fontWeight(.bold)
+                Text("\(spell.school ?? "")").fontWeight(.bold)
             }
             HStack{
                 Text("Duration:")

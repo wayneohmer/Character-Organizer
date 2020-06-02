@@ -60,6 +60,7 @@
 		2BF2935223C505E000659673 /* Proficiency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF2935123C505E000659673 /* Proficiency.swift */; };
 		2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBE247D80340045DD6F /* WeaponAction.swift */; };
 		2BF76BC1247D80340045DD6F /* SpellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBF247D80340045DD6F /* SpellAction.swift */; };
+		2BF9ED3F2486BF0E005C7389 /* spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF9ED3E2486BF0E005C7389 /* spells.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,7 @@
 		2BF2935123C505E000659673 /* Proficiency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proficiency.swift; sourceTree = "<group>"; };
 		2BF76BBE247D80340045DD6F /* WeaponAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeaponAction.swift; sourceTree = "<group>"; };
 		2BF76BBF247D80340045DD6F /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
+		2BF9ED3E2486BF0E005C7389 /* spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spells.json; sourceTree = "<group>"; };
 		B01D027C247AF71200F58FFB /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +175,7 @@
 		2B068BE523C2C814007893BC /* Data Files */ = {
 			isa = PBXGroup;
 			children = (
+				2BF9ED3E2486BF0E005C7389 /* spells.json */,
 				2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */,
 				2BE9EF2A23F0B01700422D0D /* 5e-SRD-Damage-Types.json */,
 				2B16BCEE23D8172800360928 /* 5e-SRD-StartingEquipment.json */,
@@ -436,6 +439,7 @@
 				2B16BCE923D80B0D00360928 /* 5e-SRD-Equipment.json in Resources */,
 				2B068BF123C2CCBA007893BC /* 5e-SRD-Subraces.json in Resources */,
 				2BE9EF2B23F0B01700422D0D /* 5e-SRD-Damage-Types.json in Resources */,
+				2BF9ED3F2486BF0E005C7389 /* spells.json in Resources */,
 				2B068BF223C2CCBA007893BC /* 5e-SRD-Traits.json in Resources */,
 				2B6890A3236B812C00EC8948 /* Assets.xcassets in Resources */,
 				2B27BF9823BFFEE0001719A0 /* Awww.aif in Resources */,
