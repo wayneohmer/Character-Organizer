@@ -297,5 +297,43 @@ struct FyreDiceModel: Codable, Identifiable, Hashable {
     var id = UUID()
     var dice = [Int:Int]()
     var modifier = 0
+    
+    var display:String {
+           var returnString = ""
+           for (die,multiplier) in self.dice.sorted(by: {$0 < $1}) {
+               if multiplier != 0 {
+                   if returnString != "" {
+                       let sign = multiplier > 0 ? "+" : ""
+                       returnString += sign
+                   }
+                   returnString += "\(multiplier)d\(die)"
+               }
+           }
+           if self.modifier != 0 {
+               let sign = modifier > 0 ? "+" : ""
+               returnString += "\(sign)\(self.modifier)"
+           }
+           return returnString == "" ? " " : returnString
+       }
+    
+    mutating func clear() {
+        dice.removeAll()
+        modifier = 0
+    }
+    
+    mutating func add(multipier:Int, d die:Int) {
+        if var newValue = self.dice[die] {
+            newValue += multipier
+            if newValue > 0 {
+                self.dice[die] = newValue
+            } else {
+                self.dice.removeValue(forKey: die)
+            }
+        } else {
+            if multipier > 0 {
+                self.dice[die] = multipier
+            }
+        }
+    }
 }
 

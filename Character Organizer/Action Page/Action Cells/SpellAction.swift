@@ -52,7 +52,7 @@ struct SpellAction: View {
     var sheetView: some View {
         var myView = AnyView(DetailView(detail:self.action.spell ?? Spell()))
         if self.action.isAttack {
-            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice)))
+            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice.dice, modifier: self.damageBonus())))
         } else if self.action.damageDice.dice.count > 0 {
             myView = AnyView(ModalDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: self.action.damageDice)))
         }

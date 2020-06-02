@@ -187,7 +187,6 @@ struct AttackCreationView: View {
     }
     
     func updateAction() {
-        self.action.damageDice = self.damageDice.model
         self.action.desc = self.desc
         self.action.isAttack = true
         self.action.damageType = self.damageTypes[self.damageTypeIdx]

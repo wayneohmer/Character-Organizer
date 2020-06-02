@@ -21,12 +21,13 @@ struct DicePickerView: View {
     let bmodwidth:CGFloat = 55
     @ObservedObject var details:DiceDetails
     @Binding var diceModel:FyreDiceModel
+    var hasModifier = false
     @ObservedObject var pickerhelper:PickerHelper = PickerHelper()
     @State var saveCheck = ["Save","Check"]
     @State var sign = "+"
-    
-    var dice = FyreDice(with: diceModel)
-    
+    @State var oopsStack = [FyreDiceModel]()
+
+        
     var body: some View {
         
         VStack {
@@ -43,7 +44,7 @@ struct DicePickerView: View {
                     .font(Font.system(size: 20, weight: .bold, design: .default))
                     .foregroundColor(Color.white).padding(5)
                 VStack {
-                    Text(self.dice.display)
+                    Text(self.diceModel.display)
                         .padding(8)
                         .font(Font.system(size: 20, weight: .bold, design: .default))
                         .frame(width: 240, height:40, alignment: .center)
@@ -52,7 +53,7 @@ struct DicePickerView: View {
                 }
                 HStack{
                     VStack {
-                        self.diceButton(name: "Clear", width:longWidth, action: {self.dice.clear()})
+                        self.diceButton(name: "Clear", width:longWidth, action: {self.diceModel.clear()})
                         HStack {
                             self.diceButton(width:diceWith, d: 4)
                             self.diceButton(width:diceWith, d: 6)
@@ -64,24 +65,46 @@ struct DicePickerView: View {
                             self.diceButton(width:diceWith, d: 20)
                         }
                         self.diceButton(name: "oops", width:longWidth, action: {
-                            if let oops = self.dice.oopsStack.last {
-                                switch oops.type {
-                                case .buttonTouch:
-                                    self.dice.replaceWith(fyreDice:FyreDice(with:oops.fyreDice, includeResult:true))
-                                case .roll:
-                                    self.dice.rollValue = FyreDice(with:oops.fyreDice, includeResult:true).rollValue
-                                    self.dice.diceResults = FyreDice(with:oops.fyreDice, includeResult:true).diceResults
-                                default:
-                                    break
-                                }
-                                self.dice.oopsStack.removeLast()
+                            if let oops = self.oopsStack.last {
+                                self.diceModel = oops
+                                self.oopsStack.removeLast()
                             }
                         })
+                        Spacer()
+
                     }.padding(3)
+                    if hasModifier {
+                        VStack {
+                            HStack {
+                                self.diceButton(width:modwidth, modifier: 1)
+                                self.diceButton(width:modwidth, modifier: 2)
+                                self.diceButton(width:modwidth, modifier: 3)
+                                self.diceButton(width:modwidth, modifier: 4)
+                                self.diceButton(width:modwidth, modifier: 5)
+                            }
+                            HStack {
+                                self.diceButton(width:modwidth, modifier: 6)
+                                self.diceButton(width:modwidth, modifier: 7)
+                                self.diceButton(width:modwidth, modifier: 8)
+                                self.diceButton(width:modwidth, modifier: 9)
+                                self.diceButton(width:modwidth, modifier: 10)
+                                
+                            }
+                            HStack {
+                                self.diceButton(width:bmodwidth, modifier: 20)
+                                self.diceButton(width:bmodwidth, modifier: 30)
+                                self.diceButton(width:bmodwidth, modifier: 40)
+                                self.diceButton(name: "\(sign)", width:bmodwidth, action: {
+                                    self.sign = self.sign == "+" ? "-" : "+"
+                                })
+                            }
+                            Spacer()
+                        }.padding(3)
+                    }
+
                 }
             }
             .background(background)
-            .frame(width: 250, alignment: .center)
             Spacer()
             
         }
@@ -94,13 +117,13 @@ struct DicePickerView: View {
             if let action = action {
                 action()
             } else {
-                self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.buttonTouch))
+                self.oopsStack.append(self.diceModel)
                 
                 if modifier != 0 {
-                    self.dice.model.modifier += self.sign == "+" ? modifier : -modifier
+                    self.diceModel.modifier += self.sign == "+" ? modifier : -modifier
                     return
                 } else if d != 0 {
-                    self.dice.add(multipier: self.sign == "+" ? 1 : -1, d: d)
+                    self.diceModel.add(multipier: self.sign == "+" ? 1 : -1, d: d)
                 }
             }
         }) {
@@ -122,7 +145,7 @@ struct DicePickerView: View {
 struct DicePickerView_Previews: PreviewProvider {
     
     static var previews: some View {
-        DicePickerView(details: DiceDetails(), diceModel: .constant(FyreDiceModel()))
+        DicePickerView(details: DiceDetails(), diceModel: .constant(FyreDiceModel()), hasModifier: true)
     }
 }
 

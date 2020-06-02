@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Character.shared.int = "9"
         Character.shared.wis = "7"
         Character.shared.cha = "20"
-        Character.shared.casterAttributeIdx = 3
+        Character.shared.casterAttributeIdx = 5
         Character.shared.proficiencyBonus = "2"
         Character.shared.model.actions = Set<Action>()
         for spell in Character.shared.model.spells {

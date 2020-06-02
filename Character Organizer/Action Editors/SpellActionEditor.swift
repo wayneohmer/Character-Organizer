@@ -26,7 +26,9 @@ struct SpellActionEditor: View  {
     @State var damageDice = FyreDice()    
     
     var spell:Spell { return action.spell ?? Spell() }
-    
+    var background = Color(red: 0.07, green: 0.07, blue: 0.07)
+    var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
+
     var body: some View {
         VStack {
             HStack {
@@ -41,17 +43,20 @@ struct SpellActionEditor: View  {
                               }),
                               secondaryButton: .cancel(Text("NO!")))
                 }
-                
+                Spacer()
+                Text(action.name).font(.title).foregroundColor(Color.white).padding(5)
                 Spacer()
                 GrayButton(text: "Save", width: 100, color:Color(.green), action:{
                     self.presentationMode.wrappedValue.dismiss()
                     self.saveAction()
                 })
             }
-            Text(spell.name).font(.title).foregroundColor(Color.white).padding(5)
+            .padding(3)
+            .background(LinearGradient(gradient: Gradient(colors: [foreground, .black]), startPoint: .top, endPoint: .bottom))
+            
             HStack {
                 VStack (alignment: .leading){
-                    SpellHeader(spell: spell)
+                    SpellHeader(spell: spell).padding()
                     VStack(alignment: .leading) {
                         VStack {
                             HStack {
@@ -72,24 +77,26 @@ struct SpellActionEditor: View  {
                                     .foregroundColor(Color.black)
                                     .cornerRadius(5)
                                     .popover(isPresented: $showingSpellDice, content: {
-                                        DicePickerView(details: DiceDetails(title: self.action.name), diceModel: self.$action.damageDice)
+                                        DicePickerView(details: DiceDetails(title: self.action.name), diceModel: self.$action.damageDice, hasModifier: true)
                                     })
                                     Spacer()
                                     
                                 }
                             }
                         }
-                    }
+                    }.padding()
+                    .background(Color(.black))
                 }
             Spacer()
             }
+
             ScrollView {
                 Text(spell.description).fontWeight(.bold)
-            }
+            }.padding()
+
             Spacer()
         }
-        .padding()
-        .background(Color(.black))
+        .background(background)
         .foregroundColor(.white)
         
     }
@@ -103,12 +110,15 @@ struct SpellActionEditor: View  {
     }
     
     func deleteAction() {
+        if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
+            self.character.model.actions.remove(action)
+        }
     }
     
 }
 
 struct SpellActionEditor_Previews: PreviewProvider {
     static var previews: some View {
-        SpellActionEditor(action:Action())
+        SpellActionEditor(action:Action(name:"Spell"))
     }
 }
