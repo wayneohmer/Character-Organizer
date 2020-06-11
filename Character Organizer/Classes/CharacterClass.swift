@@ -72,6 +72,11 @@ class CharacterClass: HasProfOptions, Identifiable, Equatable {
         }
     }
     
+    convenience init(model:ClassModel){
+        self.init()
+        self.model = model
+    }
+    
 }
 
 class ProficiencyChoices: ChooseableOption {

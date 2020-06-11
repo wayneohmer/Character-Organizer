@@ -12,7 +12,7 @@ struct EquipmentPicker: View {
     
     @Environment(\.presentationMode) var presentationMode
     @State var detailShowing = false
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
 
     @State var selectedCatetory = "Armor"
     @State var selectedSubCatetory = "Heavy"
@@ -66,10 +66,10 @@ struct EquipmentPicker: View {
                             ForEach(self.stateEquipment ) { equipment in
                                 HStack {
                                     Button(action: {
-                                        self.character.model.equipment.removeAll(where: {
+                                        Character.shared.model.equipment.removeAll(where: {
                                             $0 == equipment
                                         })
-                                        self.stateEquipment = self.character.model.equipment
+                                        self.stateEquipment = Character.shared.model.equipment
                                     }, label: {
                                         Text(" - ").font(Font.system(size: 25, weight: .bold, design: .default))
                                     })
@@ -105,8 +105,8 @@ struct EquipmentPicker: View {
                                 ForEach(self.equipment ) { equipment in
                                     HStack {
                                         Button(action: {
-                                            self.character.model.equipment.append(equipment)
-                                            self.stateEquipment = self.character.model.equipment
+                                            Character.shared.model.equipment.append(equipment)
+                                            self.stateEquipment = Character.shared.model.equipment
 
                                         }, label: {
                                             Text(" + ").font(Font.system(size: 25, weight: .bold, design: .default))
@@ -133,7 +133,7 @@ struct EquipmentPicker: View {
 struct EquipmentPicker_Previews: PreviewProvider {
 
     static var previews: some View {
-       EquipmentPicker(character: .constant(Character.shared))
+       EquipmentPicker()
     }
 }
 

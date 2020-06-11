@@ -10,13 +10,14 @@ import SwiftUI
 
 struct WeaponAttackView: View  {
     
+
     @State var action: Action
 
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
-    @ObservedObject var character = ObCharacer().character
+    let timing = ActionTiming.allCases
 
     var body: some View {
-        VStack {
+        VStack() {
             HeaderBarView(name: "", saveAction:self.saveAction, deleteAction: self.deleteAction)
             
             TextField("Name",text: self.$action.name).font(Font.system(size: 30, weight: .bold, design: .default))
@@ -25,31 +26,39 @@ struct WeaponAttackView: View  {
                 .background(Color.white)
                 .foregroundColor(Color.black)
                 .padding(16)
-            AttackCreationView(action: $action)
-            TextField("Description",text: $action.desc)
-                .frame(height: 50, alignment: .center)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
-                .multilineTextAlignment(.center)
-                .background(Color.white)
-                .foregroundColor(Color.white)
-                .background(Color(.black))
+            HStack {
+                Text("Timeing:")
+                Picker("", selection: self.$action.timingIndex) {
+                    ForEach(0 ..< 3) { index in
+                        Text(self.timing[index].rawValue )
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .background(Color(.lightGray))
+                .cornerRadius(8)
+            }
+            AttackCreationView(action: self.$action)
+            TextView(text: self.$action.desc)
+                .padding()
+                .cornerRadius(5)
         }
         .foregroundColor(.white)
         .background(Color(.black))
     }
+    
     func saveAction(){
-           if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
-               self.character.model.actions.remove(action)
-           }
-           self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
-           self.character.model.actions.insert(self.action)
-       }
-       
-       func deleteAction() {
-           if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
-               self.character.model.actions.remove(action)
-           }
-       }
+        if let action = Character.shared.model.actions.filter({$0.name == self.action.name}).first {
+            Character.shared.model.actions.remove(action)
+        }
+        self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
+        Character.shared.model.actions.insert(self.action)
+    }
+    
+    func deleteAction() {
+        if let action = Character.shared.model.actions.filter({$0.name == self.action.name}).first {
+            Character.shared.model.actions.remove(action)
+        }
+    }
 }
 
 struct AttackCreationView: View {
@@ -60,7 +69,7 @@ struct AttackCreationView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var character = ObCharacer().character
+    @ObservedObject var character = Character.shared
     @State var selectedType = 0
     @State var damageTypeIdx = 0
     
@@ -161,7 +170,6 @@ struct AttackCreationView: View {
                     .cornerRadius(8)
                 }
             }
-           Spacer()
         }
         .padding()
         .foregroundColor(Color.white)
@@ -185,7 +193,9 @@ struct AttackCreationView: View {
 }
 
 struct AttackCreationView_Previews: PreviewProvider {
+
     static var previews: some View {
+
         WeaponAttackView(action: Action())
     }
 }

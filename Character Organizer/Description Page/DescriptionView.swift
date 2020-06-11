@@ -14,9 +14,10 @@ struct DescriptionView: View {
     enum SheetType {
         case detail, spellPicker, spellAction, attackAction, equipment, equipmentPicker
     }
-    
+   
+    @EnvironmentObject var character: Character
+
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
-    @State var character = Character.shared
     @State var showingDice = false
     @State var selectedDetail:Viewable = Proficiency()
     @State var selectedAction:Action = Action()
@@ -26,31 +27,30 @@ struct DescriptionView: View {
  
     var body: some View {
         VStack {
-            DemographicsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+            DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing)
             VStack {
-                ProficiencieView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-                SkillsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-                TraitsView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                ProficiencieView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                SkillsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                TraitsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
             }
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
             .background(Color.black)
-            AttacksView(character: $character, selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType)
-            EquipmentView(character: $character, selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-            SpellsView(character: $character, selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
+            AttacksView(selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType)
+            EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+            SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
             Spacer()
         }.sheet(isPresented: self.$detailShowing, content:  {
             
             if self.sheetType == .detail {
                 DetailView(detail: self.selectedDetail, isFromInventory: true )
             }  else if self.sheetType == .equipmentPicker {
-                EquipmentPicker(character: self.$character)
+                EquipmentPicker()
             } else if self.sheetType == .spellPicker {
-                SpellPicker(character: self.$character)
+                SpellPicker()
             } else if self.sheetType == .spellAction {
                 SpellActionEditor(action: self.selectedAction)
             } else if self.sheetType == .attackAction {
-                Text("Attack")
                 WeaponAttackView(action: self.selectedAttack)
             }
         })
@@ -67,7 +67,7 @@ struct DescriptionView: View {
 
 struct DemographicsView:  View {
 
-@Binding var character:Character
+@EnvironmentObject var character: Character
 @Binding var selectedDetail:Viewable
 @Binding var detailShowing:Bool
 
@@ -109,7 +109,7 @@ struct DemographicsView:  View {
 
 struct AttacksView: View {
     
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
     @Binding var selectedAttack:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
@@ -177,7 +177,7 @@ struct AttackTypeView:  View {
 
 struct SpellsView:  View {
 
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
     @Binding var selectedAction:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
@@ -234,7 +234,7 @@ struct SpellLevelView:  View {
 
 struct EquipmentView:  View {
 
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
@@ -337,7 +337,8 @@ struct EquipmentTypeView:  View {
 
 struct ProficiencieView:  View {
     
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
+
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
@@ -359,7 +360,7 @@ struct ProficiencieView:  View {
 
 struct SkillsView:  View {
     
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
@@ -380,7 +381,7 @@ struct SkillsView:  View {
 
 struct TraitsView:  View {
     
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType

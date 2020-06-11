@@ -21,7 +21,7 @@ struct StatDetail : Identifiable {
 
 struct StatCreationView: View {
     
-    @State var character = Character.shared
+    @ObservedObject var character = Character.shared
     @Environment(\.presentationMode) var presentationMode
 
     @State var newPosition = CGSize.zero

@@ -15,8 +15,8 @@ struct SpellActionEditor: View  {
     @State var action: Action
     @State var showingSpellDice = false
     @State var showAttack = false
-    @ObservedObject var character = ObCharacer().character
-    
+    @EnvironmentObject var character: Character
+
     @State var damageTypeIdx = 0
     @State var isProficient = true
     @State var toHitBonus:String = "0"
@@ -79,16 +79,16 @@ struct SpellActionEditor: View  {
     }
     
     func saveAction(){
-        if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
+        if let action = Character.shared.model.actions.filter({$0.name == self.action.name}).first {
             self.character.model.actions.remove(action)
         }
         self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
-        self.character.model.actions.insert(self.action)
+        Character.shared.model.actions.insert(self.action)
     }
     
     func deleteAction() {
-        if let action = self.character.model.actions.filter({$0.name == self.action.name}).first {
-            self.character.model.actions.remove(action)
+        if let action = Character.shared.model.actions.filter({$0.name == self.action.name}).first {
+            Character.shared.model.actions.remove(action)
         }
     }
     

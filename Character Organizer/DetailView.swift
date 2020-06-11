@@ -10,7 +10,8 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var character: Character
+
     var detail: Viewable
     var isFromInventory = false
     
@@ -38,6 +39,9 @@ struct DetailView: View {
             }
             Spacer()
         }.background(Color.black).foregroundColor(Color.white)
+            .onAppear(){
+                self.character.model = Character.shared.model
+        }
         
     }
 }
@@ -45,7 +49,8 @@ struct DetailView: View {
 struct EquipmentDetail: View {
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var character: Character
+
     var equipment: Equipment
     @State var detailShow = false
     @State var showAttack = false
@@ -146,7 +151,7 @@ struct SpellHeader: View {
             }
             HStack{
                 Text("Components:")
-                Text("\(spell.components))").fontWeight(.bold)
+                Text("\(spell.components)").fontWeight(.bold).minimumScaleFactor(0.5).lineLimit(1)
             }
             HStack{
                 Text("Casting Time:")

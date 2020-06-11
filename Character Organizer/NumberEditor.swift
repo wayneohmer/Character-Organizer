@@ -15,7 +15,6 @@ struct NumberEditor: View {
     @State var value:String
     @Binding var modifiedValue:Int
     @State var isHP:Bool
-    @ObservedObject var character = ObCharacer().character
 
     var body: some View {
         VStack{
@@ -89,12 +88,12 @@ struct NumberEditor: View {
                     })
                     Button(action: {
                         var damage = Int(self.value) ?? 0
-                        if self.character.model.tempHP > 0 {
-                            if damage > self.character.model.tempHP {
-                                damage -= self.character.model.tempHP
-                                self.character.model.tempHP = 0
+                        if Character.shared.model.tempHP > 0 {
+                            if damage > Character.shared.model.tempHP {
+                                damage -= Character.shared.model.tempHP
+                                Character.shared.model.tempHP = 0
                             } else {
-                                self.character.model.tempHP -= damage
+                                Character.shared.model.tempHP -= damage
                                 damage = 0
                             }
                         }

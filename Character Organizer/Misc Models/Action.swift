@@ -31,7 +31,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var attrDamage = false
     var attrIndex = 0
     var isAttack = false
-    var timingString: String?
+    var timingIndex: Int = 0
     var damageDice: FyreDiceModel = FyreDiceModel()
     var spell: Spell?
     var weapon: Equipment?
@@ -44,7 +44,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
         return desc
     }
     
-    var timing:ActionTiming { return ActionTiming(rawValue: timingString ?? "Long") ?? .Long }
+    var timing:ActionTiming { return ActionTiming.allCases[timingIndex] }
     
     var damageFyreDice:FyreDice {
         return FyreDice(with: damageDice.dice, modifier: damageDice.modifier)
@@ -82,6 +82,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
         action.isProficient = true
         action.attrDamage = true
         action.isAttack = true
+        action.timingIndex = 0
         action.damageTypeIndex = DamageType.shared.map({$0.value.name}).sorted().firstIndex(of: weapon.damage?.damage_type?.name ?? "") ?? 0
 
         return action

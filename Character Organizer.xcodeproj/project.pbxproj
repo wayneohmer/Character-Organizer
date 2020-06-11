@@ -45,9 +45,11 @@
 		2B69F23724806EF60066C745 /* SpellActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B69F23624806EF60066C745 /* SpellActionEditor.swift */; };
 		2B7B881E2427FE1800340A3E /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7B881D2427FE1800340A3E /* Action.swift */; };
 		2B7B88202428015B00340A3E /* AttackCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7B881F2428015B00340A3E /* AttackCreationView.swift */; };
+		2B93ED4D24899259004E1CA2 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93ED4C24899259004E1CA2 /* SelectView.swift */; };
 		2BBFC05623EA41FA0019E819 /* EquipmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */; };
 		2BCA2CB9246A1C7A0066DBD6 /* NumberEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */; };
 		2BD7108324731F01004D7A69 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD7108224731F01004D7A69 /* Formatters.swift */; };
+		2BDB06C424884F3400FFF128 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDB06C324884F3400FFF128 /* TextView.swift */; };
 		2BE92C6A23F9C04F00044E68 /* 5e-SRD-Spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */; };
 		2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6B23F9D0CE00044E68 /* Spell.swift */; };
 		2BE92C6E23F9D4CD00044E68 /* SpellPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */; };
@@ -116,9 +118,11 @@
 		2B69F23624806EF60066C745 /* SpellActionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellActionEditor.swift; sourceTree = "<group>"; };
 		2B7B881D2427FE1800340A3E /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		2B7B881F2428015B00340A3E /* AttackCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackCreationView.swift; sourceTree = "<group>"; };
+		2B93ED4C24899259004E1CA2 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
 		2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentPicker.swift; sourceTree = "<group>"; };
 		2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberEditor.swift; sourceTree = "<group>"; };
 		2BD7108224731F01004D7A69 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		2BDB06C324884F3400FFF128 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Spells.json"; sourceTree = "<group>"; };
 		2BE92C6B23F9D0CE00044E68 /* Spell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spell.swift; sourceTree = "<group>"; };
 		2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellPicker.swift; sourceTree = "<group>"; };
@@ -262,6 +266,7 @@
 			children = (
 				2B68909C236B812700EC8948 /* AppDelegate.swift */,
 				2B68909E236B812700EC8948 /* SceneDelegate.swift */,
+				2B93ED4C24899259004E1CA2 /* SelectView.swift */,
 				2B69F23824806EFB0066C745 /* Action Editors */,
 				2B69F23A24806F610066C745 /* Action Page */,
 				2B69F23924806F320066C745 /* Description Page */,
@@ -279,6 +284,7 @@
 				2B6890A4236B812C00EC8948 /* Preview Content */,
 				2B25B390238B22F8000E022B /* Sounds */,
 				2B068BE523C2C814007893BC /* Data Files */,
+				2BDB06C324884F3400FFF128 /* TextView.swift */,
 			);
 			path = "Character Organizer";
 			sourceTree = "<group>";
@@ -469,6 +475,7 @@
 				2B68909D236B812700EC8948 /* AppDelegate.swift in Sources */,
 				2B25B399238B2B52000E022B /* DiceView.swift in Sources */,
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
+				2B93ED4D24899259004E1CA2 /* SelectView.swift in Sources */,
 				2B7B88202428015B00340A3E /* AttackCreationView.swift in Sources */,
 				2B4D5CEA246C8E6C003AAC3C /* DicePickerView.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ActionView.swift in Sources */,
@@ -477,6 +484,7 @@
 				2BE9EF2D23F0B05C00422D0D /* WeaponModels.swift in Sources */,
 				2B068BE223C2B6B2007893BC /* DetailView.swift in Sources */,
 				2BE92C6E23F9D4CD00044E68 /* SpellPicker.swift in Sources */,
+				2BDB06C424884F3400FFF128 /* TextView.swift in Sources */,
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,

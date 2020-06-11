@@ -50,10 +50,17 @@ enum Attribute: String {
        }
 }
 
+class CharacterSet: ObservableObject {
+    
+    static var shared = CharacterSet()
+    
+    @Published var allCharacters = Set<CharacterModel>()
+
+}
 
 class Character: ObservableObject {
     
-    static let shared = Character()
+    static var shared = Character()
     
     static let aligment1 = ["Lawful","Neutral","Chaotic"]
     static let aligment2 = ["Good","Neutral","Evil"]
@@ -72,24 +79,25 @@ class Character: ObservableObject {
     }
     var race:Race = Race() {
         didSet {
+            self.model.raceModel = race.model
             self.speed = "\(self.race.speed)"
             self.languages.removeAll()
             self.languages.formUnion(self.race.selectedLanguages)
             self.languages.formUnion(self.race.languages ?? [Descriptor]())
-            self.proficiencies.removeAll()
+            self.model.proficiencies.removeAll()
             for descriptor in race.startingProficiencies ?? [Descriptor]() {
                 if let prof = Proficiency.shared[descriptor.url] {
                     if let skill = prof.skill  {
-                        self.skills.insert(skill)
+                        self.model.skills.insert(skill)
                     } else {
-                        self.proficiencies.insert(prof)
+                        self.model.proficiencies.insert(prof)
                     }
                 }
             }
-            self.traits.removeAll()
+            self.model.traits.removeAll()
             for descriptor in race.traits ?? [Descriptor]() {
                 if let trait = Trait.shared[descriptor.url] {
-                    self.traits.insert(trait)
+                    self.model.traits.insert(trait)
                 }
             }
         }
@@ -97,12 +105,13 @@ class Character: ObservableObject {
     
     var charcaterClass = CharacterClass() {
         didSet {
-            self.proficiencies.formUnion(self.charcaterClass.proficiencies)
+            self.model.characterClass = charcaterClass.model
+            self.model.proficiencies.formUnion(self.charcaterClass.proficiencies)
             for prof in self.charcaterClass.selectedProficiencies {
                 if let skill = prof.skill {
-                    self.skills.insert(skill)
+                    self.model.skills.insert(skill)
                 } else {
-                    self.proficiencies.insert(prof)
+                    self.model.proficiencies.insert(prof)
                 }
             }
         }
@@ -265,9 +274,9 @@ class Character: ObservableObject {
         let langs = languages.map({ $0.name })
         return langs.joined(separator: ", ")
     }
-    var proficiencies = Set<Proficiency>()
-    var skills = Set<Skill>()
-    var traits = Set<Trait>()
+    var proficiencies: Set<Proficiency> { return model.proficiencies }
+    var skills: Set<Skill> { return model.skills }
+    var traits: Set<Trait> { return model.traits }
     var alingment1Idx:Int { return model.alingment1Idx }
     var alingment2Idx:Int { return model.alingment2Idx }
     var alingment:String {
@@ -282,6 +291,13 @@ class Character: ObservableObject {
     var spellActions:[Action] { return model.actions.filter({ $0.spell != nil }) }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
+    
+    convenience init(model: CharacterModel) {
+        self.init()
+        self.model = model
+        self.race = Race(model: model.raceModel ?? RaceModel())
+        self.charcaterClass = CharacterClass(model: model.characterClass ?? ClassModel())
+    }
     
     func modValue (_ attribute:Int) -> Int {
         return Int((attribute - 10)/2)
@@ -303,7 +319,7 @@ class Character: ObservableObject {
         action.name = spell.name
         action.isAttack = spell.isAttack
         action.attrIndex = self.casterAttributeIdx ?? 0
-        action.timingString = spell.timeing?.rawValue ?? "long"
+        action.timingIndex = ActionTiming.allCases.firstIndex(of: spell.timeing ?? .Long) ?? 0
         action.damageType = spell.damageType
         action.damageTypeIndex = DamageType.shared.map({$0.value.name}).sorted().firstIndex(of: spell.damageType) ?? 0
 
@@ -315,7 +331,8 @@ class Character: ObservableObject {
 
 }
 
-struct CharacterModel: Codable {
+struct CharacterModel: Codable, Comparable, Hashable  {
+    
     var name = ""
     var raceModel:RaceModel?
     var subrace:RaceModel?
@@ -337,8 +354,26 @@ struct CharacterModel: Codable {
     var alingment1Idx:Int = 1
     var alingment2Idx:Int = 1
     var casterAttributeIdx: Int?
+    var isActive = false
 
+    var proficiencies = Set<Proficiency>()
+    var skills = Set<Skill>()
+    var traits = Set<Trait>()
     var actions = Set<Action>()
     var equipment = [Equipment]()
     var spells = [Spell]()
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+    
+    static func == (lhs: CharacterModel, rhs: CharacterModel) -> Bool {
+        lhs.name == rhs.name
+    }
+    
+    static func < (lhs: CharacterModel, rhs: CharacterModel) -> Bool {
+        lhs.name < rhs.name
+    }
+    
+    
 }

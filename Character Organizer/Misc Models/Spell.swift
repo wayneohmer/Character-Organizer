@@ -16,7 +16,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     var description:String {
         var str = desc
         if let higherLevel = higherLevel {
-            str.append("\n\n\(higherLevel))")
+            str.append("\n\n\(higherLevel)")
         }
         return str
         
@@ -42,8 +42,8 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
         case name = "Name"
         case levelString = "Level"
         case castingTime = "Casting Time"
-        case school = "Duration"
-        case duration = "School"
+        case duration = "Duration"
+        case school = "School"
         case range = "Range"
         case components = "Components"
         case desc = "Text"
@@ -128,11 +128,11 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     var timeing: ActionTiming? {
         
         switch self.castingTime {
-        case "1 action":
+        case "Action":
             return .Action
-        case "1 reaction":
+        case "Reaction":
             return .Reaction
-        case "1 bonus action":
+        case "Bonus acn.":
             return .BonusAction
         default:
             return .Long

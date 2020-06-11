@@ -36,15 +36,15 @@ struct WeaponAction: View {
                 Text(action.damageType ?? "")
                 Spacer()
             }
-            HStack {
-                if showDesc {
+            if showDesc {
+                HStack {
                     Text(action.desc)
+                    Spacer()
                 }
-                Spacer()
             }
         }.onTapGesture {
             self.showingDice = true
-            }.padding(5)
+        }.padding(5)
         .sheet(isPresented: self.$showingDice, content: {
             AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice.dice, modifier: self.damageBonus()), damageType: self.action.damageType ?? " ")
         })

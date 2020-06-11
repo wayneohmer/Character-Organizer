@@ -58,6 +58,10 @@ class Race: Identifiable, Equatable, Comparable, ObservableObject, HasProfOption
         lhs.model.name < rhs.model.name
     }
     
+    convenience init(model:RaceModel) {
+        self.init()
+        self.model = model
+    }
     
 }
 

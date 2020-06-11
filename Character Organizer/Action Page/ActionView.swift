@@ -8,14 +8,19 @@
 
 import SwiftUI
 
-class ObCharacer: ObservableObject {
-    @Published var character = Character.shared
+class CharacterPickerHelper: ObservableObject {
+    
+    @Published var saveCheckIndex = 0
 }
 
 struct ActionView: View {
     @State var selection = 0
-    @ObservedObject var character = ObCharacer().character
-    @State var model = Character.shared.model
+    @EnvironmentObject var character: Character
+    @EnvironmentObject var characterSet: CharacterSet
+    @ObservedObject var characterPicker = CharacterPickerHelper()
+    @State var pickerIndex = 0
+    
+    @State var model: CharacterModel = CharacterModel()
     @State var showingInitDice = false
     @State var showingStrDice = false
     @State var showingDexDice = false
@@ -37,6 +42,8 @@ struct ActionView: View {
 
     var lightGray = Color(.lightGray)
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
+    
+    var allCharacters:[CharacterModel] { return characterSet.allCharacters.sorted().filter({ $0.isActive} ) }
 
     var hitPoints: some View {
         HStack{
@@ -123,11 +130,24 @@ struct ActionView: View {
     }
     
     var demographics: some View {
-        VStack {
-            Text(character.name)
-                .font(Font.system(size: 20, weight: .bold, design: .default))
-                .foregroundColor(Color.white)
-                .padding(8)
+        let saveCheckIndex = Binding<Int>(get: {
+
+            return self.pickerIndex
+
+        }, set: {
+            self.pickerIndex = $0
+            self.characterSet.allCharacters.update(with:Character.shared.model)
+            Character.shared.model = self.allCharacters[$0]
+            self.character.model = Character.shared.model
+        })
+        
+        return VStack {
+            Picker("", selection: saveCheckIndex) {
+                ForEach(0 ..< allCharacters.count) { index in
+                    Text(self.allCharacters[index].name)
+                }
+            }.pickerStyle(SegmentedPickerStyle())
+            
             HStack {
                 Text("Race:").foregroundColor(Color.white)
                 Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
@@ -242,8 +262,8 @@ struct ActionView: View {
     }
     
     var body: some View {
+        
         TabView(selection: self.$selection){
-            
             VStack {
                  HStack {
                     VStack {
@@ -307,7 +327,12 @@ struct ActionView: View {
 
                 Spacer()
             }.onAppear(){
-               
+                for (idx,model) in self.allCharacters.enumerated() {
+                    if model == Character.shared.model {
+                        self.pickerIndex = idx
+                        self.character.model = Character.shared.model
+                    }
+                }
             }
 
             .tabItem {
@@ -323,13 +348,20 @@ struct ActionView: View {
                     }
             }.background(background)
                 .tag(1)
+            SelectView()
+                .tabItem {
+                    VStack {
+                        Text("Select")
+                    }
+            }.background(background)
+                .tag(2)
                 CreateView()
             .tabItem {
                     VStack {
                         Text("Create")
                     }
             }.background(background)
-                .tag(2)
+                .tag(3)
         }
         
     }
@@ -390,6 +422,6 @@ struct ActionRow: View {
 
 struct ActionView_Previews: PreviewProvider {
     static var previews: some View {
-        ActionView()
+        ActionView(model: Character.shared.model)
     }
 }

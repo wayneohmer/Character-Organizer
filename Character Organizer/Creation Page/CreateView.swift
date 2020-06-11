@@ -12,7 +12,7 @@ import SwiftUI
 
 struct CreateView: View {
     
-    @State var character = Character.shared
+    @ObservedObject var character = Character.shared
     
     @State var raceShowing = false
     @State var classShowing = false

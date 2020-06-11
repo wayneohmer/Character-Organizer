@@ -13,7 +13,7 @@ struct SkillCheckView: View {
     @Environment(\.presentationMode) var presentationMode
 
     let skills = Skill.shared.map({$1}).sorted(by: {  $0.name < $1.name })
-    @ObservedObject var character = ObCharacer().character
+    @ObservedObject var character = Character.shared
     @State var rollShowing = false
     
     var diceDetails = DiceDetails()

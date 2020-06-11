@@ -11,7 +11,7 @@ import SwiftUI
 struct SpellPicker: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @Binding var character:Character
+    @EnvironmentObject var character: Character
 
     var levels:[Int] = [0,1,2,3,4,5,6,7,8,9]
     var classes:[String] = ["Bard","Cleric","Druid","Paladin","Ranger","Sorcerer","Warlock","Wizard"]
@@ -26,10 +26,10 @@ struct SpellPicker: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    let newSpells = Set(self.character.spells).union(self.selectedSpells)
-                    self.character.model.spells = Array(newSpells)
+                    let newSpells = Set(Character.shared.spells).union(self.selectedSpells)
+                    Character.shared.model.spells = Array(newSpells)
                     for spell in self.selectedSpells {
-                        self.character.addSpellAction(spell)
+                        Character.shared.addSpellAction(spell)
                     }
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
@@ -125,6 +125,6 @@ struct SpellPicker: View {
 
 struct SpellPicker_Previews: PreviewProvider {
     static var previews: some View {
-        SpellPicker(character: .constant(Character.shared))
+        SpellPicker()
     }
 }
