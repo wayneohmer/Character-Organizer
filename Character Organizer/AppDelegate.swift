@@ -47,8 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     Character.shared.model.proficiencies.insert(prof)
                 }
             }
-            
-            
             Character.shared.model.proficiencies.formUnion(Set(Character.shared.charcaterClass.proficiencies))
             Character.shared.model.skills.insert(Skill.shared["/api/skills/animal-handling"] ?? Skill())
             Character.shared.model.skills.insert(Skill.shared["/api/skills/athletics"] ?? Skill())
@@ -69,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Character.shared.casterAttributeIdx = 5
             Character.shared.proficiencyBonus = "2"
             Character.shared.model.actions = Set<Action>()
+            Character.shared.model.isActive = true
             for spell in Character.shared.model.spells {
                 Character.shared.addSpellAction(spell)
             }

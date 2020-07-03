@@ -29,8 +29,11 @@ struct SelectView: View {
                             var thisModel = model
                             thisModel.isActive.toggle()
                             self.characterSet.allCharacters.update(with:thisModel)
-
+                            
                         }, label: { Text ("\(model.isActive ? "Active" : "Inactive")") })
+                        Button(action: {
+                            self.characterSet.allCharacters.remove(model)
+                        }, label: { Text (" - ") })
                     }
 
                 }.padding(4)

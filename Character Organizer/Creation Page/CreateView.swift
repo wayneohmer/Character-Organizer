@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-
-
 struct CreateView: View {
     
     @ObservedObject var character = Character.shared
@@ -19,13 +17,25 @@ struct CreateView: View {
     @State var statsShowing = false
     @State var alignment1Idx = 1
     @State var alignment2Idx = 1
-
-
+    @State var oldname = ""
+    
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
-
+    
     var body: some View {
         VStack {
             HStack {
+                Button(action: {
+                    let new = Character.create()
+                    self.character.model = new.model
+                    self.oldname = new.name
+                    
+                }, label: { Text("+")
+                    .font(Font.system(size: 25, weight: .bold, design: .default))
+                    .frame(width: 45, height:45)
+
+                    .background(Color.black)
+                    .foregroundColor(Color.white)
+                } )
                 Spacer()
                 TextField("Name",text: $character.name).font(Font.system(size: 25, weight: .bold, design: .default))
                     .frame(width: 300, height:45)
@@ -33,7 +43,15 @@ struct CreateView: View {
                     .background(Color.black)
                     .foregroundColor(Color.white)
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
+                    .offset(x: -22, y: 0)
                     .padding()
+                    .onTextEditCommit(perform: {
+                        let newName = self.character.name
+                        self.character.name = self.oldname
+                        CharacterSet.shared.allCharacters.remove(self.character.model)
+                        self.character.name = newName
+                        CharacterSet.shared.allCharacters.update(with:self.character.model)
+                    })
                 Spacer()
             }
             HStack{

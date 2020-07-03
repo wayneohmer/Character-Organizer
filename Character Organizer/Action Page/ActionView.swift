@@ -140,14 +140,14 @@ struct ActionView: View {
             Character.shared.model = self.allCharacters[$0]
             self.character.model = Character.shared.model
         })
-        
+
         return VStack {
             Picker("", selection: saveCheckIndex) {
                 ForEach(0 ..< allCharacters.count) { index in
                     Text(self.allCharacters[index].name)
                 }
             }.pickerStyle(SegmentedPickerStyle())
-            
+
             HStack {
                 Text("Race:").foregroundColor(Color.white)
                 Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)

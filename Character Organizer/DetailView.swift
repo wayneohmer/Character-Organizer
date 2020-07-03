@@ -40,7 +40,7 @@ struct DetailView: View {
             Spacer()
         }.background(Color.black).foregroundColor(Color.white)
             .onAppear(){
-                self.character.model = Character.shared.model
+                //self.character.model = Character.shared.model
         }
         
     }

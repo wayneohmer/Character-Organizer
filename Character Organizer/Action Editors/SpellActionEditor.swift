@@ -80,7 +80,7 @@ struct SpellActionEditor: View  {
     
     func saveAction(){
         if let action = Character.shared.model.actions.filter({$0.name == self.action.name}).first {
-            self.character.model.actions.remove(action)
+            Character.shared.model.actions.remove(action)
         }
         self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
         Character.shared.model.actions.insert(self.action)

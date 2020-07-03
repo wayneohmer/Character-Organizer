@@ -328,6 +328,40 @@ class Character: ObservableObject {
         }
         self.model.actions.insert(action)
     }
+    
+    class func create() -> Character {
+        let new = Character()
+        
+        new.charcaterClass = CharacterClass.shared[0]
+        new.name = "Name"
+        new.race = Race.shared[0]
+        for descriptor in new.race.startingProficiencies ?? [Descriptor]() {
+            if let prof = Proficiency.shared[descriptor.url] {
+                new.model.proficiencies.insert(prof)
+            }
+        }
+        new.model.proficiencies.formUnion(Set(new.charcaterClass.proficiencies))
+        new.level = "1"
+        new.armorClass = "10"
+        new.speed = "10"
+        new.maxHP = "35"
+        new.currentHP = "35"
+        new.tempHP = "0"
+        new.str = "9"
+        new.dex = "9"
+        new.con = "9"
+        new.int = "9"
+        new.wis = "9"
+        new.cha = "9"
+        new.casterAttributeIdx = 0
+        new.proficiencyBonus = "2"
+        new.model.actions = Set<Action>()
+        new.model.isActive = true
+        for spell in new.model.spells {
+            new.addSpellAction(spell)
+        }
+        return new
+    }
 
 }
 
