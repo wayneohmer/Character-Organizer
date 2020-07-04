@@ -40,8 +40,8 @@ struct SpellAction: View {
         }
         .padding(5)
         .foregroundColor(Color.white)
-        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-        .background(Color(.black))
+        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 2))
+        .background(Color(.black).opacity(0.7))
         .onTapGesture {
             self.showingDice = true
         }

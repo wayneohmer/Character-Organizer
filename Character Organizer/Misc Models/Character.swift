@@ -389,6 +389,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var alingment2Idx:Int = 1
     var casterAttributeIdx: Int?
     var isActive = false
+    var isSpellCaster = true
 
     var proficiencies = Set<Proficiency>()
     var skills = Set<Skill>()
@@ -396,7 +397,9 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var actions = Set<Action>()
     var equipment = [Equipment]()
     var spells = [Spell]()
-    
+    var spellSlots:[Int:Int] = [1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0]
+    var spellSlotsUsed:[Int:Int] = [1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0]
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }

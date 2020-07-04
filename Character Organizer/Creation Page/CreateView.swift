@@ -108,6 +108,11 @@ struct CreateView: View {
                 }
                 Spacer()
             }
+            HStack {
+                Toggle(isOn: $character.model.isSpellCaster, label: {formatedText("Spell Caster", width: 200)}).frame(width:250)
+                Spacer()
+            }
+
             Spacer()
             
         }.background(background)

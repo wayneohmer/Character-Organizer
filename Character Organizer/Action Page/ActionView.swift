@@ -48,7 +48,7 @@ struct ActionView: View {
     var hitPoints: some View {
         HStack{
             VStack(spacing: 3){
-                Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).foregroundColor(Color.white)
+                Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Text(self.character.effectiveHP)
                     .onTapGesture {
                         self.showingHP = true
@@ -67,7 +67,7 @@ struct ActionView: View {
             }.padding(5)
             VStack {
                 VStack {
-                    Text("Max").frame(maxWidth: 45).foregroundColor(Color.white)
+                    Text("Max").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
                     Text(character.maxHP)
                         .onTapGesture {
                             self.showingMaxHP = true
@@ -80,7 +80,7 @@ struct ActionView: View {
                     .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
                 }
                 VStack {
-                    Text("Temp").frame(maxWidth: 45).foregroundColor(Color.white)
+                    Text("Temp").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
                     Text(character.tempHP)
                         .onTapGesture {
                                 self.showingTempHP = true
@@ -100,7 +100,7 @@ struct ActionView: View {
     var speedProf: some View {
         VStack {
             VStack {
-                Text("Speed").frame(maxWidth: 60).foregroundColor(Color.white)
+                Text("Speed").frame(maxWidth: 60).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Text(character.speed)
                     .onTapGesture {
                         self.showingSpeed = true
@@ -113,7 +113,7 @@ struct ActionView: View {
                 .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.speed, isHP: false) })
             }
             VStack {
-                Text("Prof").frame(maxWidth: 60).foregroundColor(Color.white)
+                Text("Prof").frame(maxWidth: 60).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Text(character.proficiencyBonus)
                     .onTapGesture {
                             self.showingProfBonus = true
@@ -149,28 +149,28 @@ struct ActionView: View {
             }.pickerStyle(SegmentedPickerStyle())
 
             HStack {
-                Text("Race:").foregroundColor(Color.white)
-                Text(Character.shared.race.name).fontWeight(.bold).foregroundColor(Color.white)
-                Text("Class:").foregroundColor(Color.white)
-                Text(Character.shared.charcaterClass.name).fontWeight(.bold).foregroundColor(Color.white)
-                Text("Level:").foregroundColor(Color.white)
-                Text(Character.shared.level).fontWeight(.bold).foregroundColor(Color.white)
+                Text("Race:")
+                Text(Character.shared.race.name).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
+                Text("Class:")
+                Text(Character.shared.charcaterClass.name).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
+                Text("Level:")
+                Text(Character.shared.level).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Spacer()
                 
-            }.padding(8)
+            }
             HStack {
-                Text("Alignment:").foregroundColor(Color.white)
-                Text(Character.shared.alingment).fontWeight(.bold).foregroundColor(Color.white)
-                Text("Languages:").foregroundColor(Color.white)
-                Text(Character.shared.languageString).fontWeight(.bold).foregroundColor(Color.white)
+                Text("Alignment:")
+                Text(Character.shared.alingment).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
+                Text("Languages:")
+                Text(Character.shared.languageString).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Spacer()
-            }.padding(8)
-        }
+            }
+            }.foregroundColor(Color.black).padding()
     }
     
     var armorClass: some View {
         VStack(spacing: 3){
-            Text("AC").fontWeight(.bold).frame(width: 80).foregroundColor(Color.white)
+            Text("AC").fontWeight(.bold).frame(width: 80).background(Color(.white).opacity(0.3)).cornerRadius(5).offset(x: 0, y: -5)
             Text(character.armorClass)
                 .padding(8)
                 .font(Font.system(size: 40, weight: .bold, design: .default))
@@ -279,8 +279,31 @@ struct ActionView: View {
                             hitPoints
                             armorClass
                             speedProf
+                            if character.model.isSpellCaster {
+                                HStack {
+                                    HStack {
+                                        VStack {
+                                            Text("Level:").frame(width: 50, height: 25, alignment: .center).cornerRadius(5)
+                                            Text("Slots:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
+                                            Text("Used:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
+                                        }
+                                        ForEach ( 1..<10 ) { idx in
+                                            VStack(spacing: 3) {
+                                                Text("\(idx)").frame(width: 35, height: 25, alignment: .center).cornerRadius(5)
+                                                Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5)
+                                                Text("\(self.character.model.spellSlotsUsed[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5)
+                                            }
+                                        }
+                                    }
+                                    .background(Color(.white).opacity(0.3)).cornerRadius(5)
+                                    .foregroundColor(.black)
+                                    .padding(4)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 2))
+                                    Spacer()
+                                }
+                            }
                             Spacer()
-                        }.frame(height:140)
+                        }.frame(height:110)
                         HStack {
                             VStack(spacing:5) {
                                 GrayButton(text: "Skill", width: 120) {
@@ -296,14 +319,16 @@ struct ActionView: View {
                                 
                                 self.attributes
                             }
+                            
                             VStack {
+                                
+                                
                                 Picker("Filter", selection: $actionFilterIdx) {
                                     ForEach(0 ..< self.filterTimeings.count) { idx in
                                         Text(self.filterTimeings[idx].rawValue)
                                     }
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
-                                .background(Color(.lightGray))
                                 .cornerRadius(8)
                                 ScrollView(.vertical) {
                                     VStack{
@@ -319,14 +344,19 @@ struct ActionView: View {
                                         HStack{ Spacer() }
                                         Spacer()
                                     }
-                                }.background(Color.black)
+                                }
+                                
                             }
+                            Text("")
+                            Spacer()
                         }
                     }
-                 }
-
+                 }.background(Image("parchment").resizable().opacity(0.8))
+                
                 Spacer()
-            }.onAppear(){
+            }
+            
+            .onAppear(){
                 for (idx,model) in self.allCharacters.enumerated() {
                     if model == Character.shared.model {
                         self.pickerIndex = idx
@@ -414,7 +444,6 @@ struct ActionRow: View {
             }
             Spacer()
         }
-        .background(Color.black)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
     }
     
