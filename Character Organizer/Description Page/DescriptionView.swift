@@ -12,7 +12,7 @@ import SwiftUI
 struct DescriptionView: View {
     
     enum SheetType {
-        case detail, spellPicker, spellAction, attackAction, equipment, equipmentPicker
+        case detail, spellPicker, spellAction, attackAction, equipment, equipmentPicker, image
     }
    
     @EnvironmentObject var character: Character
@@ -24,10 +24,12 @@ struct DescriptionView: View {
     @State var selectedAttack = Action()
     @State var detailShowing = false
     @State var sheetType = DescriptionView.SheetType.detail
+    @State var image:UIImage?
+
  
     var body: some View {
         VStack {
-            DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing)
+            DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
             VStack {
                 ProficiencieView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
                 SkillsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
@@ -40,8 +42,9 @@ struct DescriptionView: View {
             EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
             SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
             Spacer()
-        }.sheet(isPresented: self.$detailShowing, content:  {
-            
+        }
+        .sheet(isPresented: self.$detailShowing, content:  {
+
             if self.sheetType == .detail {
                 DetailView(detail: self.selectedDetail, isFromInventory: true )
             }  else if self.sheetType == .equipmentPicker {
@@ -52,6 +55,10 @@ struct DescriptionView: View {
                 SpellActionEditor(action: self.selectedAction)
             } else if self.sheetType == .attackAction {
                 WeaponAttackView(action: self.selectedAttack)
+            } else if self.sheetType == .image {
+                ImagePicker(image: self.$image, isPresented: self.$detailShowing).onDisappear(perform: {
+                    self.character.image = self.image ?? UIImage()
+                })
             }
         })
         .foregroundColor(Color(.white))
@@ -66,17 +73,22 @@ struct DescriptionView: View {
 }
 
 struct DemographicsView:  View {
-
-@EnvironmentObject var character: Character
-@Binding var selectedDetail:Viewable
-@Binding var detailShowing:Bool
-
+    
+    @EnvironmentObject var character: Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+    
     var body: some View {
         HStack {
-            Image("Wayne").resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 90, height:90, alignment: .top)
+            Image(uiImage: character.image).resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 90, height:90)
                 .padding(3)
+                .onTapGesture {
+                    self.detailShowing = true
+                    self.sheetType = .image
+            }
             VStack {
                 Text(character.name)
                     .font(Font.system(size: 30, weight: .bold, design: .default))
@@ -89,19 +101,19 @@ struct DemographicsView:  View {
                     Text("Alignment:").foregroundColor(Color.white)
                     Text(character.alingment).fontWeight(.bold).foregroundColor(Color.white)
                     Spacer()
-                }.offset(CGSize(width: 8, height: 0))
+                }
                 HStack{
                     Text("Speed:").foregroundColor(Color.white)
                     Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Level:").foregroundColor(Color.white)
                     Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
                     Spacer()
-                }.offset(CGSize(width: 8, height: 0))
+                }
                 HStack {
                     Text("Languages:").foregroundColor(Color.white)
                     Text(character.languageString).fontWeight(.bold)
                     Spacer()
-                }.offset(CGSize(width: 8, height: 0))
+                }
             }
         }
     }

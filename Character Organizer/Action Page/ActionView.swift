@@ -46,54 +46,52 @@ struct ActionView: View {
     var allCharacters:[CharacterModel] { return characterSet.allCharacters.sorted().filter({ $0.isActive} ) }
 
     var hitPoints: some View {
-        HStack{
-            VStack(spacing: 3){
-                Text("Hit Points").fontWeight(.bold).frame(maxWidth: 100).background(Color(.white).opacity(0.3)).cornerRadius(5)
+        VStack{
+            Text("Hit Points").fontWeight(.bold).background(Color(.white).opacity(0.3)).cornerRadius(5).offset(x: 0, y: 15)
+            ZStack {
+                Image("heart").resizable().colorMultiply(hpColor())
                 Text(self.character.effectiveHP)
                     .onTapGesture {
                         self.showingHP = true
                 }
-                .font(Font.system(size: 45, weight: .bold, design: .default))
-                .frame(maxWidth: 100, minHeight: 70)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                .font(Font.system(size: 40, weight: .bold, design: .default))
                 .multilineTextAlignment(.center)
-                .background(self.hpColor())
-                .foregroundColor(Color.black)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(hpBorderColor(), lineWidth: 4))
-
+                .offset(x: 0, y: -7 )
                 .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.currentHP, isHP: true) })
-
-                GrayButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }
-            }.padding(5)
+                
+            }.frame(width: 120, height: 100)
+            GrayButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }.offset(x: 0, y: -10)
+        }.foregroundColor(Color.black).frame(width: 120, height: 165).offset(x: 0, y: -7)
+    }
+    
+    var maxTemp:  some View {
+        
+        VStack {
             VStack {
-                VStack {
-                    Text("Max").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                    Text(character.maxHP)
-                        .onTapGesture {
-                            self.showingMaxHP = true
-                        }
-                        .frame(width: 45, height:30)
-                        .background(Color.white)
-                        .foregroundColor(Color.black)
-                        .cornerRadius(5)
+                Text("Max").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
+                Text(character.maxHP)
+                    .onTapGesture {
+                        self.showingMaxHP = true
+                    }
+                    .frame(width: 45, height:30)
+                    .background(Color.white)
+                    .cornerRadius(5)
 
-                    .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
-                }
-                VStack {
-                    Text("Temp").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                    Text(character.tempHP)
-                        .onTapGesture {
-                                self.showingTempHP = true
-                        }
-                        .frame(width: 45, height:30)
-                        .background(Color.white)
-                        .foregroundColor(Color.black)
-                        .cornerRadius(5)
-
-                    .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.tempHP, isHP: false) })
-                }
-                Spacer()
+                .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
             }
+            VStack {
+                Text("Temp").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
+                Text(character.tempHP)
+                    .onTapGesture {
+                            self.showingTempHP = true
+                    }
+                    .frame(width: 45, height:30)
+                    .background(Color.white)
+                    .cornerRadius(5)
+
+                .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.tempHP, isHP: false) })
+            }
+            Spacer()
         }
     }
     
@@ -144,10 +142,10 @@ struct ActionView: View {
         return VStack {
             Picker("", selection: saveCheckIndex) {
                 ForEach(0 ..< allCharacters.count) { index in
-                    Text(self.allCharacters[index].name)
+                    Text(self.allCharacters[index].name).foregroundColor(Color.black)
                 }
             }.pickerStyle(SegmentedPickerStyle())
-
+            
             HStack {
                 Text("Race:")
                 Text(Character.shared.race.name).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
@@ -165,7 +163,7 @@ struct ActionView: View {
                 Text(Character.shared.languageString).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
                 Spacer()
             }
-            }.foregroundColor(Color.black).padding()
+        }.foregroundColor(Color.black).padding()
     }
     
     var armorClass: some View {
@@ -181,7 +179,7 @@ struct ActionView: View {
                 }
             .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.armorClass, isHP: false) })
             Spacer()
-        }.padding(5).frame(width:90)
+        }.padding(5).frame(width:90).foregroundColor(Color.black)
     }
     
     var attributes: some View {
@@ -265,63 +263,40 @@ struct ActionView: View {
         
         TabView(selection: self.$selection){
             VStack {
-                 HStack {
-                    VStack {
-                        HStack{
-                            Image("Wayne").resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 90, height:90)
-                                .padding(3)
-                            demographics
-                            
+                HStack {
+                    VStack( spacing: 5) {
+                        Image(uiImage: self.character.image).resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                        hitPoints
+                        GrayButton(text: "Skill", width: 100) {
+                            self.showingSkills = true
                         }
+                        .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
+                        GrayButton(text: "Initiative", width: 100){
+                            self.diceDetails.title = "Initiative"
+                            self.showingInitDice = true
+                            self.diceDetails.isSave = false
+                        }
+                        .popover(isPresented: self.$showingInitDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+                        self.attributes
+
+                        Spacer()
+                    }.offset(x: 0, y:8)
+                    VStack {
+                        demographics
                         HStack {
-                            hitPoints
+                            maxTemp
                             armorClass
                             speedProf
                             if character.model.isSpellCaster {
-                                HStack {
-                                    HStack {
-                                        VStack {
-                                            Text("Level:").frame(width: 50, height: 25, alignment: .center).cornerRadius(5)
-                                            Text("Slots:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
-                                            Text("Used:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
-                                        }
-                                        ForEach ( 1..<10 ) { idx in
-                                            VStack(spacing: 3) {
-                                                Text("\(idx)").frame(width: 35, height: 25, alignment: .center).cornerRadius(5)
-                                                Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5)
-                                                Text("\(self.character.model.spellSlotsUsed[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5)
-                                            }
-                                        }
-                                    }
-                                    .background(Color(.white).opacity(0.3)).cornerRadius(5)
-                                    .foregroundColor(.black)
-                                    .padding(4)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 2))
-                                    Spacer()
-                                }
+                                SpellsUsedGrid()
                             }
                             Spacer()
-                        }.frame(height:110)
+                        }.frame(height:100).foregroundColor(Color.black)
                         HStack {
-                            VStack(spacing:5) {
-                                GrayButton(text: "Skill", width: 120) {
-                                    self.showingSkills = true
-                                }
-                                .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
-                                GrayButton(text: "Initiative", width: 120){
-                                    self.diceDetails.title = "Initiative"
-                                    self.showingInitDice = true
-                                    self.diceDetails.isSave = false
-                                }
-                                .popover(isPresented: self.$showingInitDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
-                                
-                                self.attributes
-                            }
                             
                             VStack {
-                                
                                 
                                 Picker("Filter", selection: $actionFilterIdx) {
                                     ForEach(0 ..< self.filterTimeings.count) { idx in
@@ -330,22 +305,24 @@ struct ActionView: View {
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                                 .cornerRadius(8)
-                                ScrollView(.vertical) {
-                                    VStack{
-                                        ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 }).sorted()) { action in
-                                            if action.weapon != nil {
-                                                WeaponAction(action: action)
-                                            } else if action.spell != nil {
-                                                SpellAction(action:action)
-                                            } else {
-                                                ActionRow(action:action)
+                                ZStack {
+                                    Image(uiImage: self.character.image).resizable().aspectRatio(contentMode: .fit).opacity(0.6)
+                                    ScrollView(.vertical) {
+                                        VStack{
+                                            ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 }).sorted()) { action in
+                                                if action.weapon != nil {
+                                                    WeaponAction(action: action)
+                                                } else if action.spell != nil {
+                                                    SpellAction(action:action)
+                                                } else {
+                                                    ActionRow(action:action)
+                                                }
                                             }
+                                            HStack{ Spacer() }
+                                            Spacer()
                                         }
-                                        HStack{ Spacer() }
-                                        Spacer()
                                     }
                                 }
-                                
                             }
                             Text("")
                             Spacer()
@@ -419,7 +396,7 @@ struct ActionView: View {
     
     func hpColor() -> Color {
         let r = Double(self.character.model.currentHP)/Double(self.character.model.maxHP)
-        return Color(red: 1.0, green: r, blue: r)
+        return Color(red: 1.0  , green: r, blue: r)
     }
     
     func hpBorderColor() -> Color {
@@ -451,6 +428,6 @@ struct ActionRow: View {
 
 struct ActionView_Previews: PreviewProvider {
     static var previews: some View {
-        ActionView(model: Character.shared.model)
+        ActionView()
     }
 }

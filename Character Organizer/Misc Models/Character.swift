@@ -250,6 +250,18 @@ class Character: ObservableObject {
         }
     }
     
+    var image: UIImage {
+        set {
+            self.model.imageData =  newValue.jpegData(compressionQuality: 0)
+        }
+        get {
+            if let image = UIImage(data: self.model.imageData ?? Data()) {
+                return image
+            }
+            return UIImage(named: "Wayne")!
+        }
+    }
+        
     var attrDict:[Attribute: Int] { return [.STR:model.str, .DEX:model.dex, .CON:model.con, .INT:model.int, .WIS:model.wis, .CHA:model.cha] }
     var attrArray:[Int] { return [model.str, model.dex, model.con, model.int, model.wis, model.cha] }
     var attrBonusDict:[Attribute: Int] { return [.STR:modValue(model.str),.DEX:modValue(model.dex),.CON:modValue(model.con),.INT:modValue(model.int),.WIS:modValue(model.wis),.CHA:modValue(model.cha)] }
@@ -390,6 +402,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var casterAttributeIdx: Int?
     var isActive = false
     var isSpellCaster = true
+    var imageData: Data?
 
     var proficiencies = Set<Proficiency>()
     var skills = Set<Skill>()

@@ -22,8 +22,7 @@ struct GrayButton: View {
             .frame(width: width, height: height)
             .foregroundColor(Color.white)
             .background(LinearGradient(gradient: Gradient(colors: [color, .black]), startPoint: .top, endPoint: .bottom))
-            .cornerRadius(5)
-            
+            .cornerRadius(5)            
         }
     }
 }

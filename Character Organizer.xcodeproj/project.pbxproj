@@ -63,6 +63,8 @@
 		2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBE247D80340045DD6F /* WeaponAction.swift */; };
 		2BF76BC1247D80340045DD6F /* SpellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBF247D80340045DD6F /* SpellAction.swift */; };
 		2BF9ED3F2486BF0E005C7389 /* spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF9ED3E2486BF0E005C7389 /* spells.json */; };
+		B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */; };
+		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +139,8 @@
 		2BF76BBF247D80340045DD6F /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
 		2BF9ED3E2486BF0E005C7389 /* spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spells.json; sourceTree = "<group>"; };
 		B01D027C247AF71200F58FFB /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
+		B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsUsedGrid.swift; sourceTree = "<group>"; };
+		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,6 +277,7 @@
 				2B068BE123C2B6B2007893BC /* DetailView.swift */,
 				2BCA2CB8246A1C7A0066DBD6 /* NumberEditor.swift */,
 				2BD7108224731F01004D7A69 /* Formatters.swift */,
+				B0B3402A24B255C900169010 /* ImagePicker.swift */,
 				2B16BCE723D80AC700360928 /* Creation Page */,
 				2B16BCE623D80A9F00360928 /* Misc Models */,
 				2B068BD323C26A75007893BC /* Races */,
@@ -331,6 +336,7 @@
 				2BF76BBD247D80340045DD6F /* Action Cells */,
 				2B6890A0236B812700EC8948 /* ActionView.swift */,
 				2B1F45DE246B4E5E00CA6BC7 /* SkillCheckView.swift */,
+				B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */,
 			);
 			path = "Action Page";
 			sourceTree = "<group>";
@@ -489,8 +495,10 @@
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
+				B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */,
 				2B7B881E2427FE1800340A3E /* Action.swift in Sources */,
 				2BD7108324731F01004D7A69 /* Formatters.swift in Sources */,
+				B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */,
 				2B25B397238B2330000E022B /* FyreDice.swift in Sources */,
 				2B6890BF236B84B300EC8948 /* Character.swift in Sources */,
 				2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */,

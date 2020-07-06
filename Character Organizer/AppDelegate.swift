@@ -79,6 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Character.shared =  Character(model:CharacterSet.shared.allCharacters.sorted()[1])
         }
 
+        UISegmentedControl.appearance().selectedSegmentTintColor = .white
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
+        
         return true
     }
 
