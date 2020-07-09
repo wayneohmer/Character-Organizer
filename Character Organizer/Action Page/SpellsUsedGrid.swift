@@ -27,13 +27,15 @@ struct SpellsUsedGrid: View {
                 ForEach ( 1..<10 ) { idx in
                     VStack(spacing: 3) {
                         Text("\(idx)").frame(width: 35, height: 25, alignment: .center).cornerRadius(5)
-                        Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5).onTapGesture {
+                        Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center)
+                            .background(Color(.white)).foregroundColor(.black).cornerRadius(5).shadow(color: .black, radius: 3, x: 2, y: 2).onTapGesture {
                             self.data = self.character.model.spellSlots[idx]  ?? 0
                             self.showingEditor = true
                             self.usedIdx = 0
                             self.slotsIdx = idx
                         }
-                        Text("\(self.character.model.spellSlotsUsed[idx]!)").frame(width: 35, height: 35, alignment: .center).background(Color(.white)).foregroundColor(.black).cornerRadius(5).onTapGesture {
+                        Text("\(self.character.model.spellSlotsUsed[idx]!)").frame(width: 35, height: 35, alignment: .center)
+                            .background(Color(.white)).foregroundColor(.black).cornerRadius(5).shadow(color: .black, radius: 3, x: 2, y: 2).onTapGesture {
                             self.data = self.character.model.spellSlotsUsed[idx] ?? 0
                             self.showingEditor = true
                             self.usedIdx = idx
@@ -53,7 +55,9 @@ struct SpellsUsedGrid: View {
                 }
                 )
             }
-            .background(Color(.white).opacity(0.3)).cornerRadius(5)
+            .offset(x: 0, y:-3)
+            .padding(3)
+            .cornerRadius(5)
             .foregroundColor(.black)
             .padding(4)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 2))

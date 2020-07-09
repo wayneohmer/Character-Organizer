@@ -55,7 +55,11 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     }
     
     static func < (lhs: Action, rhs: Action) -> Bool {
-        if let lhsSpell = lhs.spell, let  rhsSpell = rhs.spell {
+        if lhs.weapon != nil && rhs.spell != nil {
+            return true
+        } else if lhs.spell != nil && rhs.weapon != nil {
+            return false
+        } else if let lhsSpell = lhs.spell, let  rhsSpell = rhs.spell {
             if lhsSpell.level == rhsSpell.level {
                 return lhsSpell.name < rhsSpell.name
             } else {

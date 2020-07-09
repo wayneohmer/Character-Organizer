@@ -47,9 +47,9 @@ struct ActionView: View {
 
     var hitPoints: some View {
         VStack{
-            Text("Hit Points").fontWeight(.bold).background(Color(.white).opacity(0.3)).cornerRadius(5).offset(x: 0, y: 15)
+            Text("Hit Points").fontWeight(.bold).frame(width: 100).offset(x: 0, y: 15)
             ZStack {
-                Image("heart").resizable().colorMultiply(hpColor())
+                Image("heart").resizable().colorMultiply(hpColor()).shadow(color: .red, radius: 5, x: 0, y: 0)
                 Text(self.character.effectiveHP)
                     .onTapGesture {
                         self.showingHP = true
@@ -60,34 +60,36 @@ struct ActionView: View {
                 .popover(isPresented: $showingHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.currentHP, isHP: true) })
                 
             }.frame(width: 120, height: 100)
-            GrayButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }.offset(x: 0, y: -10)
+            BrownButton(text: "Set Max", width: 100) { self.character.currentHP = self.character.maxHP }.offset(x: 0, y: -10)
         }.foregroundColor(Color.black).frame(width: 120, height: 165).offset(x: 0, y: -7)
     }
     
     var maxTemp:  some View {
         
-        VStack {
-            VStack {
-                Text("Max").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
+        VStack(spacing: 3)  {
+            VStack(spacing: 3)  {
+                Text("Max HP").frame(maxWidth: 60).offset(x: 0, y: 2)
                 Text(character.maxHP)
                     .onTapGesture {
                         self.showingMaxHP = true
                     }
-                    .frame(width: 45, height:30)
+                    .frame(width: 60, height:30)
                     .background(Color.white)
                     .cornerRadius(5)
+                    .shadow(color: .black, radius: 3, x: 2, y: 2)
 
                 .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
             }
-            VStack {
-                Text("Temp").frame(maxWidth: 45).background(Color(.white).opacity(0.3)).cornerRadius(5)
+            VStack(spacing: 3)  {
+                Text("Temp HP").frame(maxWidth: 70).offset(x: 0, y: 2)
                 Text(character.tempHP)
                     .onTapGesture {
                             self.showingTempHP = true
                     }
-                    .frame(width: 45, height:30)
+                    .frame(width: 60, height:30)
                     .background(Color.white)
                     .cornerRadius(5)
+                    .shadow(color: .black, radius: 3, x: 2, y: 2)
 
                 .popover(isPresented: $showingTempHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.tempHP, isHP: false) })
             }
@@ -96,9 +98,9 @@ struct ActionView: View {
     }
     
     var speedProf: some View {
-        VStack {
-            VStack {
-                Text("Speed").frame(maxWidth: 60).background(Color(.white).opacity(0.3)).cornerRadius(5)
+        VStack (spacing: 3) {
+            VStack(spacing: 3) {
+                Text("Speed").frame(maxWidth: 60).offset(x: 0, y: 2)
                 Text(character.speed)
                     .onTapGesture {
                         self.showingSpeed = true
@@ -107,11 +109,12 @@ struct ActionView: View {
                     .background(Color.white)
                     .foregroundColor(Color.black)
                     .cornerRadius(5)
+                    .shadow(color: .black, radius: 3, x: 2, y: 2)
 
                 .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.speed, isHP: false) })
             }
-            VStack {
-                Text("Prof").frame(maxWidth: 60).background(Color(.white).opacity(0.3)).cornerRadius(5)
+            VStack (spacing: 3){
+                Text("Prof").frame(maxWidth: 60).offset(x: 0, y: 2)
                 Text(character.proficiencyBonus)
                     .onTapGesture {
                             self.showingProfBonus = true
@@ -120,6 +123,7 @@ struct ActionView: View {
                     .background(Color.white)
                     .foregroundColor(Color.black)
                     .cornerRadius(5)
+                    .shadow(color: .black, radius: 3, x: 2,y: 2)
 
                 .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.proficiencyBonus, isHP: false) })
             }
@@ -128,51 +132,63 @@ struct ActionView: View {
     }
     
     var demographics: some View {
-        let saveCheckIndex = Binding<Int>(get: {
-
-            return self.pickerIndex
-
-        }, set: {
-            self.pickerIndex = $0
-            self.characterSet.allCharacters.update(with:Character.shared.model)
-            Character.shared.model = self.allCharacters[$0]
-            self.character.model = Character.shared.model
-        })
+//        let saveCheckIndex = Binding<Int>(get: {
+//
+//            return self.pickerIndex
+//
+//        }, set: {
+//            self.pickerIndex = $0
+//            self.characterSet.allCharacters.update(with:Character.shared.model)
+//            Character.shared.model = self.allCharacters[$0]
+//            self.character.model = Character.shared.model
+//        })
 
         return VStack {
-            Picker("", selection: saveCheckIndex) {
-                ForEach(0 ..< allCharacters.count) { index in
-                    Text(self.allCharacters[index].name).foregroundColor(Color.black)
-                }
-            }.pickerStyle(SegmentedPickerStyle())
-            
             HStack {
-                Text("Race:")
-                Text(Character.shared.race.name).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                Text("Class:")
-                Text(Character.shared.charcaterClass.name).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                Text("Level:")
-                Text(Character.shared.level).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                Spacer()
                 
-            }
-            HStack {
-                Text("Alignment:")
-                Text(Character.shared.alingment).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
-                Text("Languages:")
-                Text(Character.shared.languageString).fontWeight(.bold).padding(3).background(Color(.white).opacity(0.3)).cornerRadius(5)
+//                Picker("", selection: saveCheckIndex) {
+//                    ForEach(0 ..< allCharacters.count) { index in
+//                        Text(self.allCharacters[index].name).foregroundColor(Color.black)
+//                    }
+//                }.pickerStyle(WheelPickerStyle()).frame(width: 200)
+                ZStack {
+                    Image("NameBackground").resizable().frame(width: 275,height: 150)
+                    Text(Character.shared.name).font(Font.system(size: 20, weight: .bold, design: .default)).offset(x: 2, y: -3)
+                }
+                VStack {
+                    HStack {
+                        Text("Race:")
+                        Text(Character.shared.race.name).fontWeight(.bold).padding(3)
+                        Text("Class:")
+                        Text(Character.shared.charcaterClass.name).fontWeight(.bold).padding(3)
+                        Spacer()
+                        
+                    }
+                    HStack {
+                        Text("Level:")
+                        Text(Character.shared.level).fontWeight(.bold).padding(3)
+                        Text("Alignment:")
+                        Text(Character.shared.alingment).fontWeight(.bold).padding(3)
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Languages:")
+                        Text(Character.shared.languageString).fontWeight(.bold).padding(3)
+                        Spacer()
+                    }
+                }
                 Spacer()
             }
-        }.foregroundColor(Color.black).padding()
+        }.frame(height: 90).foregroundColor(Color.black).padding().offset(x: -20, y: 0)
     }
     
     var armorClass: some View {
         VStack(spacing: 3){
-            Text("AC").fontWeight(.bold).frame(width: 80).background(Color(.white).opacity(0.3)).cornerRadius(5).offset(x: 0, y: -5)
+            Text("AC").fontWeight(.bold).frame(width: 80).cornerRadius(5).offset(x: 0, y: -5)
             Text(character.armorClass)
                 .padding(8)
                 .font(Font.system(size: 40, weight: .bold, design: .default))
-                .background(Image("ACicon").resizable().frame(width: 80, height: 80, alignment: .center))
+                .background(Image("ACicon").resizable().frame(width: 85, height: 85, alignment: .center)).shadow(color: .white, radius: 10, x: 0, y: 0)
                 .foregroundColor(Color.black)
                 .onTapGesture {
                     self.showingAC = true
@@ -186,7 +202,7 @@ struct ActionView: View {
         VStack(spacing:24) {
             
             VStack  {
-                GrayButton(text: Attribute.STR.rawValue, width: 70, height: 30) {
+                BrownButton(text: Attribute.STR.rawValue, width: 70, height: 30) {
                     self.showingStrDice = true
                     self.attributeTouched(title:Attribute.STR.desc(), mod: Int(Character.shared.strMod) ?? 0)
                 }
@@ -197,7 +213,7 @@ struct ActionView: View {
             .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
-                GrayButton(text: Attribute.DEX.rawValue, width: 70, height: 30){
+                BrownButton(text: Attribute.DEX.rawValue, width: 70, height: 30){
                     self.showingDexDice = true
                     self.attributeTouched(title:Attribute.DEX.rawValue, mod: Int(Character.shared.dexMod) ?? 0)
                 }
@@ -208,7 +224,7 @@ struct ActionView: View {
             .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
-                GrayButton(text: Attribute.CON.rawValue, width: 70, height: 30){
+                BrownButton(text: Attribute.CON.rawValue, width: 70, height: 30){
                     self.showingConDice = true
                     self.attributeTouched(title:Attribute.CON.desc(), mod: Int(Character.shared.conMod) ?? 0)
                 }
@@ -220,7 +236,7 @@ struct ActionView: View {
             .popover(isPresented: self.$showingConDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             
             VStack  {
-                GrayButton(text: Attribute.INT.rawValue, width: 70, height: 30){
+                BrownButton(text: Attribute.INT.rawValue, width: 70, height: 30){
                     self.showingIntDice = true
                     self.attributeTouched(title:Attribute.INT.desc(), mod: Int(Character.shared.intMod) ?? 0)
                     
@@ -232,7 +248,7 @@ struct ActionView: View {
                 
             .popover(isPresented: self.$showingIntDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                GrayButton(text: Attribute.WIS.rawValue, width: 70, height: 30){
+                BrownButton(text: Attribute.WIS.rawValue, width: 70, height: 30){
                     self.showingWisDice = true
                     self.attributeTouched(title:Attribute.WIS.desc(), mod: Int(Character.shared.wisMod) ?? 0)
                     
@@ -245,7 +261,7 @@ struct ActionView: View {
             .popover(isPresented: self.$showingWisDice, arrowEdge: .leading, content: {
                 DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
             VStack  {
-                GrayButton(text: Attribute.CHA.rawValue, width: 70, height: 30) {
+                BrownButton(text: Attribute.CHA.rawValue, width: 70, height: 30) {
                     self.showingChaDice = true
                     self.attributeTouched(title:Attribute.CHA.desc(), mod: Int(Character.shared.chaMod) ?? 0)
                 }
@@ -268,12 +284,13 @@ struct ActionView: View {
                         Image(uiImage: self.character.image).resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 100, height: 100)
+                            .shadow(color: .black, radius: 5, x: 3, y: 3)
                         hitPoints
-                        GrayButton(text: "Skill", width: 100) {
+                        BrownButton(text: "Skill", width: 100) {
                             self.showingSkills = true
                         }
                         .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
-                        GrayButton(text: "Initiative", width: 100){
+                        BrownButton(text: "Initiative", width: 100){
                             self.diceDetails.title = "Initiative"
                             self.showingInitDice = true
                             self.diceDetails.isSave = false
