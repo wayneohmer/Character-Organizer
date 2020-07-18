@@ -81,6 +81,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 print("encode Characters Failed")
             }
         }
+        guard let dir = try? FileManager.default.contentsOfDirectory(atPath: savedCharacterPath.path) else { return }
+        for path in dir {
+            guard let url = URL(string: savedCharacterPath.appendingPathComponent(path).absoluteString) else { break }
+            do {
+                let characterData = try Data(contentsOf: url)
+                do {
+                    let model = try JSONDecoder().decode(CharacterModel.self, from: characterData)
+                    if !CharacterSet.shared.allCharacters.contains(model) {
+                        do {
+                            try FileManager.default.removeItem(at: url)
+                        } catch {
+                            print(error)
+                        }
+                    }
+                } catch {
+                    print(error)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 

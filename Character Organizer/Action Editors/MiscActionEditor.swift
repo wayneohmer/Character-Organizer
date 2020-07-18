@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SpellActionEditor: View  {
+struct MiscActionEditor: View  {
     
     let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
 
@@ -22,8 +22,9 @@ struct SpellActionEditor: View  {
     @State var toHitBonus:String = "0"
     @State var damageBonus:String = "0"
     @State var damageDice = FyreDice()    
-    
-    var spell:Spell { return action.spell ?? Spell() }
+    let timing = ActionTiming.allCases
+
+   // var spell:Spell { return action.spell ?? Spell() }
     var background = Color(red: 0.07, green: 0.07, blue: 0.07)
 
     var body: some View {
@@ -33,15 +34,37 @@ struct SpellActionEditor: View  {
             
             HStack {
                 VStack (alignment: .leading){
-                    SpellHeader(spell: spell).padding()
                     VStack(alignment: .leading) {
                         VStack {
+                            Button(action: {
+                                self.action.desc = UIPasteboard.general.string ?? "junk"
+                                self.action.damageDice = DiceParcer.likelyDice(self.action.desc)?.model ?? FyreDiceModel()
+                            }, label: {
+                                Text("  paste  ")
+                            })
+                            TextField("Name",text: self.$action.name).font(Font.system(size: 30, weight: .bold, design: .default))
+                                           .overlay(RoundedRectangle(cornerRadius: 5).stroke(background, lineWidth: 4))
+                                           .multilineTextAlignment(.center)
+                                           .background(Color.white)
+                                           .foregroundColor(Color.black)
+                                           .padding(16)
+                            HStack {
+                                Text("Timeing:")
+                                Picker("", selection: self.$action.timingIndex) {
+                                    ForEach(0 ..< 4) { index in
+                                        Text(self.timing[index].rawValue )
+                                    }
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                .background(Color(.lightGray))
+                                .cornerRadius(8)
+                            }
                             HStack {
                                 Toggle(isOn: $action.isAttack ) { Text("Attack?")}.frame(width: 130, height: 40)
                                 Spacer()
                             }
                             if action.isAttack {
-                                AttackCreationView(spell: self.spell, action: self.$action)
+                                AttackCreationView(action: self.$action)
                             } else {
                                 HStack {
                                     Text("Dice:")
@@ -68,7 +91,7 @@ struct SpellActionEditor: View  {
             }
 
             ScrollView {
-                Text(spell.description).fontWeight(.bold)
+                Text(action.description).fontWeight(.bold)
             }.padding()
 
             Spacer()
@@ -83,6 +106,7 @@ struct SpellActionEditor: View  {
             Character.shared.model.actions.remove(action)
         }
         self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
+        self.action.spell = nil
         self.action.weapon = nil
         Character.shared.model.actions.insert(self.action)
     }
@@ -95,8 +119,8 @@ struct SpellActionEditor: View  {
     
 }
 
-struct SpellActionEditor_Previews: PreviewProvider {
+struct MiscActionEditor_Previews: PreviewProvider {
     static var previews: some View {
-        SpellActionEditor(action:Action(weapon: Equipment()))
+        MiscActionEditor(action:Action(weapon: Equipment()))
     }
 }

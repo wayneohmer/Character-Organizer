@@ -51,6 +51,7 @@ struct WeaponAttackView: View  {
             Character.shared.model.actions.remove(action)
         }
         self.action.damageType = DamageType.shared.map({$0.value.name}).sorted()[action.damageTypeIndex]
+        self.action.spell = nil
         Character.shared.model.actions.insert(self.action)
     }
     

@@ -32,6 +32,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var attrIndex = 0
     var isAttack = false
     var timingIndex: Int = 0
+    var isMisc:Bool { return spell == nil && weapon == nil }
     var damageDice: FyreDiceModel = FyreDiceModel()
     var spell: Spell?
     var weapon: Equipment?
@@ -55,7 +56,11 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     }
     
     static func < (lhs: Action, rhs: Action) -> Bool {
-        if lhs.weapon != nil && rhs.spell != nil {
+        if lhs.isMisc && !rhs.isMisc {
+            return true
+        } else if !lhs.isMisc && rhs.isMisc {
+            return false
+        } else if lhs.weapon != nil && rhs.spell != nil {
             return true
         } else if lhs.spell != nil && rhs.weapon != nil {
             return false
@@ -63,7 +68,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
             if lhsSpell.level == rhsSpell.level {
                 return lhsSpell.name < rhsSpell.name
             } else {
-                return lhsSpell.level < rhsSpell.level
+                return lhsSpell.level > rhsSpell.level
             }
         } else {
             return lhs.name < rhs.name

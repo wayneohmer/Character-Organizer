@@ -11,7 +11,7 @@ import SwiftUI
 struct RaceView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @State var character = Character.shared
+    @ObservedObject var character = Character.shared
     @State var selectedRace:Race = Race.shared[0]
     
     @State var showProficiencyOptions = true
@@ -34,6 +34,7 @@ struct RaceView: View {
                 Spacer()
                 Button(action: {
                     Character.shared.race = self.selectedRace
+                    Character.shared.model.raceModel = self.selectedRace.model
                     self.presentationMode.wrappedValue.dismiss()
                 } ) {
                     Text("Save").font(Font.system(size: 30, weight: .bold, design: .default)).foregroundColor(Color.white).padding(5).offset(y:-2)

@@ -132,29 +132,24 @@ struct ActionView: View {
     }
     
     var demographics: some View {
-//        let saveCheckIndex = Binding<Int>(get: {
-//
-//            return self.pickerIndex
-//
-//        }, set: {
-//            self.pickerIndex = $0
-//            self.characterSet.allCharacters.update(with:Character.shared.model)
-//            Character.shared.model = self.allCharacters[$0]
-//            self.character.model = Character.shared.model
-//        })
 
         return VStack {
             HStack {
-                
-//                Picker("", selection: saveCheckIndex) {
-//                    ForEach(0 ..< allCharacters.count) { index in
-//                        Text(self.allCharacters[index].name).foregroundColor(Color.black)
-//                    }
-//                }.pickerStyle(WheelPickerStyle()).frame(width: 200)
-                ZStack {
-                    Image("NameBackground").resizable().frame(width: 275,height: 150)
-                    Text(Character.shared.name).font(Font.system(size: 20, weight: .bold, design: .default)).offset(x: 2, y: -3)
-                }
+                VStack {
+                    Image("Logo").resizable().aspectRatio(contentMode: .fit).frame(height: 30).offset(x: 0, y: 68)
+                    ZStack {
+                        Image("NameBackground").resizable().frame(width: 320,height: 180)
+                        Text(Character.shared.name).font(Font.system(size: 18, weight: .bold, design: .default)).offset(x: 3, y: -3).onTapGesture(perform: {
+                            self.characterSet.allCharacters.update(with:Character.shared.model)
+                            self.pickerIndex += 1
+                            if self.pickerIndex >= self.allCharacters.count {
+                                self.pickerIndex = 0
+                            }
+                            Character.shared.model = self.allCharacters[self.pickerIndex]
+                            self.character.model = Character.shared.model
+                        })
+                    }
+                }.frame(height: 20).offset(x: 0, y: -12)
                 VStack {
                     HStack {
                         Text("Race:")
@@ -204,7 +199,7 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.STR.rawValue, width: 70, height: 30) {
                     self.showingStrDice = true
-                    self.attributeTouched(title:Attribute.STR.desc(), mod: Int(Character.shared.strMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.STR, mod: Int(Character.shared.strMod) ?? 0)
                 }
                 self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
@@ -215,7 +210,7 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.DEX.rawValue, width: 70, height: 30){
                     self.showingDexDice = true
-                    self.attributeTouched(title:Attribute.DEX.rawValue, mod: Int(Character.shared.dexMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.DEX, mod: Int(Character.shared.dexMod) ?? 0)
                 }
                 self.attrText(Character.shared.dex)
                 self.attrModifier(Character.shared.dexMod)
@@ -226,7 +221,7 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.CON.rawValue, width: 70, height: 30){
                     self.showingConDice = true
-                    self.attributeTouched(title:Attribute.CON.desc(), mod: Int(Character.shared.conMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.CON, mod: Int(Character.shared.conMod) ?? 0)
                 }
                 self.attrText(Character.shared.con)
                 self.attrModifier(Character.shared.conMod)
@@ -238,7 +233,7 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.INT.rawValue, width: 70, height: 30){
                     self.showingIntDice = true
-                    self.attributeTouched(title:Attribute.INT.desc(), mod: Int(Character.shared.intMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.INT, mod: Int(Character.shared.intMod) ?? 0)
                     
                 }
                 self.attrText(Character.shared.int)
@@ -250,7 +245,7 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.WIS.rawValue, width: 70, height: 30){
                     self.showingWisDice = true
-                    self.attributeTouched(title:Attribute.WIS.desc(), mod: Int(Character.shared.wisMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.WIS, mod: Int(Character.shared.wisMod) ?? 0)
                     
                 }
                 self.attrText(Character.shared.wis)
@@ -263,11 +258,11 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.CHA.rawValue, width: 70, height: 30) {
                     self.showingChaDice = true
-                    self.attributeTouched(title:Attribute.CHA.desc(), mod: Int(Character.shared.chaMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.CHA, mod: Int(Character.shared.chaMod) ?? 0)
                 }
                 self.attrText(Character.shared.cha)
                 self.attrModifier(Character.shared.chaMod)
-                .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+                    .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice, isProficientSave: self.character.model.proficientSaves?.contains(Attribute.CHA.idx()) ?? false) })
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
             
@@ -332,7 +327,7 @@ struct ActionView: View {
                                                 } else if action.spell != nil {
                                                     SpellAction(action:action)
                                                 } else {
-                                                    ActionRow(action:action)
+                                                    MiscAction(action:action)
                                                 }
                                             }
                                             HStack{ Spacer() }
@@ -390,8 +385,8 @@ struct ActionView: View {
         
     }
     
-    func attributeTouched(title:String, mod:Int) {
-        self.diceDetails.title = title
+    func attributeTouched(attr:Attribute, mod:Int) {
+        self.diceDetails.title = attr.desc()
         self.diceDetails.isSave = true
         self.diceDetails.dice = FyreDice(with: [20:1], modifier: mod)
     }

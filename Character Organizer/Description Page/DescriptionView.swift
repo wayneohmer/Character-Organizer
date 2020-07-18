@@ -12,7 +12,7 @@ import SwiftUI
 struct DescriptionView: View {
     
     enum SheetType {
-        case detail, spellPicker, spellAction, attackAction, equipment, equipmentPicker, image
+        case detail, spellPicker, miscAction, spellAction, attackAction, equipment, equipmentPicker, image
     }
    
     @EnvironmentObject var character: Character
@@ -38,6 +38,7 @@ struct DescriptionView: View {
             .padding(5)
             .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
             .background(Color.black)
+            MiscActionsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
             AttacksView(selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType)
             EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
             SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
@@ -53,6 +54,8 @@ struct DescriptionView: View {
                 SpellPicker()
             } else if self.sheetType == .spellAction {
                 SpellActionEditor(action: self.selectedAction)
+            } else if self.sheetType == .miscAction {
+                MiscActionEditor(action: self.selectedAction)
             } else if self.sheetType == .attackAction {
                 WeaponAttackView(action: self.selectedAttack)
             } else if self.sheetType == .image {
@@ -78,6 +81,7 @@ struct DemographicsView:  View {
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
+    @State var showingLevel = false
     
     var body: some View {
         HStack {
@@ -107,6 +111,11 @@ struct DemographicsView:  View {
                     Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Level:").foregroundColor(Color.white)
                     Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
+                        .onTapGesture(perform: { self.showingLevel.toggle() })
+                        
+                        .popover(isPresented: $showingLevel, content: {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.level , isHP: false)
+                        })
                     Spacer()
                 }
                 HStack {
@@ -118,6 +127,43 @@ struct DemographicsView:  View {
         }
     }
 }
+
+struct MiscActionsView: View {
+    
+    @EnvironmentObject var character: Character
+    @Binding var selectedAction:Action
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+    
+    var body: some View {
+        VStack {
+            HStack{
+                Text("Actions").fontWeight(.bold).foregroundColor(Color.white)
+                Button(action:{
+                    self.sheetType = .miscAction
+                    self.selectedAction = Action()
+                    self.detailShowing = true
+                }) {
+                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
+                }.padding(5)
+            }
+            if character.actions.count > 0 {
+                
+                VStack(alignment: .leading){
+                    HStack {
+                        Text("All:").font(Font.system(size: 20, weight: .bold))
+                        MicsTypeView(actions: Array(character.miscActions), selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType:$sheetType )
+                    }
+                    
+                }.padding(8)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    .background(Color.black)
+            }
+            
+        }
+    }
+}
+
 
 struct AttacksView: View {
     
@@ -158,6 +204,31 @@ struct AttacksView: View {
                     .background(Color.black)
             }
             
+        }
+    }
+}
+
+
+struct MicsTypeView:  View {
+    
+    var actions:[Action]
+    @Binding var selectedAction:Action
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack { ForEach(actions) { action in
+                Text(action.name).onTapGesture {
+                    self.selectedAction = action
+                    self.detailShowing = true
+                    self.sheetType = .miscAction
+                }.font(Font.system(size: 18))
+                    .padding(4)
+                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+                    .cornerRadius(8)
+                }
+            }
         }
     }
 }

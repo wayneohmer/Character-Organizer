@@ -63,8 +63,10 @@
 		2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBE247D80340045DD6F /* WeaponAction.swift */; };
 		2BF76BC1247D80340045DD6F /* SpellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBF247D80340045DD6F /* SpellAction.swift */; };
 		2BF9ED3F2486BF0E005C7389 /* spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF9ED3E2486BF0E005C7389 /* spells.json */; };
+		B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0414AE524C2609D0060F696 /* MiscAction.swift */; };
 		B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */; };
 		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
+		B0F8280D24C24E400028E1DF /* MiscActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,8 +141,10 @@
 		2BF76BBF247D80340045DD6F /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
 		2BF9ED3E2486BF0E005C7389 /* spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spells.json; sourceTree = "<group>"; };
 		B01D027C247AF71200F58FFB /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
+		B0414AE524C2609D0060F696 /* MiscAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscAction.swift; sourceTree = "<group>"; };
 		B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsUsedGrid.swift; sourceTree = "<group>"; };
 		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscActionEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +318,7 @@
 		2B69F23824806EFB0066C745 /* Action Editors */ = {
 			isa = PBXGroup;
 			children = (
+				B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */,
 				2B7B881F2428015B00340A3E /* AttackCreationView.swift */,
 				2B69F23624806EF60066C745 /* SpellActionEditor.swift */,
 			);
@@ -352,6 +357,7 @@
 		2BF76BBD247D80340045DD6F /* Action Cells */ = {
 			isa = PBXGroup;
 			children = (
+				B0414AE524C2609D0060F696 /* MiscAction.swift */,
 				2BF76BBE247D80340045DD6F /* WeaponAction.swift */,
 				2BF76BBF247D80340045DD6F /* SpellAction.swift */,
 			);
@@ -483,6 +489,7 @@
 				2B68909F236B812700EC8948 /* SceneDelegate.swift in Sources */,
 				2B93ED4D24899259004E1CA2 /* SelectView.swift in Sources */,
 				2B7B88202428015B00340A3E /* AttackCreationView.swift in Sources */,
+				B0F8280D24C24E400028E1DF /* MiscActionEditor.swift in Sources */,
 				2B4D5CEA246C8E6C003AAC3C /* DicePickerView.swift in Sources */,
 				2B6890A1236B812700EC8948 /* ActionView.swift in Sources */,
 				2BE92C6C23F9D0CE00044E68 /* Spell.swift in Sources */,
@@ -493,6 +500,7 @@
 				2BDB06C424884F3400FFF128 /* TextView.swift in Sources */,
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
+				B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
 				B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */,

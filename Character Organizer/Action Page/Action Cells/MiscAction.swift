@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SpellAction: View {
+struct MiscAction: View {
     
     var action:Action
     @State var showingDice = false
@@ -25,19 +25,9 @@ struct SpellAction: View {
                 Spacer()
 
             }.padding(4)
-            HStack {
-                Text("Spell:")
-                Text("level: \(action.spell?.level ?? 0)" )
-                Text("Casting Time: \(action.spell?.castingTime ?? "")")
-                Text("Range: \(action.spell?.range ?? "")")
-                if action.damageFyreDice.display != " " {
-                    Text("Damage: \(action.damageFyreDice.display)")
-                }
-                Spacer()
-            }
            
             if showDesc {
-                Text(action.spell?.description ?? "")
+                Text(action.description)
             }
         }
         .padding(5)
@@ -49,24 +39,20 @@ struct SpellAction: View {
         }
         .sheet(isPresented: self.$showingDice, content: {
             self.sheetView
-            if self.action.isAttack || self.action.damageDice.dice.count > 0 {
                 ScrollView {
-                    Text(self.action.spell?.description ?? "")
+                    Text(self.action.desc)
                         .background(Color(.black))
                         .foregroundColor(Color(.white))
                 }.padding()
             .background(Color(.black))
-            }
-            
-        })
+                
+            })
        
     }
     
     var sheetView: some View {
-        var myView = AnyView(DetailView(detail:self.action.spell ?? Spell()))
-        if self.action.isAttack {
-            myView = AnyView(AttackDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: [20:1], modifier: self.attackBonus()), damageDice: FyreDice(with: self.action.damageDice.dice, modifier: self.damageBonus()), damageType: self.action.damageType ?? " "))
-        } else if self.action.damageDice.dice.count > 0 {
+        var myView = AnyView(DetailView(detail:self.action))
+        if self.action.damageDice.dice.count > 0 {
             myView = AnyView(ModalDiceView(details: DiceDetails(title:self.action.name), dice: FyreDice(with: self.action.damageDice)))
         }
         return myView
@@ -83,8 +69,8 @@ struct SpellAction: View {
     
 }
 
-struct SpellAction_Previews: PreviewProvider {
+struct MiscAction_Previews: PreviewProvider {
     static var previews: some View {
-        SpellAction(action: Action(name: "Spell", desc: "Woot"))
+        MiscAction(action: Action(name: "Misc", desc: "Woot"))
     }
 }

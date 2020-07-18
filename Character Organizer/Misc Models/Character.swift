@@ -8,7 +8,8 @@
 
 import UIKit
 
-enum Attribute: String {
+enum Attribute: String, CaseIterable {
+    
     case STR
     case DEX
     case CON
@@ -77,9 +78,10 @@ class Character: ObservableObject {
             return model.name
         }
     }
-    var race:Race = Race() {
-        didSet {
-            self.model.raceModel = race.model
+    var race:Race {
+        
+        set {
+            self.model.raceModel = newValue.model
             self.speed = "\(self.race.speed)"
             self.languages.removeAll()
             self.languages.formUnion(self.race.selectedLanguages)
@@ -101,11 +103,15 @@ class Character: ObservableObject {
                 }
             }
         }
+        get {
+            Race(model: model.raceModel ?? Race.shared[0].model )
+        }
+        
     }
     
-    var charcaterClass = CharacterClass() {
-        didSet {
-            self.model.characterClass = charcaterClass.model
+    var charcaterClass:CharacterClass {
+        set {
+            self.model.characterClass = newValue.model
             self.model.proficiencies.formUnion(self.charcaterClass.proficiencies)
             for prof in self.charcaterClass.selectedProficiencies {
                 if let skill = prof.skill {
@@ -114,6 +120,9 @@ class Character: ObservableObject {
                     self.model.proficiencies.insert(prof)
                 }
             }
+        }
+        get {
+            return CharacterClass(model: self.model.characterClass ?? CharacterClass.shared[0].model)
         }
     }
     
@@ -301,6 +310,7 @@ class Character: ObservableObject {
     var equipment:[Equipment] { return model.equipment }
     var spells:[Spell] { return model.spells }
     var spellActions:[Action] { return model.actions.filter({ $0.spell != nil }) }
+    var miscActions:[Action] { return model.actions.filter({ $0.spell == nil && $0.weapon == nil }) }
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
     
@@ -405,6 +415,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var imageData: Data?
 
     var proficiencies = Set<Proficiency>()
+    var proficientSaves:Set<Int>? = Set<Int>()
     var skills = Set<Skill>()
     var traits = Set<Trait>()
     var actions = Set<Action>()

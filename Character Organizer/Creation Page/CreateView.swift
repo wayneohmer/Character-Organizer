@@ -18,7 +18,9 @@ struct CreateView: View {
     @State var alignment1Idx = 1
     @State var alignment2Idx = 1
     @State var oldname = ""
-    
+    @State var showingStat = false
+    @State var selectedStat = Attribute.STR
+
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
     
     var body: some View {
@@ -72,15 +74,47 @@ struct CreateView: View {
                     .sheet(isPresented: $statsShowing, content:  { StatCreationView() })
                 VStack{
                     HStack {
-                        formatedText("Str:\(character.str) \(character.strMod)", width: 170).padding(3)
-                        formatedText("Dex:\(character.dex) \(character.dexMod)", width: 170).padding(3)
-                        formatedText("Con:\(character.con) \(character.conMod)", width: 170).padding(3)
-                     }
-                    HStack {
-                        formatedText("Wis:\(character.int) \(character.intMod)", width: 170).padding(3)
-                        formatedText("Int:\(character.wis) \(character.wisMod)", width: 170).padding(3)
-                        formatedText("Cha:\(character.cha) \(character.chaMod)", width: 170).padding(3)
+                        formatedText("Str:\(character.str) \(character.strMod)", width: 170).padding(3).onTapGesture(perform: {
+                            self.showingStat.toggle()
+                            self.selectedStat = .STR
+                        })
+                        formatedText("Dex:\(character.dex) \(character.dexMod)", width: 170).padding(3).onTapGesture(perform: {
+                            self.showingStat.toggle()
+                            self.selectedStat = .DEX
+                        })
+                        formatedText("Con:\(character.con) \(character.conMod)", width: 170).padding(3).onTapGesture(perform: {
+                            self.showingStat.toggle()
+                            self.selectedStat = .CON
+                        })
                     }
+                    HStack {
+                        formatedText("Int:\(character.int) \(character.intMod)", width: 170).padding(3).onTapGesture(perform: {
+                                                   self.showingStat.toggle()
+                                                   self.selectedStat = .INT
+                                               })
+                        formatedText("Wis:\(character.wis) \(character.wisMod)", width: 170).padding(3).onTapGesture(perform: {
+                            self.showingStat.toggle()
+                            self.selectedStat = .WIS
+                        })
+                        formatedText("Cha:\(character.cha) \(character.chaMod)", width: 170).padding(3).onTapGesture(perform: {
+                            self.showingStat.toggle()
+                            self.selectedStat = .CHA
+                        })
+                    }.popover(isPresented: $showingStat, content: {
+                        if self.selectedStat == .STR {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.str , isHP: false)
+                        } else if self.selectedStat == .DEX {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.dex , isHP: false)
+                        } else if self.selectedStat == .CON {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.con , isHP: false)
+                        } else if self.selectedStat == .WIS {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.wis , isHP: false)
+                        } else if self.selectedStat == .INT {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.int , isHP: false)
+                        } else if self.selectedStat == .CHA {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.cha , isHP: false)
+                        }
+                    })
                 }
 
                 Spacer()
@@ -109,13 +143,35 @@ struct CreateView: View {
                 Spacer()
             }
             HStack {
+                formatedText("Proficient Saves", width: 200)
+                ForEach(0 ..< 6) { index in
+                    if self.character.model.proficientSaves?.contains(index) ?? false {
+                        Text(Character.AttributeArray[index]).foregroundColor(.black).background(Color(.white)).onTapGesture {
+                            self.character.model.proficientSaves?.remove(index)
+                        }
+                    } else {
+                        Text(Character.AttributeArray[index]).foregroundColor(.white).background(Color(.black)).onTapGesture {
+                            self.character.model.proficientSaves?.insert(index)
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+            }
+            HStack {
                 Toggle(isOn: $character.model.isSpellCaster, label: {formatedText("Spell Caster", width: 200)}).frame(width:250)
                 Spacer()
             }
 
             Spacer()
             
-        }.background(background)
+            }.background(background)
+            .onAppear(){
+                if self.character.model.proficientSaves == nil {
+                    self.character.model.proficientSaves = Set<Int>()
+                }
+        }
     }
 }
 
