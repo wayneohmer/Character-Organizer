@@ -66,6 +66,7 @@
 		B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0414AE524C2609D0060F696 /* MiscAction.swift */; };
 		B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */; };
 		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
+		B0F2245124C4EE5300D34A85 /* CastAtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F2245024C4EE5300D34A85 /* CastAtView.swift */; };
 		B0F8280D24C24E400028E1DF /* MiscActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */; };
 /* End PBXBuildFile section */
 
@@ -144,6 +145,7 @@
 		B0414AE524C2609D0060F696 /* MiscAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscAction.swift; sourceTree = "<group>"; };
 		B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsUsedGrid.swift; sourceTree = "<group>"; };
 		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		B0F2245024C4EE5300D34A85 /* CastAtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastAtView.swift; sourceTree = "<group>"; };
 		B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscActionEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -360,6 +362,7 @@
 				B0414AE524C2609D0060F696 /* MiscAction.swift */,
 				2BF76BBE247D80340045DD6F /* WeaponAction.swift */,
 				2BF76BBF247D80340045DD6F /* SpellAction.swift */,
+				B0F2245024C4EE5300D34A85 /* CastAtView.swift */,
 			);
 			path = "Action Cells";
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */,
 				2B068BEE23C2C920007893BC /* CharacterClass.swift in Sources */,
 				2B16BCED23D80B4D00360928 /* Equipment.swift in Sources */,
+				B0F2245124C4EE5300D34A85 /* CastAtView.swift in Sources */,
 				2B69F23724806EF60066C745 /* SpellActionEditor.swift in Sources */,
 				2B068BE023C2B495007893BC /* Traits.swift in Sources */,
 				2B1F45DF246B4E5E00CA6BC7 /* SkillCheckView.swift in Sources */,

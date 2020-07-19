@@ -73,7 +73,7 @@ struct ActionView: View {
                     .onTapGesture {
                         self.showingMaxHP = true
                     }
-                    .frame(width: 60, height:30)
+                    .frame(width: 70, height:30)
                     .background(Color.white)
                     .cornerRadius(5)
                     .shadow(color: .black, radius: 3, x: 2, y: 2)
@@ -100,7 +100,7 @@ struct ActionView: View {
     var speedProf: some View {
         VStack (spacing: 3) {
             VStack(spacing: 3) {
-                Text("Speed").frame(maxWidth: 60).offset(x: 0, y: 2)
+                Text("Speed").frame(maxWidth: 70).offset(x: 0, y: 2)
                 Text(character.speed)
                     .onTapGesture {
                         self.showingSpeed = true
@@ -114,18 +114,18 @@ struct ActionView: View {
                 .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.speed, isHP: false) })
             }
             VStack (spacing: 3){
-                Text("Prof").frame(maxWidth: 60).offset(x: 0, y: 2)
-                Text(character.proficiencyBonus)
-                    .onTapGesture {
-                            self.showingProfBonus = true
-                    }
+                Text("Spell DC").frame(maxWidth: 70).offset(x: 0, y: 2)
+                Text("\(character.spellDC)")
+//                    .onTapGesture {
+//                            self.showingProfBonus = true
+//                    }
                     .frame(width: 60, height:30)
                     .background(Color.white)
                     .foregroundColor(Color.black)
                     .cornerRadius(5)
                     .shadow(color: .black, radius: 3, x: 2,y: 2)
-
-                .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.proficiencyBonus, isHP: false) })
+//
+//                .popover(isPresented: $showingProfBonus, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.proficiencyBonus, isHP: false) })
             }
             Spacer()
         }
@@ -190,7 +190,7 @@ struct ActionView: View {
                 }
             .popover(isPresented: $showingAC, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.armorClass, isHP: false) })
             Spacer()
-        }.padding(5).frame(width:90).foregroundColor(Color.black)
+        }.padding(5).frame(width:80).foregroundColor(Color.black)
     }
     
     var attributes: some View {
@@ -199,41 +199,50 @@ struct ActionView: View {
             VStack  {
                 BrownButton(text: Attribute.STR.rawValue, width: 70, height: 30) {
                     self.showingStrDice = true
-                    self.attributeTouched(attr:Attribute.STR, mod: Int(Character.shared.strMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.STR, mod: self.character.saveModFor(attr: Attribute.STR))
                 }
                 self.attrText(Character.shared.str)
                 self.attrModifier(character.strMod)
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
-            .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            .popover(isPresented: self.$showingStrDice, arrowEdge: .leading, content: {
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.STR))
+                
+            })
             
             VStack  {
                 BrownButton(text: Attribute.DEX.rawValue, width: 70, height: 30){
                     self.showingDexDice = true
-                    self.attributeTouched(attr:Attribute.DEX, mod: Int(Character.shared.dexMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.DEX, mod: self.character.saveModFor(attr: Attribute.DEX))
                 }
                 self.attrText(Character.shared.dex)
                 self.attrModifier(Character.shared.dexMod)
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
-            .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            .popover(isPresented: self.$showingDexDice, arrowEdge: .leading, content: {
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.DEX))
+                
+            })
             
             VStack  {
                 BrownButton(text: Attribute.CON.rawValue, width: 70, height: 30){
                     self.showingConDice = true
-                    self.attributeTouched(attr:Attribute.CON, mod: Int(Character.shared.conMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.CON, mod: self.character.saveModFor(attr: Attribute.CON))
                 }
                 self.attrText(Character.shared.con)
                 self.attrModifier(Character.shared.conMod)
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
                 
-            .popover(isPresented: self.$showingConDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            .popover(isPresented: self.$showingConDice, arrowEdge: .leading, content: {
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.CON))
+                
+            })
             
             VStack  {
                 BrownButton(text: Attribute.INT.rawValue, width: 70, height: 30){
                     self.showingIntDice = true
-                    self.attributeTouched(attr:Attribute.INT, mod: Int(Character.shared.intMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.INT, mod: self.character.saveModFor(attr: Attribute.INT))
                     
                 }
                 self.attrText(Character.shared.int)
@@ -241,11 +250,14 @@ struct ActionView: View {
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
                 
-            .popover(isPresented: self.$showingIntDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+            .popover(isPresented: self.$showingIntDice, arrowEdge: .leading, content: {
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.INT))
+                
+            })
             VStack  {
                 BrownButton(text: Attribute.WIS.rawValue, width: 70, height: 30){
                     self.showingWisDice = true
-                    self.attributeTouched(attr:Attribute.WIS, mod: Int(Character.shared.wisMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.WIS, mod: self.character.saveModFor(attr: Attribute.WIS))
                     
                 }
                 self.attrText(Character.shared.wis)
@@ -254,15 +266,20 @@ struct ActionView: View {
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
                 
             .popover(isPresented: self.$showingWisDice, arrowEdge: .leading, content: {
-                DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+                DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.WIS))
+                
+            })
             VStack  {
                 BrownButton(text: Attribute.CHA.rawValue, width: 70, height: 30) {
                     self.showingChaDice = true
-                    self.attributeTouched(attr:Attribute.CHA, mod: Int(Character.shared.chaMod) ?? 0)
+                    self.attributeTouched(attr:Attribute.CHA, mod: self.character.saveModFor(attr: Attribute.CHA))
                 }
                 self.attrText(Character.shared.cha)
                 self.attrModifier(Character.shared.chaMod)
-                    .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice, isProficientSave: self.character.model.proficientSaves?.contains(Attribute.CHA.idx()) ?? false) })
+                    .popover(isPresented: self.$showingChaDice, arrowEdge: .leading, content: {
+                        DiceView(details: self.diceDetails, dice: self.diceDetails.dice, proficiencyMod: self.character.saveProfModFor(attr: Attribute.CHA))
+                        
+                    })
             }
             .background(Image("AttrIcon").resizable().frame(width: 90, height: 100, alignment: .center))
             
@@ -285,12 +302,7 @@ struct ActionView: View {
                             self.showingSkills = true
                         }
                         .sheet(isPresented: $showingSkills, content: { SkillCheckView()})
-                        BrownButton(text: "Initiative", width: 100){
-                            self.diceDetails.title = "Initiative"
-                            self.showingInitDice = true
-                            self.diceDetails.isSave = false
-                        }
-                        .popover(isPresented: self.$showingInitDice, arrowEdge: .leading, content: { DiceView(details: self.diceDetails, dice: self.diceDetails.dice) })
+
                         self.attributes
 
                         Spacer()

@@ -71,6 +71,27 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     var isAttack:Bool { return attackType != "" }
     
+    var isConcentration :Bool {
+        let regex = try! NSRegularExpression(pattern: "Concentration")
+        let desc = self.duration
+        let range = NSRange(location: 0, length: desc.count)
+        let matches = regex.matches(in: desc, range: range)
+        if matches.count > 0 {
+            let val = matches.map {
+                String(desc[Range($0.range, in: desc)!])
+                }[0]
+            
+            let words = val.split(separator: " ").map(String.init)
+            if words.count > 0 {
+                return true
+            }
+        }
+        
+        return false
+        
+    }
+
+    
     var attackType: String {
         let regex = try! NSRegularExpression(pattern: "(melee|ranged) spell attack")
         let desc = self.desc

@@ -67,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Character.shared.casterAttributeIdx = 5
             Character.shared.proficiencyBonus = "2"
             Character.shared.model.actions = Set<Action>()
+            Character.shared.model.proficientSaves = Set<Int>()
             Character.shared.model.isActive = true
             for spell in Character.shared.model.spells {
                 Character.shared.addSpellAction(spell)

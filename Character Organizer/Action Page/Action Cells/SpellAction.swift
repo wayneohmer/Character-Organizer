@@ -10,8 +10,12 @@ import SwiftUI
 
 struct SpellAction: View {
     
+    @EnvironmentObject var character: Character
+
     var action:Action
     @State var showingDice = false
+    @State var castTouched = false
+    @State var showingCastAt = false
     @State var showDesc = false
     
     var body: some View {
@@ -23,36 +27,59 @@ struct SpellAction: View {
                 Spacer()
                 Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
                 Spacer()
-
+                
             }.padding(4)
-            HStack {
-                Text("Spell:")
-                Text("level: \(action.spell?.level ?? 0)" )
-                Text("Casting Time: \(action.spell?.castingTime ?? "")")
-                Text("Range: \(action.spell?.range ?? "")")
-                if action.damageFyreDice.display != " " {
-                    Text("Damage: \(action.damageFyreDice.display)")
-                }
-                Spacer()
-            }
-           
             if showDesc {
+                HStack {
+                    SpellHeader(spell: action.spell!)
+                    Spacer()
+                    }
+                .offset(x: -5, y: 0)
+                .padding(8)
                 Text(action.spell?.description ?? "")
+            } else {
+                HStack {
+                    Text("Spell:")
+                    Text("level: \(action.spell?.level ?? 0)" )
+                    Text("Casting Time: \(action.spell?.castingTime ?? "")")
+                    Text("Range: \(action.spell?.range ?? "")")
+                    if action.damageFyreDice.display != " " {
+                        Text("Damage: \(action.damageFyreDice.display)")
+                    }
+                    if action.spell?.isConcentration ?? false {
+                        Text("Concentration").fontWeight(.bold)
+                    }
+                    Spacer()
+                }
             }
+            
+            
         }
         .padding(5)
         .foregroundColor(Color.white)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 2))
         .background(Color(.black).opacity(0.8))
         .onTapGesture {
-            self.showingDice = true
+            self.showingCastAt = true
         }
-        .sheet(isPresented: self.$showingDice, content: {
-            self.sheetView
-            if self.action.isAttack || self.action.damageDice.dice.count > 0 {
-                ScrollView {
-                    Text(self.action.spell?.description ?? "")
-                        .background(Color(.black))
+        .popover(isPresented: self.$showingCastAt, arrowEdge: .bottom, content: {
+            CastAtView(castTouched:self.$castTouched, level: self.action.spell?.level ?? 1  ).environmentObject(self.character)
+                .onDisappear(
+                    perform: {
+                        if self.castTouched {
+                            if self.action.isAttack || self.action.damageDice.display != " " {
+                                self.showingDice = true
+                            }
+                            self.castTouched = false
+                        }
+                })
+        })
+            .sheet(isPresented: self.$showingDice, content: {
+                self.sheetView
+                if self.action.isAttack || self.action.damageDice.dice.count > 0 {
+                    ScrollView {
+                        Text(self.action.spell?.description ?? "")
+                            .background(Color(.black))
                         .foregroundColor(Color(.white))
                 }.padding()
             .background(Color(.black))

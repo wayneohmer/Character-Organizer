@@ -92,7 +92,7 @@ struct DiceView: View {
     @State var saveCheck = ["Save","Check"]
     @State var sign = "+"
     var showAdvantage = true
-    var isProficientSave = false
+    var proficiencyMod = 0
     var damageType = " "
     var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
 
@@ -211,7 +211,7 @@ struct DiceView: View {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                     .onReceive(self.pickerhelper.objectWillChange, perform: {
-                        self.dice.model.modifier = self.pickerhelper.saveCheckIndex == 0 ? 7 : 2
+                        self.dice.model.modifier += self.pickerhelper.saveCheckIndex == 0 ? -self.proficiencyMod : self.proficiencyMod
                     })
             }
         }

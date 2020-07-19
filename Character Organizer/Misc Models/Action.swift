@@ -27,7 +27,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var damage_bonus: Int = 0
     var damageType: String?
     var damageTypeIndex: Int = 0
-    var isProficient = false
+    var isProficient = true
     var attrDamage = false
     var attrIndex = 0
     var isAttack = false

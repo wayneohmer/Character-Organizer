@@ -314,6 +314,10 @@ class Character: ObservableObject {
     var weapons:[Equipment] { return self.equipment.filter({$0.equipment_category == "Weapon"}).sorted() }
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
     
+    var spellDC: Int {
+        return 8 + (self.attrBonusArray[model.casterAttributeIdx ?? 3]) + self.model.proficiencyBonus
+    }
+    
     convenience init(model: CharacterModel) {
         self.init()
         self.model = model
@@ -334,6 +338,15 @@ class Character: ObservableObject {
         return "\(result)"
         
     }
+    
+    func saveModFor(attr: Attribute) -> Int {
+        return self.model.proficientSaves.contains(attr.idx()) ? (self.attrBonusDict[attr] ?? 0) + self.model.proficiencyBonus : (self.attrBonusDict[attr] ?? 0)
+    }
+    
+    func saveProfModFor(attr: Attribute) -> Int {
+        return self.model.proficientSaves.contains(attr.idx()) ? self.model.proficiencyBonus : 0
+    }
+    
     
     func addSpellAction(_ spell: Spell) {
         var action = Action()
@@ -415,7 +428,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var imageData: Data?
 
     var proficiencies = Set<Proficiency>()
-    var proficientSaves:Set<Int>? = Set<Int>()
+    var proficientSaves = Set<Int>()
     var skills = Set<Skill>()
     var traits = Set<Trait>()
     var actions = Set<Action>()

@@ -12,6 +12,7 @@ struct CreateView: View {
     
     @ObservedObject var character = Character.shared
     
+    @State var forceUpdater = false
     @State var raceShowing = false
     @State var classShowing = false
     @State var statsShowing = false
@@ -20,6 +21,7 @@ struct CreateView: View {
     @State var oldname = ""
     @State var showingStat = false
     @State var selectedStat = Attribute.STR
+    
 
     var background = Color(red: 0.15, green: 0.15, blue: 0.15)
     
@@ -145,13 +147,14 @@ struct CreateView: View {
             HStack {
                 formatedText("Proficient Saves", width: 200)
                 ForEach(0 ..< 6) { index in
-                    if self.character.model.proficientSaves?.contains(index) ?? false {
-                        Text(Character.AttributeArray[index]).foregroundColor(.black).background(Color(.white)).onTapGesture {
-                            self.character.model.proficientSaves?.remove(index)
+                    if self.character.model.proficientSaves.contains(index) {
+                        Text(Character.AttributeArray[index]).padding(8).foregroundColor(.black).background(Color(.white)).onTapGesture {
+                            self.character.model.proficientSaves.remove(index)
+
                         }
                     } else {
-                        Text(Character.AttributeArray[index]).foregroundColor(.white).background(Color(.black)).onTapGesture {
-                            self.character.model.proficientSaves?.insert(index)
+                        Text(Character.AttributeArray[index]).padding(8).foregroundColor(.white).background(Color(.black)).onTapGesture {
+                            self.character.model.proficientSaves.insert(index)
                         }
                     }
                 }
@@ -159,18 +162,36 @@ struct CreateView: View {
                 Spacer()
                 
             }
-            HStack {
-                Toggle(isOn: $character.model.isSpellCaster, label: {formatedText("Spell Caster", width: 200)}).frame(width:250)
-                Spacer()
-            }
-
+            spellStack
+           
             Spacer()
-            
+
             }.background(background)
-            .onAppear(){
-                if self.character.model.proficientSaves == nil {
-                    self.character.model.proficientSaves = Set<Int>()
+            
+    }
+    
+    var spellStack: some View {
+        
+        let casterAttrIdx = Binding<Int> (get:{
+            return self.character.model.casterAttributeIdx ?? 3
+            
+        }, set: {
+            self.character.model.casterAttributeIdx = $0
+        })
+        
+        return HStack {
+            Toggle(isOn: $character.model.isSpellCaster, label: {formatedText("Spell Caster", width: 200)}).frame(width:250)
+            if character.model.isSpellCaster {
+                Picker("", selection: casterAttrIdx) {
+                    ForEach(0 ..< Character.AttributeArray.count) { index in
+                        Text(Character.AttributeArray[index])
+                    }
                 }
+                .pickerStyle(SegmentedPickerStyle())
+                .background(Color(.lightGray))
+                .cornerRadius(8)
+            }
+            Spacer()
         }
     }
 }
