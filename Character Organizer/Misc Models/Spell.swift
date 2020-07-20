@@ -111,7 +111,7 @@ struct Spell: Codable, Viewable, Identifiable, Hashable, Comparable {
     }
     
     var saveType:String {
-        let regex = try! NSRegularExpression(pattern: "(strength|dexteriy|constitution|intelligence|wisdom|charisma) saveing throw")
+        let regex = try! NSRegularExpression(pattern: "(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma) saving throw")
         let desc = self.desc
         let range = NSRange(location: 0, length: desc.count)
         let matches = regex.matches(in: desc, range: range)

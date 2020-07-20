@@ -35,6 +35,9 @@ struct ActionView: View {
     @State var showingSkills = false
     @State var showingSpeed = false
     @State var showingProfBonus = false
+    
+    @State var selectedSpellLevels = Set<Int>()
+
 
     var diceDetails = DiceDetails()
     var filterTimeings: [ActionTiming] = [.All, .Action, .BonusAction, .Reaction, .Long]
@@ -313,11 +316,15 @@ struct ActionView: View {
                             maxTemp
                             armorClass
                             speedProf
-                            if character.model.isSpellCaster {
-                                SpellsUsedGrid()
-                            }
                             Spacer()
-                        }.frame(height:100).foregroundColor(Color.black)
+                        }.frame(height:100).foregroundColor(Color.black).offset(x: 0, y: -8)
+                        if character.model.isSpellCaster {
+                            HStack {
+                                Spacer()
+                                SpellsUsedGrid(selectedSpellLevels: self.$selectedSpellLevels)
+                            }
+                            
+                        }
                         HStack {
                             
                             VStack {
@@ -333,7 +340,18 @@ struct ActionView: View {
                                     Image(uiImage: self.character.image).resizable().aspectRatio(contentMode: .fit).opacity(0.6)
                                     ScrollView(.vertical) {
                                         VStack{
-                                            ForEach(character.actions.filter({$0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0 }).sorted()) { action in
+                                            ForEach(character.actions.filter({
+                                                if self.selectedSpellLevels.count > 0 {
+                                                    if let spell = $0.spell {
+                                                        if !self.selectedSpellLevels.contains(spell.level) {
+                                                            return false
+                                                        }
+                                                    }
+                                                }
+                                                return $0.timing == self.filterTimeings[actionFilterIdx] || actionFilterIdx == 0
+                                                
+                                                
+                                            }).sorted()) { action in
                                                 if action.weapon != nil {
                                                     WeaponAction(action: action)
                                                 } else if action.spell != nil {

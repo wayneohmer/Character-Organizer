@@ -17,6 +17,7 @@ struct SpellAction: View {
     @State var castTouched = false
     @State var showingCastAt = false
     @State var showDesc = false
+    var spell:Spell { return self.action.spell ?? Spell() }
     
     var body: some View {
         VStack {
@@ -24,9 +25,15 @@ struct SpellAction: View {
                 GrayButton(text: self.showDesc ? " - " : " + ", width: 30, height:30,  action: {
                     withAnimation(.default,  { self.showDesc.toggle() } )
                 })
-                Spacer()
+                //Spacer()
                 Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
+                    //.offset(x:spell.isAttack ? 40 : 0)
                 Spacer()
+                if spell.isAttack {
+                    GrayButton(text: "Attack", width: 80, action: {
+                        self.showingDice = true
+                    })
+                }
                 
             }.padding(4)
             if showDesc {
@@ -39,15 +46,21 @@ struct SpellAction: View {
                 Text(action.spell?.description ?? "")
             } else {
                 HStack {
-                    Text("Spell:")
-                    Text("level: \(action.spell?.level ?? 0)" )
-                    Text("Casting Time: \(action.spell?.castingTime ?? "")")
-                    Text("Range: \(action.spell?.range ?? "")")
+                    Text("lvl:")
+                    Text("\(action.spell?.level ?? 0)" ).fontWeight(.bold)
+                    Text("Speed:")
+                    Text("\(action.spell?.castingTime ?? "")").fontWeight(.bold)
+                    Text("Range:")
+                    Text("\(action.spell?.range ?? "")").fontWeight(.bold)
                     if action.damageFyreDice.display != " " {
-                        Text("Damage: \(action.damageFyreDice.display)")
+                        Text("Dmg:")
+                        Text("\(action.damageFyreDice.display)").fontWeight(.bold)
                     }
                     if action.spell?.isConcentration ?? false {
                         Text("Concentration").fontWeight(.bold)
+                    }
+                    if action.spell?.saveType ?? ""  != ""{
+                        Text("\(action.spell?.saveType ?? "") save").fontWeight(.bold)
                     }
                     Spacer()
                 }

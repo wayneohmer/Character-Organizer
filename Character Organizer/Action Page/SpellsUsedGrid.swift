@@ -11,6 +11,9 @@ import SwiftUI
 struct SpellsUsedGrid: View {
     
     @EnvironmentObject var character: Character
+    
+    @Binding var selectedSpellLevels:Set<Int>
+    
     @State var showingEditor = false
     @State var slotsIdx = Int(0)
     @State var usedIdx = Int(0)
@@ -20,20 +23,28 @@ struct SpellsUsedGrid: View {
         HStack {
             HStack {
                 VStack {
-                    Text("Level:").frame(width: 50, height: 25, alignment: .center).cornerRadius(5)
-                    Text("Slots:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
-                    Text("Used:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
+                    Text("Level:").frame(width: 90, height: 25, alignment: .center).cornerRadius(5)
+                    //Text("Slots:").frame(width: 50, height: 35, alignment: .center).cornerRadius(5)
+                    Text("Remaining:").frame(width: 90, height: 35, alignment: .center).cornerRadius(5)
                 }
                 ForEach ( 1..<10 ) { idx in
                     VStack(spacing: 3) {
                         Text("\(idx)").frame(width: 35, height: 25, alignment: .center).cornerRadius(5)
-                        Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center)
-                            .background(Color(.white)).foregroundColor(.black).cornerRadius(5).shadow(color: .black, radius: 3, x: 2, y: 2).onTapGesture {
-                            self.data = self.character.model.spellSlots[idx]  ?? 0
-                            self.showingEditor = true
-                            self.usedIdx = 0
-                            self.slotsIdx = idx
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: self.selectedSpellLevels.contains(idx) ? 2 :0 ))
+                            .onTapGesture {
+                                if self.selectedSpellLevels.contains(idx) {
+                                    self.selectedSpellLevels.remove(idx)
+                                } else {
+                                    self.selectedSpellLevels.insert(idx)
+                                }
                         }
+//                        Text("\(self.character.model.spellSlots[idx]!)").frame(width: 35, height: 35, alignment: .center)
+//                            .background(Color(.white)).foregroundColor(.black).cornerRadius(5).shadow(color: .black, radius: 3, x: 2, y: 2).onTapGesture {
+//                            self.data = self.character.model.spellSlots[idx]  ?? 0
+//                            self.showingEditor = true
+//                            self.usedIdx = 0
+//                            self.slotsIdx = idx
+//                        }
                         Text("\(self.character.model.spellSlotsUsed[idx]!)").frame(width: 35, height: 35, alignment: .center)
                             .background(Color(.white)).foregroundColor(.black).cornerRadius(5).shadow(color: .black, radius: 3, x: 2, y: 2).onTapGesture {
                             self.data = self.character.model.spellSlotsUsed[idx] ?? 0
@@ -55,8 +66,6 @@ struct SpellsUsedGrid: View {
                 }
                 )
             }
-            .offset(x: 0, y:-3)
-            .padding(3)
             .cornerRadius(5)
             .foregroundColor(.black)
             .padding(4)
@@ -68,6 +77,6 @@ struct SpellsUsedGrid: View {
 
 struct SpellsUsedGrid_Previews: PreviewProvider {
     static var previews: some View {
-        SpellsUsedGrid()
+        SpellsUsedGrid(selectedSpellLevels: .constant(Set<Int>()))
     }
 }

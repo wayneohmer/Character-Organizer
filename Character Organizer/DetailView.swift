@@ -26,7 +26,7 @@ struct DetailView: View {
                 }.frame(width: 100, height: 50, alignment: .center)
                 
             }
-            Text(detail.name).font(.title).foregroundColor(Color.white).padding(5)
+            Text(detail.name).font(.title).padding(5)
             if detail is Equipment {
                 EquipmentDetail(equipment:detail as! Equipment, isFromInventory: isFromInventory )
             } else if detail is Spell {
@@ -38,9 +38,11 @@ struct DetailView: View {
                 }
             }
             Spacer()
-        }.background(Color.black).foregroundColor(Color.white)
-            .onAppear(){
-                //self.character.model = Character.shared.model
+        }
+        .background(Image("parchment").resizable().opacity(0.8))
+        .foregroundColor(Color.black)
+        .onAppear(){
+            //self.character.model = Character.shared.model
         }
         
     }
@@ -131,6 +133,7 @@ struct EquipmentDetail: View {
                 }
             }
         }.padding()
+        
     }
 }
 
@@ -164,6 +167,12 @@ struct SpellHeader: View {
             HStack{
                 Text("Duration:")
                 Text("\(spell.concentration ? "Concentration - " : "")\(spell.duration)").fontWeight(.bold)
+            }
+            if spell.saveType != "" {
+                HStack{
+                    Text("Save:")
+                    Text("\(spell.saveType)").fontWeight(.bold)
+                }
             }
         }
     }

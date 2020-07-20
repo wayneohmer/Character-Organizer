@@ -3,4 +3,54 @@
    uuid = "5934ED4A-40E6-44E8-B36F-74FED050F7BF"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Character Organizer/Misc Models/Spell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "saveType"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D - 5aaff0fdd6b5c7f7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Character_Organizer.Spell.saveType.getter : Swift.String"
+                  moduleName = "Character Organizer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wayne/Character-Organizer/Character%20Organizer/Misc%20Models/Spell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "119"
+                  endingLineNumber = "119"
+                  offsetFromSymbolStart = "812">
+               </Location>
+               <Location
+                  uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D - 6f5e1cbc23be709e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.NSTextCheckingResult) -&gt; Swift.String in Character_Organizer.Spell.saveType.getter : Swift.String"
+                  moduleName = "Character Organizer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wayne/Character-Organizer/Character%20Organizer/Misc%20Models/Spell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "120"
+                  endingLineNumber = "120"
+                  offsetFromSymbolStart = "94">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -20,7 +20,6 @@ struct MiscAction: View {
                 GrayButton(text: self.showDesc ? " - " : " + ", width: 30, height:30,  action: {
                     withAnimation(.default,  { self.showDesc.toggle() } )
                 })
-                Spacer()
                 Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
                 Spacer()
 
