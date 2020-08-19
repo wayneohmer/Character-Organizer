@@ -264,6 +264,8 @@ struct SpellsView:  View {
     @Binding var selectedAction:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
+    
+    @State var selectedSpellLevels = Set<Int>()
 
     var levelNames = ["Cantrips","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"]
 
@@ -278,19 +280,23 @@ struct SpellsView:  View {
                     Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
             }.padding(5)
+            SpellsUsedGrid(selectedSpellLevels: $selectedSpellLevels, isActionPage: false)
+            
             if character.spells.count > 0 {
-                VStack(alignment: .leading) {
-                    ForEach ( 0 ..< 9) { index in
-                        HStack {
-                            if self.character.spells.filter({ $0.level == index }).count > 0 {
-                                Text("\(self.levelNames[index] ):").font(Font.system(size: 20, weight: .bold))
-                                SpellLevelView(spells: self.character.spellActions.filter({ $0.spell?.level == index}), selectedAction: self.$selectedAction, detailShowing: self.$detailShowing, sheetType: self.$sheetType)
+                ScrollView(.vertical) {
+                    VStack(alignment: .leading) {
+                        ForEach ( 0 ..< 9) { index in
+                            HStack {
+                                if self.character.spells.filter({ $0.level == index }).count > 0 {
+                                    Text("\(self.levelNames[index] ):").font(Font.system(size: 20, weight: .bold))
+                                    SpellLevelView(spells: self.character.spellActions.filter({ $0.spell?.level == index}), selectedAction: self.$selectedAction, detailShowing: self.$detailShowing, sheetType: self.$sheetType)
+                                }
                             }
                         }
-                    }
-                }.padding(8)
-                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                    .background(Color.black)
+                    }.padding(8)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                        .background(Color.black)
+                }
             }
         }
     }

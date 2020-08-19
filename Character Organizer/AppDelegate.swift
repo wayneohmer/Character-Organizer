@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             model2.name = "Dingus"
             CharacterSet.shared.allCharacters.insert(model2)
         } else {
-            Character.shared =  Character(model:CharacterSet.shared.allCharacters.sorted()[1])
+            Character.shared =  Character(model:CharacterSet.shared.allCharacters.sorted()[0])
         }
 
         UISegmentedControl.appearance().selectedSegmentTintColor = .white

@@ -68,6 +68,7 @@
 		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
 		B0F2245124C4EE5300D34A85 /* CastAtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F2245024C4EE5300D34A85 /* CastAtView.swift */; };
 		B0F8280D24C24E400028E1DF /* MiscActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */; };
+		B0FE12EF24ED980C00E3A36C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0FE12EE24ED980C00E3A36C /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,8 @@
 		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B0F2245024C4EE5300D34A85 /* CastAtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastAtView.swift; sourceTree = "<group>"; };
 		B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscActionEditor.swift; sourceTree = "<group>"; };
+		B0FE12EC24ED97C500E3A36C /* Character Organizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Character Organizer.entitlements"; sourceTree = "<group>"; };
+		B0FE12EE24ED980C00E3A36C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0FE12EF24ED980C00E3A36C /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +263,7 @@
 				2B6890B2236B812D00EC8948 /* Character OrganizerTests */,
 				2B68909A236B812700EC8948 /* Products */,
 				2BF76BBC247D7F150045DD6F /* Recovered References */,
+				B0FE12ED24ED980C00E3A36C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -274,6 +279,7 @@
 		2B68909B236B812700EC8948 /* Character Organizer */ = {
 			isa = PBXGroup;
 			children = (
+				B0FE12EC24ED97C500E3A36C /* Character Organizer.entitlements */,
 				2B68909C236B812700EC8948 /* AppDelegate.swift */,
 				2B68909E236B812700EC8948 /* SceneDelegate.swift */,
 				2B93ED4C24899259004E1CA2 /* SelectView.swift */,
@@ -365,6 +371,14 @@
 				B0F2245024C4EE5300D34A85 /* CastAtView.swift */,
 			);
 			path = "Action Cells";
+			sourceTree = "<group>";
+		};
+		B0FE12ED24ED980C00E3A36C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B0FE12EE24ED980C00E3A36C /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -676,6 +690,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Character Organizer/Character Organizer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Character Organizer/Preview Content\"";
 				DEVELOPMENT_TEAM = EKUA3NG8A6;
@@ -685,7 +700,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Character-Organizer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CharacterOrganizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -696,6 +711,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Character Organizer/Character Organizer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Character Organizer/Preview Content\"";
 				DEVELOPMENT_TEAM = EKUA3NG8A6;
@@ -705,7 +721,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Character-Organizer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CharacterOrganizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;

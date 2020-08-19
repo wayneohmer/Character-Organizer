@@ -35,7 +35,8 @@ struct ActionView: View {
     @State var showingSkills = false
     @State var showingSpeed = false
     @State var showingProfBonus = false
-    
+    @State var showingSpellDc = false
+
     @State var selectedSpellLevels = Set<Int>()
 
 
@@ -71,7 +72,7 @@ struct ActionView: View {
         
         VStack(spacing: 3)  {
             VStack(spacing: 3)  {
-                Text("Max HP").frame(maxWidth: 60).offset(x: 0, y: 2)
+                Text("Max HP").frame(maxWidth: 80).offset(x: 0, y: 2)
                 Text(character.maxHP)
                     .onTapGesture {
                         self.showingMaxHP = true
@@ -84,7 +85,7 @@ struct ActionView: View {
                 .popover(isPresented: $showingMaxHP, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.maxHP, isHP: false) })
             }
             VStack(spacing: 3)  {
-                Text("Temp HP").frame(maxWidth: 70).offset(x: 0, y: 2)
+                Text("Temp HP").frame(maxWidth: 80).offset(x: 0, y: 2)
                 Text(character.tempHP)
                     .onTapGesture {
                             self.showingTempHP = true
@@ -103,7 +104,7 @@ struct ActionView: View {
     var speedProf: some View {
         VStack (spacing: 3) {
             VStack(spacing: 3) {
-                Text("Speed").frame(maxWidth: 70).offset(x: 0, y: 2)
+                Text("Speed").frame(maxWidth: 80).offset(x: 0, y: 2)
                 Text(character.speed)
                     .onTapGesture {
                         self.showingSpeed = true
@@ -117,10 +118,10 @@ struct ActionView: View {
                 .popover(isPresented: $showingSpeed, arrowEdge: .leading, content: { NumberEditor(value: "0", modifiedValue: self.$character.model.speed, isHP: false) })
             }
             VStack (spacing: 3){
-                Text("Spell DC").frame(maxWidth: 70).offset(x: 0, y: 2)
+                Text("Spell DC").frame(maxWidth: 80).offset(x: 0, y: 2)
                 Text("\(character.spellDC)")
 //                    .onTapGesture {
-//                            self.showingProfBonus = true
+//                            self.showingSpellDc = true
 //                    }
                     .frame(width: 60, height:30)
                     .background(Color.white)

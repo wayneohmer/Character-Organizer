@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 enum Attribute: String, CaseIterable {
     
@@ -56,13 +57,14 @@ class CharacterSet: ObservableObject {
     static var shared = CharacterSet()
     
     @Published var allCharacters = Set<CharacterModel>()
+    @Published var cloudCharacters = Set<CharacterModel>()
 
 }
 
 class Character: ObservableObject {
     
     static var shared = Character()
-    
+
     static let aligment1 = ["Lawful","Neutral","Chaotic"]
     static let aligment2 = ["Good","Neutral","Evil"]
     static let AttributeDict = ["STR":"Strength","DEX":"Dexterity","CON":"Constution","INT":"Intelligence","WIS":"Wisdom","CHA":"Charisma"]
@@ -315,7 +317,7 @@ class Character: ObservableObject {
     var armor:[Equipment] { return self.equipment.filter({$0.equipment_category == "Armor"}).sorted() }
     
     var spellDC: Int {
-        return 8 + (self.attrBonusArray[model.casterAttributeIdx ?? 3]) + self.model.proficiencyBonus
+        return 8 + (self.attrBonusArray[model.casterAttributeIdx ?? 3]) + (2 + (self.model.level-1)/4)
     }
     
     convenience init(model: CharacterModel) {
@@ -397,7 +399,36 @@ class Character: ObservableObject {
         }
         return new
     }
-
+    
+    class func fetchFromCloud() {
+        
+        let searchPredicate = NSPredicate(format: "TRUEPREDICATE")
+        let query = CKQuery(recordType: "Character", predicate: searchPredicate)
+        let container = CKContainer(identifier: "iCloud.com.trialbyfyre.charactersheet")
+        let cloudDb = container.publicCloudDatabase
+        cloudDb.perform(query, inZoneWith: nil) { records, error in
+            if let error = error {
+                print(error)
+            } else {
+                DispatchQueue.main.async {
+                    if let records = records {
+                        CharacterSet.shared.cloudCharacters.removeAll()
+                        for record in records {
+                            if let json = record["json"] as? String {
+                                let decoder = JSONDecoder()
+                                if var characterModel = try? decoder.decode(CharacterModel.self, from: json.data(using: .utf8, allowLossyConversion: true) ?? Data()) {
+                                    characterModel.isActive = false
+                                    CharacterSet.shared.cloudCharacters.insert(characterModel)
+                                    print(characterModel.name)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 struct CharacterModel: Codable, Comparable, Hashable  {
@@ -449,5 +480,44 @@ struct CharacterModel: Codable, Comparable, Hashable  {
         lhs.name < rhs.name
     }
     
+    func saveToCloud() {
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        let data = try! encoder.encode(self)
+        //let container = CKContainer.default() //iCloud.com.trialbyfyre.charactersheet
+        let container = CKContainer(identifier: "iCloud.com.trialbyfyre.charactersheet")
+        let cloudDb = container.publicCloudDatabase
+        let character = CKRecord(recordType: "Character", recordID: CKRecord.ID(recordName: name)  )
+        character["json"] = String(data: data, encoding: .utf8)!
+        cloudDb.save(character) { record, error in
+            if error == nil {
+                print("\(record?["name"] ?? "No Name")")
+            } else {
+                cloudDb.fetch(withRecordID: CKRecord.ID(recordName: self.name), completionHandler: { (record, error) in
+                    if let recordToSave = record {
+                        
+                        //Modify the record value here
+                        recordToSave["json"] = String(data: data, encoding: .utf8)!
+                        
+                        let modifyRecords = CKModifyRecordsOperation(recordsToSave:[recordToSave], recordIDsToDelete: nil)
+                        modifyRecords.savePolicy = CKModifyRecordsOperation.RecordSavePolicy.allKeys
+                        modifyRecords.qualityOfService = QualityOfService.userInitiated
+                        modifyRecords.modifyRecordsCompletionBlock = { savedRecords, deletedRecordIDs, error in
+                            if error == nil {
+                                print("Modified")
+                            }else {
+                                print(error.debugDescription)
+                            }
+                        }
+                        cloudDb.add(modifyRecords)
+                    }else{
+                        print(error.debugDescription)
+                    }
+                })
+            }
+        }
+    }
     
 }
