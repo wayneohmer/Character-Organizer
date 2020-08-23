@@ -12,7 +12,7 @@ import SwiftUI
 struct DescriptionView: View {
     
     enum SheetType {
-        case detail, spellPicker, miscAction, spellAction, attackAction, equipment, equipmentPicker, image
+        case detail, spellPicker, miscAction, spellAction, attackAction, equipment, equipmentPicker, image, miscEditor
     }
    
     @EnvironmentObject var character: Character
@@ -25,23 +25,29 @@ struct DescriptionView: View {
     @State var detailShowing = false
     @State var sheetType = DescriptionView.SheetType.detail
     @State var image:UIImage?
+    
+    @State var spellShowing = true
+    @State var actionsShowing = true
+    @State var attacksShowing = true
+    @State var itemsShowing = true
+    @State var miscShowing = true
 
  
     var body: some View {
         VStack {
             DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-            VStack {
-                ProficiencieView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-                SkillsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-                TraitsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+            
+            ScrollView(.vertical) {
+                if character.model.isSpellCaster {
+                    SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType, spellShowing: $spellShowing)
+                }
+                MiscActionsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType, actionsShowing: $actionsShowing)
+                AttacksView(selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType, attacksShowing: $attacksShowing)
+                EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType, itemsShowing: $itemsShowing)
+                
+                MiscDetailsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType, miscShowing: $miscShowing)
+               
             }
-            .padding(5)
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
-            .background(Color.black)
-            MiscActionsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
-            AttacksView(selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType)
-            EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-            SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType)
             Spacer()
         }
         .sheet(isPresented: self.$detailShowing, content:  {
@@ -51,13 +57,15 @@ struct DescriptionView: View {
             }  else if self.sheetType == .equipmentPicker {
                 EquipmentPicker()
             } else if self.sheetType == .spellPicker {
-                SpellPicker()
+                SpellPicker().environmentObject(Character.shared)
             } else if self.sheetType == .spellAction {
                 SpellActionEditor(action: self.selectedAction)
             } else if self.sheetType == .miscAction {
                 MiscActionEditor(action: self.selectedAction)
             } else if self.sheetType == .attackAction {
                 WeaponAttackView(action: self.selectedAttack)
+            } else if self.sheetType == .miscEditor {
+                MiscDetailPicker()
             } else if self.sheetType == .image {
                 ImagePicker(image: self.$image, isPresented: self.$detailShowing).onDisappear(perform: {
                     self.character.image = self.image ?? UIImage()
@@ -118,11 +126,6 @@ struct DemographicsView:  View {
                         })
                     Spacer()
                 }
-                HStack {
-                    Text("Languages:").foregroundColor(Color.white)
-                    Text(character.languageString).fontWeight(.bold)
-                    Spacer()
-                }
             }
         }
     }
@@ -134,32 +137,38 @@ struct MiscActionsView: View {
     @Binding var selectedAction:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
-    
+    @Binding var actionsShowing:Bool
+
     var body: some View {
         VStack {
             HStack{
+                Button( action: {
+                    withAnimation(.default,  { self.actionsShowing.toggle() } )
+                }, label: { Image(self.actionsShowing ? "arrowDown" : "arrowLeft").resizable() })
+                    .frame(width: 30, height: 30)
+                Spacer()
                 Text("Actions").fontWeight(.bold).foregroundColor(Color.white)
-                Button(action:{
+                Spacer()
+                GrayButton(text:"+",width: 40) {
                     self.sheetType = .miscAction
                     self.selectedAction = Action()
                     self.detailShowing = true
-                }) {
-                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
-                }.padding(5)
-            }
-            if character.actions.count > 0 {
-                
-                VStack(alignment: .leading){
-                    HStack {
-                        Text("All:").font(Font.system(size: 20, weight: .bold))
-                        MicsTypeView(actions: Array(character.miscActions), selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType:$sheetType )
-                    }
+                }
+            }.frame(height: 45)
+            if actionsShowing {
+                if character.actions.count > 0 {
                     
-                }.padding(8)
-                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                    .background(Color.black)
+                    VStack(alignment: .leading){
+                        HStack {
+                            Text("All:").font(Font.system(size: 20, weight: .bold))
+                            MicsTypeView(actions: Array(character.miscActions), selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType:$sheetType )
+                        }
+                        
+                    }.padding(8)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                        .background(Color.black)
+                }
             }
-            
         }
     }
 }
@@ -171,19 +180,25 @@ struct AttacksView: View {
     @Binding var selectedAttack:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
-    
+    @Binding var attacksShowing:Bool
+
     var body: some View {
+    
         VStack {
             HStack{
+                Button( action: {
+                    withAnimation(.default,  { self.attacksShowing.toggle() } )
+                }, label: { Image(self.attacksShowing ? "arrowDown" : "arrowLeft").resizable() })
+                    .frame(width: 30, height: 30)
+                Spacer()
                 Text("Attacks").fontWeight(.bold).foregroundColor(Color.white)
-                Button(action:{
+                Spacer()
+                GrayButton(text:"+",width: 40) {
                     self.sheetType = .attackAction
                     self.detailShowing = true
-                }) {
-                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
-                }.padding(5)
-            }
-            if character.weaponAttacks.count + character.otherAttacks.count > 0 {
+                }
+            }.frame(height: 45)
+            if character.weaponAttacks.count + character.otherAttacks.count > 0  && attacksShowing {
                 
                 VStack(alignment: .leading){
                     HStack {
@@ -264,7 +279,8 @@ struct SpellsView:  View {
     @Binding var selectedAction:Action
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
-    
+    @Binding var spellShowing:Bool
+
     @State var selectedSpellLevels = Set<Int>()
 
     var levelNames = ["Cantrips","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"]
@@ -272,18 +288,23 @@ struct SpellsView:  View {
     var body: some View {
         VStack {
             HStack{
+                Button( action: {
+                    withAnimation(.default,  { self.spellShowing.toggle() } )
+                }, label: { Image(self.spellShowing ? "arrowDown" : "arrowLeft").resizable() })
+                    .frame(width: 30, height: 30)
+                
+                Spacer()
                 Text("Spells").fontWeight(.bold).foregroundColor(Color.white)
-                Button(action:{
+                Spacer()
+                GrayButton(text:"+",width: 40) {
                     self.detailShowing = true
                     self.sheetType = .spellPicker
-                }) {
-                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
-            }.padding(5)
-            SpellsUsedGrid(selectedSpellLevels: $selectedSpellLevels, isActionPage: false)
-            
-            if character.spells.count > 0 {
-                ScrollView(.vertical) {
+            }.frame(height: 45)
+            if self.spellShowing {
+                SpellsUsedGrid(selectedSpellLevels: $selectedSpellLevels, isActionPage: false)
+                
+                if character.spells.count > 0 {
                     VStack(alignment: .leading) {
                         ForEach ( 0 ..< 9) { index in
                             HStack {
@@ -327,43 +348,89 @@ struct EquipmentView:  View {
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
+    @Binding var itemsShowing:Bool
+
 
     var body: some View {
         VStack {
             HStack{
-                Text("Equipment").fontWeight(.bold).foregroundColor(Color.white)
-                Button(action:{
+                Button( action: {
+                    withAnimation(.default,  { self.itemsShowing.toggle() } )
+                }, label: { Image(self.itemsShowing ? "arrowDown" : "arrowLeft").resizable() })
+                    .frame(width: 30, height: 30)
+                Spacer()
+                Text("Items").fontWeight(.bold).foregroundColor(Color.white)
+                Spacer()
+                GrayButton(text:"+",width: 40) {
                     self.sheetType = .equipmentPicker
                     self.detailShowing = true
-                }) {
-                    Text("+").fontWeight(.bold).foregroundColor(Color.white)
                 }
-            }.padding(5)
-            VStack(alignment: .leading){
-                HStack {
-                    if character.weapons.count > 0 {
-                        Text("Weapons:").font(Font.system(size: 20, weight: .bold))
-                        EquipmentTypeView(equipment: character.weapons , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+            }.frame(height: 45)
+            if itemsShowing {
+                VStack(alignment: .leading){
+                    HStack {
+                        if character.weapons.count > 0 {
+                            Text("Weapons:").font(Font.system(size: 20, weight: .bold))
+                            EquipmentTypeView(equipment: character.weapons , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+                        }
                     }
-                }
-                HStack {
-                    if character.armor.count > 0 {
-                        Text("Armor:").font(Font.system(size: 20, weight: .bold))
-                        EquipmentTypeView(equipment: character.armor , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+                    HStack {
+                        if character.armor.count > 0 {
+                            Text("Armor:").font(Font.system(size: 20, weight: .bold))
+                            EquipmentTypeView(equipment: character.armor , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+                        }
                     }
-                }
-                HStack {
-                    Text("Other Shit:").font(Font.system(size: 20, weight: .bold))
-                    EquipmentTypeView(equipment: Array(character.equipment.filter({
-                        $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
-                    })) , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
-
-                }
-            }.padding(8)
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
-                .background(Color.black)
+                    HStack {
+                        Text("Other Shit:").font(Font.system(size: 20, weight: .bold))
+                        EquipmentTypeView(equipment: Array(character.equipment.filter({
+                            $0.equipment_category != "Armor" &&  $0.equipment_category != "Weapon"
+                        })) , selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType:$sheetType)
+                        
+                    }
+                }.padding(8)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    .background(Color.black)
+            }
         }
     }
+}
+
+struct MiscDetailsView:  View {
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+    @Binding var miscShowing:Bool
+    
+    var body: some View {
+        VStack {
+            HStack{
+                Button( action: {
+                    withAnimation(.default,  { self.miscShowing.toggle() } )
+                }, label: { Image(self.miscShowing ? "arrowDown" : "arrowLeft").resizable() })
+                    .frame(width: 30, height: 30)
+                Spacer()
+                Text("Misc").fontWeight(.bold).foregroundColor(Color.white)
+                Spacer()
+                GrayButton(text:"+",width: 40) {
+                    self.sheetType = .miscEditor
+                    self.detailShowing = true
+                }
+            }.frame(height: 45)
+            if miscShowing {
+                VStack {
+                    ProficiencieView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                    SkillsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                    TraitsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                    LanguagesView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
+                }
+                .padding(5)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2)).foregroundColor(Color.white)
+                .background(Color.black)
+            }
+            
+        }
+    }
+    
 }
 
 struct DetailTextView:  View {
@@ -412,7 +479,6 @@ struct EquipmentTypeView:  View {
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
-
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -489,8 +555,29 @@ struct TraitsView:  View {
     }
 }
 
+struct LanguagesView: View {
+    
+    @EnvironmentObject var character: Character
+    @Binding var selectedDetail:Viewable
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
+    var body: some View {
+        HStack {
+            Text("Languages:").font(Font.system(size: 20, weight: .bold))
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(Array(character.languages)) { language in
+                        DetailTextView(thing: language, selectedDetail: self.$selectedDetail , detailShowing: self.$detailShowing, sheetType:self.$sheetType)
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct DescriptionView_Previews: PreviewProvider {
     static var previews: some View {
-        DescriptionView()
+        DescriptionView().environmentObject(Character.shared)
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Proficiency: Codable, Viewable, Identifiable, Hashable {
+struct Proficiency: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     static var shared = [String:Proficiency]()
     
@@ -43,6 +43,10 @@ struct Proficiency: Codable, Viewable, Identifiable, Hashable {
         }
     }
 
+    static func < (lhs: Proficiency, rhs: Proficiency) -> Bool {
+        lhs.name < rhs.name
+    }
+    
     static func getProficiencies(){
         
         let path = Bundle.main.path(forResource: "5e-SRD-Proficiencies", ofType: "json")!

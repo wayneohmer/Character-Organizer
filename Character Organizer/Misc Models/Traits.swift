@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct Trait: Codable, Viewable, Identifiable, Hashable {
-    
+struct Trait: Codable, Viewable, Identifiable, Hashable, Comparable {
+   
     static var shared:[String:Trait] = [String:Trait]()
     
     var description:String { return desc.joined(separator: "\n\n") }
@@ -19,6 +19,10 @@ struct Trait: Codable, Viewable, Identifiable, Hashable {
     var name = ""
     var desc = [String]()
     var url = ""
+    
+    static func < (lhs: Trait, rhs: Trait) -> Bool {
+        return lhs.name < rhs.name
+    }
     
     static func getTraits(){
         

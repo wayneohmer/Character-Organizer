@@ -66,6 +66,8 @@
 		B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0414AE524C2609D0060F696 /* MiscAction.swift */; };
 		B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */; };
 		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
+		B0DAB86E24F31D4100BE2B21 /* MiscDetailPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DAB86D24F31D4100BE2B21 /* MiscDetailPicker.swift */; };
+		B0DAB87024F32BCF00BE2B21 /* 5e-SRD-Languages.json in Resources */ = {isa = PBXBuildFile; fileRef = B0DAB86F24F32BCF00BE2B21 /* 5e-SRD-Languages.json */; };
 		B0F2245124C4EE5300D34A85 /* CastAtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F2245024C4EE5300D34A85 /* CastAtView.swift */; };
 		B0F8280D24C24E400028E1DF /* MiscActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */; };
 		B0FE12EF24ED980C00E3A36C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0FE12EE24ED980C00E3A36C /* CloudKit.framework */; };
@@ -146,6 +148,8 @@
 		B0414AE524C2609D0060F696 /* MiscAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscAction.swift; sourceTree = "<group>"; };
 		B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsUsedGrid.swift; sourceTree = "<group>"; };
 		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		B0DAB86D24F31D4100BE2B21 /* MiscDetailPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscDetailPicker.swift; sourceTree = "<group>"; };
+		B0DAB86F24F32BCF00BE2B21 /* 5e-SRD-Languages.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "5e-SRD-Languages.json"; sourceTree = "<group>"; };
 		B0F2245024C4EE5300D34A85 /* CastAtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastAtView.swift; sourceTree = "<group>"; };
 		B0F8280C24C24E400028E1DF /* MiscActionEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscActionEditor.swift; sourceTree = "<group>"; };
 		B0FE12EC24ED97C500E3A36C /* Character Organizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Character Organizer.entitlements"; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 		2B068BE523C2C814007893BC /* Data Files */ = {
 			isa = PBXGroup;
 			children = (
+				B0DAB86F24F32BCF00BE2B21 /* 5e-SRD-Languages.json */,
 				2BF9ED3E2486BF0E005C7389 /* spells.json */,
 				2BE92C6923F9C04F00044E68 /* 5e-SRD-Spells.json */,
 				2BE9EF2A23F0B01700422D0D /* 5e-SRD-Damage-Types.json */,
@@ -339,6 +344,7 @@
 				2B2CF77E23D513F500167DB3 /* DescriptionView.swift */,
 				2BBFC05523EA41FA0019E819 /* EquipmentPicker.swift */,
 				2BE92C6D23F9D4CD00044E68 /* SpellPicker.swift */,
+				B0DAB86D24F31D4100BE2B21 /* MiscDetailPicker.swift */,
 			);
 			path = "Description Page";
 			sourceTree = "<group>";
@@ -481,6 +487,7 @@
 				2B27BF9623BFFEE0001719A0 /* DeathSound.aif in Resources */,
 				2BEC8E0C23C3B26C0034CE8B /* 5e-SRD-Skills.json in Resources */,
 				2B27BF9523BFFEE0001719A0 /* 3dice.aif in Resources */,
+				B0DAB87024F32BCF00BE2B21 /* 5e-SRD-Languages.json in Resources */,
 				2BE92C6A23F9C04F00044E68 /* 5e-SRD-Spells.json in Resources */,
 				2B068BEF23C2CCBA007893BC /* 5e-SRD-Races.json in Resources */,
 			);
@@ -538,6 +545,7 @@
 				2B068BD223C26A6E007893BC /* RaceView.swift in Sources */,
 				2BF76BC1247D80340045DD6F /* SpellAction.swift in Sources */,
 				2BBFC05623EA41FA0019E819 /* EquipmentPicker.swift in Sources */,
+				B0DAB86E24F31D4100BE2B21 /* MiscDetailPicker.swift in Sources */,
 				2B068BEB23C2C879007893BC /* ClassView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

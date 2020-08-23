@@ -17,9 +17,9 @@ struct WeaponAction: View {
     var body: some View {
         VStack {
             HStack{
-                GrayButton(text: self.showDesc ? " - " : " + ", width: 30, height:30,  action: {
-                    self.showDesc.toggle()
-                })
+                Button(action: {
+                    withAnimation(.default,  { self.showDesc.toggle() } )
+                }, label: {Image(self.showDesc ? "arrowDown" : "arrowLeft").resizable() }).frame(width: 30, height: 30)
                 Text(action.name).font(Font.system(size: 20, weight: .bold, design: .default))
                 Spacer()
                 

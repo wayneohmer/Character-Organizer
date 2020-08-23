@@ -21,13 +21,18 @@ struct ChooseableOptionModel: Codable {
     var from:[Descriptor]?
 }
 
-struct Descriptor: Codable, Identifiable, Hashable {
-    
+struct Descriptor: Codable, Viewable, Identifiable, Hashable, Comparable {
+  
     var id:String { return name }
     var name = ""
     var url = ""
     var selected:Bool? = false
-
+    var description:String { return name }
+    
+    static func < (lhs: Descriptor, rhs: Descriptor) -> Bool {
+        lhs.name < rhs.name
+    }
+          
 }
 
 class DiceParcer {

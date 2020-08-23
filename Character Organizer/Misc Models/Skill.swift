@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Skill: Codable, Viewable, Identifiable, Hashable {
+struct Skill: Codable, Viewable, Identifiable, Hashable, Comparable {
     
     static var shared = [String:Skill]()
     
@@ -20,6 +20,10 @@ struct Skill: Codable, Viewable, Identifiable, Hashable {
     var ability_score:Descriptor?
     var url = ""
 
+    static func < (lhs: Skill, rhs: Skill) -> Bool {
+        return lhs.name < rhs.name
+    }
+    
     static func getSkills(){
         
         let path = Bundle.main.path(forResource: "5e-SRD-Skills", ofType: "json")!

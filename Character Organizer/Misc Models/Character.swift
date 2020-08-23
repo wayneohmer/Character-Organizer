@@ -400,7 +400,7 @@ class Character: ObservableObject {
         return new
     }
     
-    class func fetchFromCloud() {
+    class func fetchFromCloud(completion: (() -> Void)? = nil ) {
         
         let searchPredicate = NSPredicate(format: "TRUEPREDICATE")
         let query = CKQuery(recordType: "Character", predicate: searchPredicate)
@@ -419,6 +419,7 @@ class Character: ObservableObject {
                                 if var characterModel = try? decoder.decode(CharacterModel.self, from: json.data(using: .utf8, allowLossyConversion: true) ?? Data()) {
                                     characterModel.isActive = false
                                     CharacterSet.shared.cloudCharacters.insert(characterModel)
+                                    completion?()
                                     print(characterModel.name)
                                 }
                             }

@@ -398,7 +398,7 @@ struct ActionView: View {
                     }
             }.background(background)
                 .tag(1)
-            SelectView()
+            SelectView(pairs: [(CharacterModel?,CharacterModel?)](), cloudPairs: [(CharacterModel?,CharacterModel?)]())
                 .tabItem {
                     VStack {
                         Text("Select")
@@ -471,6 +471,7 @@ struct ActionRow: View {
 
 struct ActionView_Previews: PreviewProvider {
     static var previews: some View {
-        ActionView()
+        ActionView().environmentObject(Character.shared).environmentObject(CharacterSet.shared)
+        
     }
 }
