@@ -302,7 +302,10 @@ struct SpellsView:  View {
                 }
             }.frame(height: 45)
             if self.spellShowing {
-                SpellsUsedGrid(selectedSpellLevels: $selectedSpellLevels, isActionPage: false)
+                HStack {
+                    SpellsUsedGrid(selectedSpellLevels: $selectedSpellLevels, isActionPage: false)
+                    Spacer()
+                }
                 
                 if character.spells.count > 0 {
                     VStack(alignment: .leading) {

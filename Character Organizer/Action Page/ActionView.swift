@@ -321,10 +321,9 @@ struct ActionView: View {
                         }.frame(height:100).foregroundColor(Color.black).offset(x: 0, y: -8)
                         if character.model.isSpellCaster {
                             HStack {
-                                Spacer()
                                 SpellsUsedGrid(selectedSpellLevels: self.$selectedSpellLevels)
+                                Spacer()
                             }
-                            
                         }
                         HStack {
                             

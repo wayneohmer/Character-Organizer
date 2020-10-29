@@ -37,7 +37,9 @@ struct CastAtView: View {
                 .disabled(level == minlevel)
             Spacer()
             GrayButton(text: " Cast ", width: 75, action: {
-                self.character.model.spellSlotsUsed[self.level]! += 1
+                if self.level > 0 {
+                    self.character.model.spellSlotsUsed[self.level]! += 1
+                }
                 self.presentationMode.wrappedValue.dismiss()
                 self.castTouched = true
             }

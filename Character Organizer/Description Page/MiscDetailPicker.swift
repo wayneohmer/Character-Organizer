@@ -166,26 +166,26 @@ struct MiscDetailPicker: View {
         }
     }
     
-    func allLanguages (proxy: GeometryProxy) -> some View {
-        ForEach(.shared.values.sorted(), id:\.self) { thing in
-            HStack {
-                GrayButton(text: "+", width: 40) {
-                    self.selectedTraits.insert(thing)
-                }
-                Text(thing.name)
-                    .font(Font.system(size: 20, weight: .bold, design: .default))
-                    .onTapGesture {
-                        self.selectedTrait = thing
-                        self.detailShowing = true
-                }
-                .padding(5)
-                Spacer()
-            }
-            .frame(width:(proxy.size.width/2)-16)
-            .background(Color.white.opacity(0.1))
-            .padding(4)
-        }
-    }
+//    func allLanguages (proxy: GeometryProxy) -> some View {
+//        ForEach(.shared.values.sorted(), id:\.self) { thing in
+//            HStack {
+//                GrayButton(text: "+", width: 40) {
+//                    self.selectedTraits.insert(thing)
+//                }
+//                Text(thing.name)
+//                    .font(Font.system(size: 20, weight: .bold, design: .default))
+//                    .onTapGesture {
+//                        self.selectedTrait = thing
+//                        self.detailShowing = true
+//                }
+//                .padding(5)
+//                Spacer()
+//            }
+//            .frame(width:(proxy.size.width/2)-16)
+//            .background(Color.white.opacity(0.1))
+//        }
+//    }
+    
     func selectedSkills(proxy: GeometryProxy) -> some View {
         return ForEach(Array(self.selectedSkills).sorted()) { thing in
             HStack {

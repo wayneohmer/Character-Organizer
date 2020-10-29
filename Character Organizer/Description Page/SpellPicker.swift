@@ -52,18 +52,20 @@ struct SpellPicker: View {
                         self.selectedLevel = index
                     }
                     .font(Font.system(size: 20, weight: .bold, design: .default))
-                        
+                    
                     .frame(width: 40, height: 40, alignment: .center)
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: self.selectedLevel == index ? 2 :0 )).foregroundColor(Color.white)
                 }.padding(6)
             }.background(Color.white.opacity(0.1))
             GeometryReader { proxy in
-                
+                    
                 HStack {
-                    VStack {
-                        Text("Selected").font(Font.system(size: 25, weight: .bold, design: .default))
-                            .padding(4)
-
+                    ScrollView(.vertical) {
+                        
+                        VStack {
+                            Text("Selected").font(Font.system(size: 25, weight: .bold, design: .default))
+                                .padding(4)
+                            
                             VStack(alignment: .leading) {
                                 ForEach(Array(self.selectedSpells).sorted()) { spell in
                                     HStack {
@@ -75,58 +77,61 @@ struct SpellPicker: View {
                                             .onTapGesture {
                                                 self.selectedSpell = spell
                                                 self.detailShowing = true
-                                        }
-                                        .padding(5)
+                                            }
+                                            .padding(5)
                                         Spacer()
                                     }
                                     .frame(width:(proxy.size.width/2)-16)
                                     .background(Color.white.opacity(0.1))
                                     .padding(4)
                                 }
-                        }.offset(x: 0, y: 16)
-                        Spacer()
-                       
-                    }.frame(width:proxy.size.width/2)
-                    
-                    VStack {
-                        Text("Spells").font(Font.system(size: 25, weight: .bold, design: .default))
-                            .padding(4)
+                                Spacer()
+                                
+                            }.offset(x: 0, y: 16)
+                            Spacer()
+                            
+                        }.frame(width:proxy.size.width/2)
+                    }
                         ScrollView(.vertical) {
-                            VStack(alignment: .leading) {
-                                ForEach(Spell.shared.values.filter({
-                                    $0.level == self.selectedLevel && $0.hasClass(Set([self.selectedClass]))
-                                }).sorted(), id:\.self) { spell in
-                                    HStack {
-                                        GrayButton(text: "+", width: 40) {
-                                            self.selectedSpells.insert(spell)
-                                        }
-                                        Text(spell.name)
-                                            .font(Font.system(size: 20, weight: .bold, design: .default))
-                                            .onTapGesture {
-                                                self.selectedSpell = spell
-                                                self.detailShowing = true
-                                        }
-                                        .padding(5)
-                                        Spacer()
-                                    }
-                                    .frame(width:(proxy.size.width/2)-16)
-                                    .background(Color.white.opacity(0.1))
+                            
+                            VStack {
+                                Text("Spells").font(Font.system(size: 25, weight: .bold, design: .default))
                                     .padding(4)
+                                VStack(alignment: .leading) {
+                                    ForEach(Spell.shared.values.filter({
+                                        $0.level == self.selectedLevel && $0.hasClass(Set([self.selectedClass]))
+                                    }).sorted(), id:\.self) { spell in
+                                        HStack {
+                                            GrayButton(text: "+", width: 40) {
+                                                self.selectedSpells.insert(spell)
+                                            }
+                                            Text(spell.name)
+                                                .font(Font.system(size: 20, weight: .bold, design: .default))
+                                                .onTapGesture {
+                                                    self.selectedSpell = spell
+                                                    self.detailShowing = true
+                                                }
+                                                .padding(5)
+                                            Spacer()
+                                        }
+                                        .frame(width:(proxy.size.width/2)-16)
+                                        .background(Color.white.opacity(0.1))
+                                        .padding(4)
+                                    }
+                                    Spacer()
                                 }
-                            }
+                            }.frame(width:proxy.size.width/2)
+                            
                             Spacer()
                         }
-                    }.frame(width:proxy.size.width/2)
-
-                    Spacer()
-                }
+                    }
             }
         }.sheet(isPresented: $detailShowing, content: { DetailView(detail: self.selectedSpell as Viewable) } )
-            .foregroundColor(Color.white)
-            .background(Color.black)
-            .onAppear(){
-                self.selectedClass = self.character.charcaterClass.name
-                
+        .foregroundColor(Color.white)
+        .background(Color.black)
+        .onAppear(){
+            self.selectedClass = self.character.charcaterClass.name
+            
         }
     }
 }
