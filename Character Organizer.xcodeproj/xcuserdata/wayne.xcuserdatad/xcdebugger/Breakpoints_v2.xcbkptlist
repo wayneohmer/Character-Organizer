@@ -7,49 +7,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D"
-            shouldBeEnabled = "No"
+            uuid = "44381881-C952-4F12-94C1-AA5F3E3C552F"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Character Organizer/Misc Models/Spell.swift"
+            filePath = "Character Organizer/Action Editors/MagicItemEditor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "saveType"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D - d94604bc7253db6e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Character_Organizer.Spell.saveType.getter : Swift.String"
-                  moduleName = "Character Organizer"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wayne/Character-Organizer/Character%20Organizer/Misc%20Models/Spell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "119"
-                  endingLineNumber = "119"
-                  offsetFromSymbolStart = "812">
-               </Location>
-               <Location
-                  uuid = "51CA693D-CE9B-40BC-8F5F-44753926275D - ecb7e8fd87586ce6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSTextCheckingResult) -&gt; Swift.String in Character_Organizer.Spell.saveType.getter : Swift.String"
-                  moduleName = "Character Organizer"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wayne/Character-Organizer/Character%20Organizer/Misc%20Models/Spell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "94">
-               </Location>
-            </Locations>
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "saveMagicItem()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5B0A19ED-EFE0-462B-A0DB-37BEE47EE88C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Character Organizer/Action Editors/MiscActionEditor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "saveAction()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

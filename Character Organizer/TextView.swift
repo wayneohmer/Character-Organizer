@@ -68,6 +68,7 @@ fileprivate extension EnvironmentValues {
 @available (macOS 10.15, iOS 13, *)
 @available (tvOS, unavailable)
 @available (watchOS, unavailable)
+
 public struct TextView: View {
     private typealias _PlatformView = _UIKitTextView
 

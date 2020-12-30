@@ -17,11 +17,6 @@ struct MiscActionEditor: View  {
     @State var showAttack = false
     @EnvironmentObject var character: Character
 
-    @State var damageTypeIdx = 0
-    @State var isProficient = true
-    @State var toHitBonus:String = "0"
-    @State var damageBonus:String = "0"
-    @State var damageDice = FyreDice()    
     let timing = ActionTiming.allCases
 
    // var spell:Spell { return action.spell ?? Spell() }
@@ -37,7 +32,7 @@ struct MiscActionEditor: View  {
                     VStack(alignment: .leading) {
                         VStack {
                             Button(action: {
-                                self.action.desc = UIPasteboard.general.string ?? "junk"
+                                self.action.getPastedString()
                                 self.action.damageDice = DiceParcer.likelyDice(self.action.desc)?.model ?? FyreDiceModel()
                             }, label: {
                                 Text("  paste  ")
@@ -90,9 +85,7 @@ struct MiscActionEditor: View  {
             Spacer()
             }
 
-            ScrollView {
-                Text(action.description).fontWeight(.bold)
-            }.padding()
+            TextView(text: $action.desc)
 
             Spacer()
         }

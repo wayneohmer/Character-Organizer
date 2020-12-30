@@ -136,6 +136,14 @@ class Character: ObservableObject {
             return "\(model.level)"
         }
     }
+    var experiencePoints:String {
+        set {
+            model.experiencePoints = Int(newValue) ?? 1
+        }
+        get {
+            return "\(model.experiencePoints)"
+        }
+    }
     var speed:String {
         set {
             model.speed = Int(newValue) ?? 1
@@ -279,7 +287,8 @@ class Character: ObservableObject {
     var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
 
     var actions:Set<Action> { return model.actions }
-    
+    var magicItems:Set<MagicItem> { return model.magicItems ?? Set<MagicItem>() }
+
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
     var weaponAttacks:[Action] { return attackActions.filter({ $0.weapon != nil }) }
     var spellAttacks:[Action] { return attackActions.filter({ $0.spell != nil }) }
@@ -320,6 +329,12 @@ class Character: ObservableObject {
         return 8 + (self.attrBonusArray[model.casterAttributeIdx ?? 3]) + (2 + (self.model.level-1)/4)
     }
     
+    var levelUp: Bool {
+        let levelDict: [Int] = [0,300,900,2700,6500,14000,23000,34000,48000,64000,85000,100000,120000,140000,165000,195000,225000,265000,305000,355000]
+        
+        return self.model.experiencePoints >= levelDict[self.model.level]
+    }
+   
     convenience init(model: CharacterModel) {
         self.init()
         self.model = model
@@ -445,6 +460,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var armorClass = 0
     var speed = 30
     var level = Int(1)
+    var experiencePoints = Int(0)
     var str = Int(1)
     var int = Int(1)
     var dex = Int(1)
@@ -468,6 +484,7 @@ struct CharacterModel: Codable, Comparable, Hashable  {
     var spells = [Spell]()
     var spellSlots:[Int:Int] = [1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0]
     var spellSlotsUsed:[Int:Int] = [1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0]
+    var magicItems: Set<MagicItem>?
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
@@ -520,5 +537,6 @@ struct CharacterModel: Codable, Comparable, Hashable  {
             }
         }
     }
-    
 }
+
+

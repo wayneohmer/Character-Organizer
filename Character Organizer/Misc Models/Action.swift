@@ -6,7 +6,7 @@
 //  Copyright © 2020 Tryal by Fyre. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 enum ActionTiming: String, CaseIterable {
     case Action
@@ -95,6 +95,25 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
         action.damageTypeIndex = DamageType.shared.map({$0.value.name}).sorted().firstIndex(of: weapon.damage?.damage_type?.name ?? "") ?? 0
 
         return action
+    }
+    
+    mutating func getPastedString() {
+        
+        guard let pastedString = UIPasteboard.general.string, pastedString != "" else {
+            return
+        }
+        var firstLine = ""
+        let regex = try! NSRegularExpression(pattern: "(.*)(\\r|\\n)")
+        let range = NSRange(location: 0, length: pastedString.count)
+        let matches = regex.matches(in: pastedString, range: range)
+        if matches.count > 0 {
+            firstLine = matches.map {
+                String(pastedString[Range($0.range, in: pastedString)!])
+                }[0]
+            self.name = firstLine.capitalized
+            self.desc = String(pastedString.dropFirst(firstLine.count))
+        }
+        
     }
     
 }

@@ -12,7 +12,7 @@ import SwiftUI
 struct DescriptionView: View {
     
     enum SheetType {
-        case detail, spellPicker, miscAction, spellAction, attackAction, equipment, equipmentPicker, image, miscEditor
+        case detail, spellPicker, miscAction, spellAction, attackAction, equipment, equipmentPicker, image, miscEditor, magicItem
     }
    
     @EnvironmentObject var character: Character
@@ -21,6 +21,7 @@ struct DescriptionView: View {
     @State var showingDice = false
     @State var selectedDetail:Viewable = Proficiency()
     @State var selectedAction:Action = Action()
+    @State var selectedItem:MagicItem = MagicItem()
     @State var selectedAttack = Action()
     @State var detailShowing = false
     @State var sheetType = DescriptionView.SheetType.detail
@@ -30,9 +31,9 @@ struct DescriptionView: View {
     @State var actionsShowing = true
     @State var attacksShowing = true
     @State var itemsShowing = true
+    @State var magicItemsShowing = true
     @State var miscShowing = true
 
- 
     var body: some View {
         VStack {
             DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
@@ -41,10 +42,11 @@ struct DescriptionView: View {
                 if character.model.isSpellCaster {
                     SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType, spellShowing: $spellShowing)
                 }
+                
+                MagicItemsView(selectedItem: $selectedItem, detailShowing: $detailShowing, sheetType: $sheetType, actionsShowing: $magicItemsShowing)
                 MiscActionsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType, actionsShowing: $actionsShowing)
                 AttacksView(selectedAttack: $selectedAttack, detailShowing: $detailShowing, sheetType: $sheetType, attacksShowing: $attacksShowing)
                 EquipmentView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType, itemsShowing: $itemsShowing)
-                
                 MiscDetailsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType, miscShowing: $miscShowing)
                
             }
@@ -66,6 +68,8 @@ struct DescriptionView: View {
                 WeaponAttackView(action: self.selectedAttack)
             } else if self.sheetType == .miscEditor {
                 MiscDetailPicker()
+            } else if self.sheetType == .magicItem {
+                MagicItemEditor(magicItem: self.selectedItem)
             } else if self.sheetType == .image {
                 ImagePicker(image: self.$image, isPresented: self.$detailShowing).onDisappear(perform: {
                     self.character.image = self.image ?? UIImage()
@@ -83,6 +87,47 @@ struct DescriptionView: View {
     }
 }
 
+struct MagicItemsView: View {
+    
+    @EnvironmentObject var character: Character
+    @Binding var selectedItem:MagicItem
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+    @Binding var actionsShowing:Bool
+    
+    var body: some View {
+        VStack {
+            HStack{
+                Button( action: {
+                    withAnimation(.default,  { self.actionsShowing.toggle() } )
+                }, label: { Image(self.actionsShowing ? "arrowDown" : "arrowLeft").resizable() })
+                .frame(width: 30, height: 30)
+                Spacer()
+                Text("Magic Items").fontWeight(.bold).foregroundColor(Color.white)
+                Spacer()
+                GrayButton(text:"+",width: 40) {
+                    self.sheetType = .magicItem
+                    self.selectedItem = MagicItem()
+                    self.detailShowing = true
+                }
+            }.frame(height: 45)
+            if actionsShowing {
+                if character.magicItems.count > 0 {
+                    VStack(alignment: .leading){
+                        HStack {
+                            Text("All:").font(Font.system(size: 20, weight: .bold))
+                            MagicItemsListView(items: Array(character.magicItems), selectedItem: $selectedItem, detailShowing: $detailShowing, sheetType:$sheetType )
+                        }
+
+                    }.padding(8)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
+                    .background(Color.black)
+                }
+            }
+        }
+    }
+}
+
 struct DemographicsView:  View {
     
     @EnvironmentObject var character: Character
@@ -90,7 +135,8 @@ struct DemographicsView:  View {
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
     @State var showingLevel = false
-    
+    @State var showingXP = false
+
     var body: some View {
         HStack {
             Image(uiImage: character.image).resizable()
@@ -118,11 +164,19 @@ struct DemographicsView:  View {
                     Text("Speed:").foregroundColor(Color.white)
                     Text(character.speed).fontWeight(.bold).foregroundColor(Color.white)
                     Text("Level:").foregroundColor(Color.white)
-                    Text(character.level).fontWeight(.bold).foregroundColor(Color.white)
+                    Text(character.level).fontWeight(.bold)
+                        .foregroundColor(self.character.levelUp ? Color.red : Color.white)
                         .onTapGesture(perform: { self.showingLevel.toggle() })
                         
                         .popover(isPresented: $showingLevel, content: {
                             NumberEditor(value: "0", modifiedValue: self.$character.model.level , isHP: false)
+                        })
+                    Text("XP:").foregroundColor(Color.white)
+                    Text(character.experiencePoints).fontWeight(.bold).foregroundColor(Color.white)
+                        .onTapGesture(perform: { self.showingXP.toggle() })
+
+                        .popover(isPresented: $showingXP, content: {
+                            NumberEditor(value: "0", modifiedValue: self.$character.model.experiencePoints , isHP: false)
                         })
                     Spacer()
                 }
@@ -130,6 +184,8 @@ struct DemographicsView:  View {
         }
     }
 }
+
+
 
 struct MiscActionsView: View {
     
@@ -161,7 +217,7 @@ struct MiscActionsView: View {
                     VStack(alignment: .leading){
                         HStack {
                             Text("All:").font(Font.system(size: 20, weight: .bold))
-                            MicsTypeView(actions: Array(character.miscActions), selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType:$sheetType )
+                            MiscTypeView(actions: Array(character.miscActions), selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType:$sheetType )
                         }
                         
                     }.padding(8)
@@ -224,7 +280,7 @@ struct AttacksView: View {
 }
 
 
-struct MicsTypeView:  View {
+struct MiscTypeView: View {
     
     var actions:[Action]
     @Binding var selectedAction:Action
@@ -248,7 +304,31 @@ struct MicsTypeView:  View {
     }
 }
 
-struct AttackTypeView:  View {
+struct MagicItemsListView: View {
+    
+    var items:[MagicItem]
+    @Binding var selectedItem:MagicItem
+    @Binding var detailShowing:Bool
+    @Binding var sheetType:DescriptionView.SheetType
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            HStack { ForEach(items) { item in
+                Text(item.name).onTapGesture {
+                    self.selectedItem = item
+                    self.detailShowing = true
+                    self.sheetType = .magicItem
+                }.font(Font.system(size: 18))
+                    .padding(4)
+                    .background(Color(red: 0.15, green: 0.15, blue: 0.15))
+                    .cornerRadius(8)
+                }
+            }
+        }
+    }
+}
+
+struct AttackTypeView: View {
     
     var actions:[Action]
     @Binding var selectedAttack:Action
@@ -273,7 +353,7 @@ struct AttackTypeView:  View {
 }
 
 
-struct SpellsView:  View {
+struct SpellsView: View {
 
     @EnvironmentObject var character: Character
     @Binding var selectedAction:Action
@@ -326,7 +406,7 @@ struct SpellsView:  View {
     }
 }
 
-struct SpellLevelView:  View {
+struct SpellLevelView: View {
 
     var spells:[Action]
     @Binding var selectedAction:Action
@@ -345,7 +425,7 @@ struct SpellLevelView:  View {
 }
 
 
-struct EquipmentView:  View {
+struct EquipmentView: View {
 
     @EnvironmentObject var character: Character
     @Binding var selectedDetail:Viewable
@@ -398,7 +478,7 @@ struct EquipmentView:  View {
     }
 }
 
-struct MiscDetailsView:  View {
+struct MiscDetailsView: View {
     @Binding var selectedDetail:Viewable
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
