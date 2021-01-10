@@ -27,8 +27,7 @@ struct WeaponAction: View {
             
             HStack{
                 Text("Weapon:")
-                Text("(\(action.weapon?.weapon_range ?? "")" )
-                Text("\(Character.AttributeArray[action.attrIndex]))")
+                Text("\(Character.AttributeArray[action.attrIndex])")
                 Text(self.attackBonusString())
                 Text("damage: \(action.damageFyreDice.display)")
                 Text(self.damagebonusString())

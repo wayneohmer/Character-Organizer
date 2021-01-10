@@ -9,15 +9,38 @@
 import SwiftUI
 
 struct MagicItem: Codable, Viewable, Identifiable, Hashable, Comparable {
-
+    
     var id:String { return name }
-    var name = ""
-    var desc = ""
+    var name = "" {
+        didSet {
+            if isAction {
+                action.name = name
+            }
+        }
+    }
+    var desc = "" {
+        didSet {
+            if isAction {
+                action.desc = desc
+            }
+        }
+    }
+    
+    var isAction = false {
+        didSet {
+            if isAction {
+                action.name = name
+                action.desc = desc
+                action.isMagicItem = true
+            } else {
+                self.action = Action()
+            }
+        }
+    }
     var requiresAttunement = false
     var attuned = false
     var equipped = false
-    var isAction = false
-    var action: Action?
+    var action = Action()
     var equipment: Equipment?
     
     var description: String {
@@ -27,11 +50,7 @@ struct MagicItem: Codable, Viewable, Identifiable, Hashable, Comparable {
     static func < (lhs: MagicItem, rhs: MagicItem) -> Bool {
         return lhs.name < rhs.name
     }
-    
-    static func == (lhs: MagicItem, rhs: MagicItem) -> Bool {
-        return lhs.name == rhs.name
-    }
-    
+        
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
@@ -49,9 +68,8 @@ struct MagicItem: Codable, Viewable, Identifiable, Hashable, Comparable {
             firstLine = matches.map {
                 String(pastedString[Range($0.range, in: pastedString)!])
                 }[0]
-            self.name = firstLine.capitalized
+            self.name = firstLine.capitalized.trimmingCharacters(in: .newlines)
             self.desc = String(pastedString.dropFirst(firstLine.count))
         }
-        
     }
 }

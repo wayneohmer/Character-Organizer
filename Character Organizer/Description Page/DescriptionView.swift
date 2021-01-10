@@ -69,7 +69,7 @@ struct DescriptionView: View {
             } else if self.sheetType == .miscEditor {
                 MiscDetailPicker()
             } else if self.sheetType == .magicItem {
-                MagicItemEditor(magicItem: self.selectedItem)
+               MagicItemEditor(magicItem: self.selectedItem)
             } else if self.sheetType == .image {
                 ImagePicker(image: self.$image, isPresented: self.$detailShowing).onDisappear(perform: {
                     self.character.image = self.image ?? UIImage()
@@ -104,6 +104,10 @@ struct MagicItemsView: View {
                 .frame(width: 30, height: 30)
                 Spacer()
                 Text("Magic Items").fontWeight(.bold).foregroundColor(Color.white)
+                if self.character.itemsAttuned > 0 {
+                    Text(" \(self.character.itemsAttuned) Attuned")
+                    .foregroundColor( self.character.itemsAttuned > 3 ? Color.red : Color.white)
+                }
                 Spacer()
                 GrayButton(text:"+",width: 40) {
                     self.sheetType = .magicItem
@@ -115,10 +119,14 @@ struct MagicItemsView: View {
                 if character.magicItems.count > 0 {
                     VStack(alignment: .leading){
                         HStack {
-                            Text("All:").font(Font.system(size: 20, weight: .bold))
-                            MagicItemsListView(items: Array(character.magicItems), selectedItem: $selectedItem, detailShowing: $detailShowing, sheetType:$sheetType )
+                            Text("Attuned:").font(Font.system(size: 20, weight: .bold))
+                            MagicItemsListView(items: Array(character.magicItems.filter( { $0.attuned } )), selectedItem: $selectedItem, detailShowing: $detailShowing, sheetType:$sheetType )
                         }
-
+                        HStack {
+                            Text("Other:").font(Font.system(size: 20, weight: .bold))
+                            MagicItemsListView(items: Array(character.magicItems.filter( { !$0.attuned } )), selectedItem: $selectedItem, detailShowing: $detailShowing, sheetType:$sheetType )
+                        }
+                        
                     }.padding(8)
                     .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.white, lineWidth: 2))
                     .background(Color.black)
@@ -310,15 +318,17 @@ struct MagicItemsListView: View {
     @Binding var selectedItem:MagicItem
     @Binding var detailShowing:Bool
     @Binding var sheetType:DescriptionView.SheetType
-
+    
     var body: some View {
         ScrollView(.horizontal) {
-            HStack { ForEach(items) { item in
-                Text(item.name).onTapGesture {
-                    self.selectedItem = item
-                    self.detailShowing = true
-                    self.sheetType = .magicItem
-                }.font(Font.system(size: 18))
+            HStack {
+                ForEach(items) { item in
+                    Text("\(item.name)").onTapGesture {
+                        sheetType = .magicItem
+                        selectedItem = item
+                        detailShowing = true
+                        
+                    }.font(Font.system(size: 18))
                     .padding(4)
                     .background(Color(red: 0.15, green: 0.15, blue: 0.15))
                     .cornerRadius(8)

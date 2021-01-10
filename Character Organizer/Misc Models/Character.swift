@@ -286,7 +286,7 @@ class Character: ObservableObject {
     var attrBonusDict:[Attribute: Int] { return [.STR:modValue(model.str),.DEX:modValue(model.dex),.CON:modValue(model.con),.INT:modValue(model.int),.WIS:modValue(model.wis),.CHA:modValue(model.cha)] }
     var attrBonusArray:[Int] { return [modValue(model.str),modValue(model.dex),modValue(model.con),modValue(model.int),modValue(model.wis),modValue(model.cha)] }
 
-    var actions:Set<Action> { return model.actions }
+    var actions:Set<Action> { return model.actions.union((model.magicItems ?? Set<MagicItem>()).filter({ $0.isAction} ).map({ $0.action })) }
     var magicItems:Set<MagicItem> { return model.magicItems ?? Set<MagicItem>() }
 
     var attackActions:[Action] { return model.actions.filter({ $0.isAttack }) }
@@ -333,6 +333,10 @@ class Character: ObservableObject {
         let levelDict: [Int] = [0,300,900,2700,6500,14000,23000,34000,48000,64000,85000,100000,120000,140000,165000,195000,225000,265000,305000,355000]
         
         return self.model.experiencePoints >= levelDict[self.model.level]
+    }
+    
+    var itemsAttuned:Int {
+        return magicItems.map({ $0.attuned ? 1 : 0 }).reduce(0 , +)
     }
    
     convenience init(model: CharacterModel) {

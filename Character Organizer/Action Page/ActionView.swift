@@ -352,7 +352,7 @@ struct ActionView: View {
                                                 
                                                 
                                             }).sorted()) { action in
-                                                if action.weapon != nil {
+                                                if action.weapon != nil || action.isMagicItem {
                                                     WeaponAction(action: action)
                                                 } else if action.spell != nil {
                                                     SpellAction(action:action)

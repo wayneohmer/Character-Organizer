@@ -115,7 +115,7 @@ struct AttackCreationView: View {
                             .onTapGesture {
                                 self.showingToHitBonus = true
                         }
-                        .frame(width: 45, height:30)
+                        .frame(width: 55, height:30)
                         .background(Color.white)
                         .foregroundColor(Color.black)
                         .cornerRadius(5)
@@ -141,7 +141,7 @@ struct AttackCreationView: View {
                         .popover(isPresented: $showingDamageDice, content: {
                             DicePickerView(details: DiceDetails(title: self.action.name), diceModel: self.$action.damageDice)
                         })
-                        Text("Bonus:")
+                        Text("Bonus:").frame(width: 75)
                         Text("\(action.damage_bonus)").onTapGesture {
                             self.showingDamageBonus = true
                         }
