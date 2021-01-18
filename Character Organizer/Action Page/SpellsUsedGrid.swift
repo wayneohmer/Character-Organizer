@@ -65,7 +65,7 @@ struct SpellsUsedGrid: View {
                                         self.slotsIdx = 0
                                     }
                             }
-                        }.popover(isPresented: $showingEditor, arrowEdge: .trailing, content: {
+                        }.popover(isPresented: self.$showingEditor, arrowEdge: .trailing, content: {
                             if self.slotsIdx > 0 {
                                 NumberEditor(value: "0", modifiedValue: self.$data, isHP: false).onDisappear (perform: {
                                     self.character.model.spellSlots[self.slotsIdx] = self.data

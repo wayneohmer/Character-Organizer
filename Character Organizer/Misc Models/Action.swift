@@ -34,7 +34,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var timingIndex: Int = 0
     var isMisc:Bool { return spell == nil && weapon == nil }
     var damageDice: FyreDiceModel = FyreDiceModel()
-    var isMagicItem = false
+    var isMagicItem: Bool? = false
     var spell: Spell?
     var weapon: Equipment?
     var description: String {

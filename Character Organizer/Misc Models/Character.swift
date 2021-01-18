@@ -435,17 +435,27 @@ class Character: ObservableObject {
                         for record in records {
                             if let json = record["json"] as? String {
                                 let decoder = JSONDecoder()
-                                if var characterModel = try? decoder.decode(CharacterModel.self, from: json.data(using: .utf8, allowLossyConversion: true) ?? Data()) {
+                                do {
+                                    var characterModel = try decoder.decode(CharacterModel.self, from: json.data(using: .utf8, allowLossyConversion: true) ?? Data())
                                     characterModel.isActive = false
                                     CharacterSet.shared.cloudCharacters.insert(characterModel)
                                     completion?()
                                     print(characterModel.name)
+                                } catch {
+                                    print(error)
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+    
+    func longRest() {
+        self.currentHP = self.maxHP
+        for (key,_) in self.model.spellSlotsUsed {
+            self.model.spellSlotsUsed[key] = 0
         }
     }
     

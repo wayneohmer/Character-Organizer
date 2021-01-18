@@ -67,7 +67,7 @@ struct AttackDiceView: View {
                 }.frame(width: 100, height: 50, alignment: .center)
             }
             DiceView(details: details, dice: dice)
-            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false, damageType: damageType)
+            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false)
             Spacer()
         }
         .background(Color(.black))
@@ -93,7 +93,6 @@ struct DiceView: View {
     @State var sign = "+"
     var showAdvantage = true
     var proficiencyMod = 0
-    var damageType = " "
     var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
 
     var body: some View {
@@ -131,7 +130,7 @@ struct DiceView: View {
                         .background(Color.black)
                         .cornerRadius(5)
                         .padding(5)
-                    Text (self.damageType)
+                    Text (self.dice.damageType ?? " ")
                 }.offset(x: 0, y: -2)
             }
             .foregroundColor(Color.white)

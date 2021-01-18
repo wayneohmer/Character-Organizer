@@ -22,6 +22,7 @@ class FyreDice: ObservableObject {
     @Published var model:FyreDiceModel = FyreDiceModel()
     var dice: [Int:Int] { return model.dice }
     var modifier: Int { return model.modifier }
+    var damageType: String? { return model.damageType }
 
     @Published var diceResults = [Int:Int]()
     @Published var rollValue = 0
@@ -142,13 +143,15 @@ class FyreDice: ObservableObject {
     }
     
     convenience init(with model:FyreDiceModel ) {
-        self.init(with: model.dice, modifier: model.modifier)
+        self.init()
+        self.model = model
     }
     
-    convenience init(with die:[Int:Int], modifier:Int) {
+    convenience init(with die:[Int:Int], modifier:Int, damageType: String? = nil) {
         self.init()
         self.model.dice = die
         self.model.modifier = modifier
+        self.model.damageType = damageType
     }
     
     convenience init(with fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {
@@ -297,6 +300,7 @@ struct FyreDiceModel: Codable, Identifiable, Hashable {
     var id = UUID()
     var dice = [Int:Int]()
     var modifier = 0
+    var damageType: String?
     
     var display:String {
            var returnString = ""

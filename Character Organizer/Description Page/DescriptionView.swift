@@ -37,7 +37,12 @@ struct DescriptionView: View {
     var body: some View {
         VStack {
             DemographicsView(selectedDetail: $selectedDetail, detailShowing: $detailShowing, sheetType: $sheetType)
-            
+            HStack {
+                GrayButton(text: "Long Rest", width: 100) {
+                    self.character.longRest()
+                }
+                Spacer()
+            }
             ScrollView(.vertical) {
                 if character.model.isSpellCaster {
                     SpellsView(selectedAction: $selectedAction, detailShowing: $detailShowing, sheetType: $sheetType, spellShowing: $spellShowing)
@@ -324,9 +329,9 @@ struct MagicItemsListView: View {
             HStack {
                 ForEach(items) { item in
                     Text("\(item.name)").onTapGesture {
-                        sheetType = .magicItem
-                        selectedItem = item
-                        detailShowing = true
+                        self.sheetType = .magicItem
+                        self.selectedItem = item
+                        self.detailShowing = true
                         
                     }.font(Font.system(size: 18))
                     .padding(4)
