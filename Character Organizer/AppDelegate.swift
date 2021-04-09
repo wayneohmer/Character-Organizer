@@ -108,7 +108,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             do {
                 let characterData = try Data(contentsOf: url)
                 do {
-                    let model = try JSONDecoder().decode(CharacterModel.self, from: characterData)
+                    var model = try JSONDecoder().decode(CharacterModel.self, from: characterData)
+                    var actionArray = Array(model.actions)
+                    for (idx, _) in actionArray.enumerated() {
+                        actionArray[idx].convertDamage()
+                    }
+                    model.actions = Set(actionArray)
                     CharacterSet.shared.allCharacters.insert(model)
                 } catch {
                     print(error)

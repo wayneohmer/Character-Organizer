@@ -34,6 +34,7 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
     var timingIndex: Int = 0
     var isMisc:Bool { return spell == nil && weapon == nil }
     var damageDice: FyreDiceModel = FyreDiceModel()
+    var damage: [String: FyreDiceModel]? = [String: FyreDiceModel]()
     var isMagicItem: Bool? = false
     var spell: Spell?
     var weapon: Equipment?
@@ -73,6 +74,12 @@ struct Action: Codable, Identifiable, Comparable, Hashable, Viewable {
             }
         } else {
             return lhs.name < rhs.name
+        }
+    }
+    
+    mutating func convertDamage() {
+        if self.damage?.count == 0, let damageType = self.damageType, damageType != "" {
+            self.damage![damageType] = self.damageDice
         }
     }
     

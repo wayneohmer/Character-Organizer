@@ -63,6 +63,7 @@
 		2BF76BC0247D80340045DD6F /* WeaponAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBE247D80340045DD6F /* WeaponAction.swift */; };
 		2BF76BC1247D80340045DD6F /* SpellAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF76BBF247D80340045DD6F /* SpellAction.swift */; };
 		2BF9ED3F2486BF0E005C7389 /* spells.json in Resources */ = {isa = PBXBuildFile; fileRef = 2BF9ED3E2486BF0E005C7389 /* spells.json */; };
+		B020A8A9261FC7F000A3C26A /* DamgeDiceDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B020A8A8261FC7F000A3C26A /* DamgeDiceDisplay.swift */; };
 		B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0414AE524C2609D0060F696 /* MiscAction.swift */; };
 		B05EB7D025991094005A369F /* MagicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05EB7CF25991094005A369F /* MagicItem.swift */; };
 		B05EB7D4259A6390005A369F /* MagicItemEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05EB7D3259A6390005A369F /* MagicItemEditor.swift */; };
@@ -146,7 +147,7 @@
 		2BF76BBE247D80340045DD6F /* WeaponAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeaponAction.swift; sourceTree = "<group>"; };
 		2BF76BBF247D80340045DD6F /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
 		2BF9ED3E2486BF0E005C7389 /* spells.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spells.json; sourceTree = "<group>"; };
-		B01D027C247AF71200F58FFB /* SpellAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellAction.swift; sourceTree = "<group>"; };
+		B020A8A8261FC7F000A3C26A /* DamgeDiceDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamgeDiceDisplay.swift; sourceTree = "<group>"; };
 		B0414AE524C2609D0060F696 /* MiscAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscAction.swift; sourceTree = "<group>"; };
 		B05EB7CF25991094005A369F /* MagicItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicItem.swift; sourceTree = "<group>"; };
 		B05EB7D3259A6390005A369F /* MagicItemEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicItemEditor.swift; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 				2B4D5CE9246C8E6C003AAC3C /* DicePickerView.swift */,
 				2B25B398238B2B52000E022B /* DiceView.swift */,
 				2B25B396238B2330000E022B /* FyreDice.swift */,
+				B020A8A8261FC7F000A3C26A /* DamgeDiceDisplay.swift */,
 			);
 			path = Dice;
 			sourceTree = "<group>";
@@ -369,7 +371,6 @@
 		2BF76BBC247D7F150045DD6F /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				B01D027C247AF71200F58FFB /* SpellAction.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -533,6 +534,7 @@
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */,
+				B020A8A9261FC7F000A3C26A /* DamgeDiceDisplay.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
 				B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */,

@@ -79,6 +79,8 @@ struct DiceView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    let damageTypes:[String] = DamageType.shared.map({$0.value.name}).sorted()
+
     var lightGray = Color(.lightGray)
     var background = Color(red: 0.10, green: 0.10, blue: 0.10)
     let longWidth:CGFloat = 237
@@ -94,6 +96,8 @@ struct DiceView: View {
     var showAdvantage = true
     var proficiencyMod = 0
     var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
+    @State var isDamageEditor = false
+    @State var damageTypeIndex = Int(0)
 
     var body: some View {
         VStack {
@@ -124,13 +128,25 @@ struct DiceView: View {
                         .padding(3)
                 }
                 VStack {
-                    Text(self.dice.rollValueString)
-                        .font(Font.system(size: 50, weight: .bold, design: .default))
-                        .frame(width: 250, alignment: .center)
-                        .background(Color.black)
-                        .cornerRadius(5)
-                        .padding(5)
-                    Text (self.dice.damageType ?? " ")
+                    if isDamageEditor {
+                        Picker("", selection: $damageTypeIndex) {
+                            ForEach(0 ..< self.damageTypes.count) { index in
+                                Text(String(self.damageTypes[index]))
+                            }
+                        }
+                        .pickerStyle(WheelPickerStyle())
+                        .background(Color(.lightGray))
+                        .frame(width: 250, height: 100)
+                        .cornerRadius(8)
+                    } else {
+                        Text(self.dice.rollValueString)
+                            .font(Font.system(size: 50, weight: .bold, design: .default))
+                            .frame(width: 250, alignment: .center)
+                            .background(Color.black)
+                            .cornerRadius(5)
+                            .padding(5)
+                        Text (self.dice.damageType ?? " ")
+                    }
                 }.offset(x: 0, y: -2)
             }
             .foregroundColor(Color.white)
@@ -165,11 +181,18 @@ struct DiceView: View {
                 }.padding(3)
                 VStack {
                     
-                    self.diceButton(name: "Roll", width:longModWidth, action: {
-                        self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.roll))
-                        self.dice.roll()
+                    if isDamageEditor {
+                        self.diceButton(name: "Save", width:longModWidth, action: {
+                            
+                        })
+                    } else {
                         
-                    })
+                        self.diceButton(name: "Roll", width:longModWidth, action: {
+                            self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.roll))
+                            self.dice.roll()
+                            
+                        })
+                    }
                     HStack {
                         self.diceButton(width:modwidth, modifier: 1)
                         self.diceButton(width:modwidth, modifier: 2)

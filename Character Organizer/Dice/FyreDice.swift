@@ -324,7 +324,7 @@ struct FyreDiceModel: Codable, Identifiable, Hashable {
         dice.removeAll()
         modifier = 0
     }
-    
+
     mutating func add(multipier:Int, d die:Int) {
         if var newValue = self.dice[die] {
             newValue += multipier
