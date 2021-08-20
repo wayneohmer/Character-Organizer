@@ -9,7 +9,8 @@
 import UIKit
 import AudioToolbox
 
-class FyreDice: ObservableObject {
+class FyreDice: ObservableObject, Identifiable, Hashable {
+    
     
     let deathSound = "DeathSound"
     let awwwSound = "Awww"
@@ -18,6 +19,7 @@ class FyreDice: ObservableObject {
     let tenDieSound = "10dice"
     var soundUrls = [String: CFURL]()
     var oopsStack = [Oops]()
+    var id:UUID { return model.id }
        
     @Published var model:FyreDiceModel = FyreDiceModel()
     var dice: [Int:Int] { return model.dice }
@@ -84,7 +86,9 @@ class FyreDice: ObservableObject {
         return false
     }
     
-   
+    static func == (lhs: FyreDice, rhs: FyreDice) -> Bool {
+        return lhs.id == rhs.id
+    }
     
     var display:String {
         var returnString = ""
@@ -164,6 +168,10 @@ class FyreDice: ObservableObject {
             self.diceResults = fyreDice.diceResults
             self.rollValue = fyreDice.rollValue
         }
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     func replaceWith(fyreDice:FyreDice, includeResult isResultIncluded:Bool = false) {

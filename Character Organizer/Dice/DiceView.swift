@@ -67,7 +67,7 @@ struct AttackDiceView: View {
                 }.frame(width: 100, height: 50, alignment: .center)
             }
             DiceView(details: details, dice: dice)
-            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false)
+            DiceView(details: DiceDetails(title: "Damage"), dice: damageDice, showAdvantage: false, isDamage:true)
             Spacer()
         }
         .background(Color(.black))
@@ -89,7 +89,7 @@ struct DiceView: View {
     let modwidth:CGFloat = 42
     let bmodwidth:CGFloat = 55
     @ObservedObject var details:DiceDetails
-    @ObservedObject var dice:FyreDice
+    @State var dice:FyreDice = FyreDice(with: FyreDiceModel(dice: [20:1], modifier: 2))
     @ObservedObject var pickerhelper:PickerHelper = PickerHelper()
     @State var saveCheck = ["Save","Check"]
     @State var sign = "+"
@@ -97,7 +97,13 @@ struct DiceView: View {
     var proficiencyMod = 0
     var foreground = Color(red: 0.40, green: 0.40, blue: 0.40)
     @State var isDamageEditor = false
+    @State var isDamage = false
     @State var damageTypeIndex = Int(0)
+    @State var selectedDamageIdx = 0
+    @State var damageDice = [FyreDice(with:FyreDiceModel(id: UUID(), dice: [10: 1], modifier: 2, damageType: "Slashing")),
+                     FyreDice(with:FyreDiceModel(id: UUID(), dice: [6: 2], modifier: 2, damageType: "Fire")),
+                     FyreDice(with:FyreDiceModel(id: UUID(), dice: [4: 1], modifier: 2, damageType: "Cold")),
+                     FyreDice(with:FyreDiceModel(id: UUID(), dice: [8: 2], modifier: 2, damageType: "Radient"))]
 
     var body: some View {
         VStack {
@@ -111,43 +117,47 @@ struct DiceView: View {
             .background(LinearGradient(gradient: Gradient(colors: [foreground, .black]), startPoint: .top, endPoint: .bottom))
             .foregroundColor(Color.white)
             HStack {
-                VStack {
-                    Text(self.dice.display)
-                        .padding(8)
-                        .font(Font.system(size: 20, weight: .bold, design: .default))
-                        .frame(width: 240, height:40, alignment: .center)
-                        .background(Color.black)
-                        .cornerRadius(5)
-                    
-                    Text(self.dice.resultDisplay)
-                        .padding(8)
-                        .font(Font.system(size: 20, weight: .bold, design: .default))
-                        .frame(width: 240, height:40, alignment: .center)
-                        .background(Color.black)
-                        .cornerRadius(5)
-                        .padding(3)
-                }
-                VStack {
-                    if isDamageEditor {
-                        Picker("", selection: $damageTypeIndex) {
-                            ForEach(0 ..< self.damageTypes.count) { index in
-                                Text(String(self.damageTypes[index]))
-                            }
-                        }
-                        .pickerStyle(WheelPickerStyle())
-                        .background(Color(.lightGray))
-                        .frame(width: 250, height: 100)
-                        .cornerRadius(8)
-                    } else {
-                        Text(self.dice.rollValueString)
-                            .font(Font.system(size: 50, weight: .bold, design: .default))
-                            .frame(width: 250, alignment: .center)
+                if isDamage {
+                    DamgeDiceDisplay(damageDice: $damageDice, selectedDamageIdx: $selectedDamageIdx, selectedDice: $dice)
+                } else {
+                    VStack {
+                        Text(self.dice.display)
+                            .padding(8)
+                            .font(Font.system(size: 20, weight: .bold, design: .default))
+                            .frame(width: 240, height:40, alignment: .center)
                             .background(Color.black)
                             .cornerRadius(5)
-                            .padding(5)
-                        Text (self.dice.damageType ?? " ")
+                        
+                        Text(self.dice.resultDisplay)
+                            .padding(8)
+                            .font(Font.system(size: 20, weight: .bold, design: .default))
+                            .frame(width: 240, height:40, alignment: .center)
+                            .background(Color.black)
+                            .cornerRadius(5)
+                            .padding(3)
                     }
-                }.offset(x: 0, y: -2)
+                    VStack {
+                        if isDamageEditor {
+                            Picker("", selection: $damageTypeIndex) {
+                                ForEach(0 ..< self.damageTypes.count) { index in
+                                    Text(String(self.damageTypes[index]))
+                                }
+                            }
+                            .pickerStyle(WheelPickerStyle())
+                            .background(Color(.lightGray))
+                            .frame(width: 250, height: 100)
+                            .cornerRadius(8)
+                        } else {
+                            Text(self.dice.rollValueString)
+                                .font(Font.system(size: 50, weight: .bold, design: .default))
+                                .frame(width: 250, alignment: .center)
+                                .background(Color.black)
+                                .cornerRadius(5)
+                                .padding(5)
+                            Text (self.dice.damageType ?? " ")
+                        }
+                    }.offset(x: 0, y: -2)
+                }
             }
             .foregroundColor(Color.white)
             
@@ -189,8 +199,17 @@ struct DiceView: View {
                         
                         self.diceButton(name: "Roll", width:longModWidth, action: {
                             self.dice.oopsStack.append(Oops(fyreDice: FyreDice(with:self.dice, includeResult:true), type: Oops.OopsType.roll))
-                            self.dice.roll()
-                            
+                            if isDamage {
+                                for die in self.damageDice {
+                                    die.roll()
+                                }
+                            } else {
+                                self.dice.roll()
+                            }
+                            //Hack to force redraw
+                            let idx = self.selectedDamageIdx
+                            self.selectedDamageIdx = -1
+                            self.selectedDamageIdx = idx
                         })
                     }
                     HStack {
@@ -252,11 +271,14 @@ struct DiceView: View {
                 
                 if modifier != 0 {
                     self.dice.model.modifier += self.sign == "+" ? modifier : -modifier
-                    return
                 } else if d != 0 {
                     self.dice.add(multipier: self.sign == "+" ? 1 : -1, d: d)
                 }
             }
+            //Hack to force redraw
+            let idx = self.selectedDamageIdx
+            self.selectedDamageIdx = -1
+            self.selectedDamageIdx = idx
         }) {
             if name != "" {
                 Text("\(name)").fontWeight(.bold).padding(3)

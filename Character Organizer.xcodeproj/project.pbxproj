@@ -67,6 +67,7 @@
 		B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0414AE524C2609D0060F696 /* MiscAction.swift */; };
 		B05EB7D025991094005A369F /* MagicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05EB7CF25991094005A369F /* MagicItem.swift */; };
 		B05EB7D4259A6390005A369F /* MagicItemEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05EB7D3259A6390005A369F /* MagicItemEditor.swift */; };
+		B0B31821262102E9002EC459 /* DamageTypePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B31820262102E9002EC459 /* DamageTypePicker.swift */; };
 		B0B3402924B24A2000169010 /* SpellsUsedGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */; };
 		B0B3402B24B255C900169010 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B3402A24B255C900169010 /* ImagePicker.swift */; };
 		B0DAB86E24F31D4100BE2B21 /* MiscDetailPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DAB86D24F31D4100BE2B21 /* MiscDetailPicker.swift */; };
@@ -151,6 +152,7 @@
 		B0414AE524C2609D0060F696 /* MiscAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscAction.swift; sourceTree = "<group>"; };
 		B05EB7CF25991094005A369F /* MagicItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicItem.swift; sourceTree = "<group>"; };
 		B05EB7D3259A6390005A369F /* MagicItemEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicItemEditor.swift; sourceTree = "<group>"; };
+		B0B31820262102E9002EC459 /* DamageTypePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DamageTypePicker.swift; sourceTree = "<group>"; };
 		B0B3402824B24A2000169010 /* SpellsUsedGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsUsedGrid.swift; sourceTree = "<group>"; };
 		B0B3402A24B255C900169010 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B0DAB86D24F31D4100BE2B21 /* MiscDetailPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscDetailPicker.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				2B25B398238B2B52000E022B /* DiceView.swift */,
 				2B25B396238B2330000E022B /* FyreDice.swift */,
 				B020A8A8261FC7F000A3C26A /* DamgeDiceDisplay.swift */,
+				B0B31820262102E9002EC459 /* DamageTypePicker.swift */,
 			);
 			path = Dice;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				2B068BD523C26C0F007893BC /* Race.swift in Sources */,
 				2BF2935223C505E000659673 /* Proficiency.swift in Sources */,
 				B0414AE624C2609D0060F696 /* MiscAction.swift in Sources */,
+				B0B31821262102E9002EC459 /* DamageTypePicker.swift in Sources */,
 				B020A8A9261FC7F000A3C26A /* DamgeDiceDisplay.swift in Sources */,
 				2B068BCF23C259A4007893BC /* CreateView.swift in Sources */,
 				2BF2934E23C4F84300659673 /* Skill.swift in Sources */,
