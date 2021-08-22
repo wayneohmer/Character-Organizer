@@ -113,7 +113,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     for (idx, _) in actionArray.enumerated() {
                         actionArray[idx].convertDamage()
                     }
-                    model.actions = Set(actionArray)
+                    model.actions = Set(actionArray.filter({ $0.name != "" }))
+                    
                     CharacterSet.shared.allCharacters.insert(model)
                 } catch {
                     print(error)

@@ -330,7 +330,11 @@ class Character: ObservableObject {
     }
     
     var levelUp: Bool {
-        let levelDict: [Int] = [0,300,900,2700,6500,14000,23000,34000,48000,64000,85000,100000,120000,140000,165000,195000,225000,265000,305000,355000]
+        
+        if self.model.level > 20 {
+            return false
+        }
+        let levelDict: [Int] = [0,300,900,2700,6500,14000,23000,34000,48000,64000,85000,100000,120000,140000,165000,195000,225000,265000,305000,355000,1000000]
         
         return self.model.experiencePoints >= levelDict[self.model.level]
     }

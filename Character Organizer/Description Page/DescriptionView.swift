@@ -404,7 +404,7 @@ struct SpellsView: View {
                 
                 if character.spells.count > 0 {
                     VStack(alignment: .leading) {
-                        ForEach ( 0 ..< 9) { index in
+                        ForEach ( 0 ..< 10) { index in
                             HStack {
                                 if self.character.spells.filter({ $0.level == index }).count > 0 {
                                     Text("\(self.levelNames[index] ):").font(Font.system(size: 20, weight: .bold))
